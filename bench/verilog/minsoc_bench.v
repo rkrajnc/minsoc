@@ -45,7 +45,7 @@ reg [31:0] data_in [1023:0];		//send buffer
 //
 // Testbench mechanics
 //
-reg [7:0] program_mem[(1<<((`MEMORY_ADR_WIDTH)+11+2))-1:0];
+reg [7:0] program_mem[(1<<(`MEMORY_ADR_WIDTH+2))-1:0];
 integer initialize, final, ptr;
 reg [8*64:0] file_name;
 reg load_file;
