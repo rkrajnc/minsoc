@@ -64,6 +64,10 @@
 // Revision History
 //
 //
+// Revision 2.1 2009/08/23 16:41:00   fajardo
+// Sensitivity of addr_reg and memory write changed back to posedge clk for GENERIC_MEMORY
+// This actually models appropriately the behavior of the FPGA internal RAMs
+//
 // Revision 2.0 2009/09/10 11:30:00   fajardo
 // Added tri-state buffering for altera output
 // Sensitivity of addr_reg and memory write changed to negedge clk for GENERIC_MEMORY
@@ -209,7 +213,7 @@ assign doq = (oe) ? mem[addr_reg] : {dw{1'bZ}};
 //
 // RAM address register
 //
-always @(negedge clk or posedge rst)
+always @(posedge clk or posedge rst)
 	if (rst)
 		addr_reg <= #1 {aw{1'b0}};
 	else if (ce)
@@ -218,7 +222,7 @@ always @(negedge clk or posedge rst)
 //
 // RAM write
 //
-always @(negedge clk)
+always @(posedge clk)
 	if (ce && we)
 		mem[addr] <= #1 di;
 
