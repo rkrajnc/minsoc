@@ -86,7 +86,7 @@
 //
 // Width of WB initiator inputs (coming from WB masters)
 //
-// cyc + stb + cab + address bus width +
+// cyc + stb + address bus width +
 // byte select bus width + we + data bus width
 //
 `define TC_IIN_W	1+1+1+`TC_AW+`TC_BSW+1+`TC_DW
@@ -100,7 +100,6 @@ module minsoc_tc_top (
 
 	i0_wb_cyc_i,
 	i0_wb_stb_i,
-	i0_wb_cab_i,
 	i0_wb_adr_i,
 	i0_wb_sel_i,
 	i0_wb_we_i,
@@ -111,7 +110,6 @@ module minsoc_tc_top (
 
 	i1_wb_cyc_i,
 	i1_wb_stb_i,
-	i1_wb_cab_i,
 	i1_wb_adr_i,
 	i1_wb_sel_i,
 	i1_wb_we_i,
@@ -122,7 +120,6 @@ module minsoc_tc_top (
 
 	i2_wb_cyc_i,
 	i2_wb_stb_i,
-	i2_wb_cab_i,
 	i2_wb_adr_i,
 	i2_wb_sel_i,
 	i2_wb_we_i,
@@ -133,7 +130,6 @@ module minsoc_tc_top (
 
 	i3_wb_cyc_i,
 	i3_wb_stb_i,
-	i3_wb_cab_i,
 	i3_wb_adr_i,
 	i3_wb_sel_i,
 	i3_wb_we_i,
@@ -144,7 +140,6 @@ module minsoc_tc_top (
 
 	i4_wb_cyc_i,
 	i4_wb_stb_i,
-	i4_wb_cab_i,
 	i4_wb_adr_i,
 	i4_wb_sel_i,
 	i4_wb_we_i,
@@ -155,7 +150,6 @@ module minsoc_tc_top (
 
 	i5_wb_cyc_i,
 	i5_wb_stb_i,
-	i5_wb_cab_i,
 	i5_wb_adr_i,
 	i5_wb_sel_i,
 	i5_wb_we_i,
@@ -166,7 +160,6 @@ module minsoc_tc_top (
 
 	i6_wb_cyc_i,
 	i6_wb_stb_i,
-	i6_wb_cab_i,
 	i6_wb_adr_i,
 	i6_wb_sel_i,
 	i6_wb_we_i,
@@ -177,7 +170,6 @@ module minsoc_tc_top (
 
 	i7_wb_cyc_i,
 	i7_wb_stb_i,
-	i7_wb_cab_i,
 	i7_wb_adr_i,
 	i7_wb_sel_i,
 	i7_wb_we_i,
@@ -188,7 +180,6 @@ module minsoc_tc_top (
 
 	t0_wb_cyc_o,
 	t0_wb_stb_o,
-	t0_wb_cab_o,
 	t0_wb_adr_o,
 	t0_wb_sel_o,
 	t0_wb_we_o,
@@ -199,7 +190,6 @@ module minsoc_tc_top (
 
 	t1_wb_cyc_o,
 	t1_wb_stb_o,
-	t1_wb_cab_o,
 	t1_wb_adr_o,
 	t1_wb_sel_o,
 	t1_wb_we_o,
@@ -210,7 +200,6 @@ module minsoc_tc_top (
 
 	t2_wb_cyc_o,
 	t2_wb_stb_o,
-	t2_wb_cab_o,
 	t2_wb_adr_o,
 	t2_wb_sel_o,
 	t2_wb_we_o,
@@ -221,7 +210,6 @@ module minsoc_tc_top (
 
 	t3_wb_cyc_o,
 	t3_wb_stb_o,
-	t3_wb_cab_o,
 	t3_wb_adr_o,
 	t3_wb_sel_o,
 	t3_wb_we_o,
@@ -232,7 +220,6 @@ module minsoc_tc_top (
 
 	t4_wb_cyc_o,
 	t4_wb_stb_o,
-	t4_wb_cab_o,
 	t4_wb_adr_o,
 	t4_wb_sel_o,
 	t4_wb_we_o,
@@ -243,7 +230,6 @@ module minsoc_tc_top (
 
 	t5_wb_cyc_o,
 	t5_wb_stb_o,
-	t5_wb_cab_o,
 	t5_wb_adr_o,
 	t5_wb_sel_o,
 	t5_wb_we_o,
@@ -254,7 +240,6 @@ module minsoc_tc_top (
 
 	t6_wb_cyc_o,
 	t6_wb_stb_o,
-	t6_wb_cab_o,
 	t6_wb_adr_o,
 	t6_wb_sel_o,
 	t6_wb_we_o,
@@ -265,7 +250,6 @@ module minsoc_tc_top (
 
 	t7_wb_cyc_o,
 	t7_wb_stb_o,
-	t7_wb_cab_o,
 	t7_wb_adr_o,
 	t7_wb_sel_o,
 	t7_wb_we_o,
@@ -276,7 +260,6 @@ module minsoc_tc_top (
 
 	t8_wb_cyc_o,
 	t8_wb_stb_o,
-	t8_wb_cab_o,
 	t8_wb_adr_o,
 	t8_wb_sel_o,
 	t8_wb_we_o,
@@ -316,7 +299,6 @@ input			wb_rst_i;
 //
 input			i0_wb_cyc_i;
 input			i0_wb_stb_i;
-input			i0_wb_cab_i;
 input	[`TC_AW-1:0]	i0_wb_adr_i;
 input	[`TC_BSW-1:0]	i0_wb_sel_i;
 input			i0_wb_we_i;
@@ -330,7 +312,6 @@ output			i0_wb_err_o;
 //
 input			i1_wb_cyc_i;
 input			i1_wb_stb_i;
-input			i1_wb_cab_i;
 input	[`TC_AW-1:0]	i1_wb_adr_i;
 input	[`TC_BSW-1:0]	i1_wb_sel_i;
 input			i1_wb_we_i;
@@ -344,7 +325,6 @@ output			i1_wb_err_o;
 //
 input			i2_wb_cyc_i;
 input			i2_wb_stb_i;
-input			i2_wb_cab_i;
 input	[`TC_AW-1:0]	i2_wb_adr_i;
 input	[`TC_BSW-1:0]	i2_wb_sel_i;
 input			i2_wb_we_i;
@@ -358,7 +338,6 @@ output			i2_wb_err_o;
 //
 input			i3_wb_cyc_i;
 input			i3_wb_stb_i;
-input			i3_wb_cab_i;
 input	[`TC_AW-1:0]	i3_wb_adr_i;
 input	[`TC_BSW-1:0]	i3_wb_sel_i;
 input			i3_wb_we_i;
@@ -372,7 +351,6 @@ output			i3_wb_err_o;
 //
 input			i4_wb_cyc_i;
 input			i4_wb_stb_i;
-input			i4_wb_cab_i;
 input	[`TC_AW-1:0]	i4_wb_adr_i;
 input	[`TC_BSW-1:0]	i4_wb_sel_i;
 input			i4_wb_we_i;
@@ -386,7 +364,6 @@ output			i4_wb_err_o;
 //
 input			i5_wb_cyc_i;
 input			i5_wb_stb_i;
-input			i5_wb_cab_i;
 input	[`TC_AW-1:0]	i5_wb_adr_i;
 input	[`TC_BSW-1:0]	i5_wb_sel_i;
 input			i5_wb_we_i;
@@ -400,7 +377,6 @@ output			i5_wb_err_o;
 //
 input			i6_wb_cyc_i;
 input			i6_wb_stb_i;
-input			i6_wb_cab_i;
 input	[`TC_AW-1:0]	i6_wb_adr_i;
 input	[`TC_BSW-1:0]	i6_wb_sel_i;
 input			i6_wb_we_i;
@@ -414,7 +390,6 @@ output			i6_wb_err_o;
 //
 input			i7_wb_cyc_i;
 input			i7_wb_stb_i;
-input			i7_wb_cab_i;
 input	[`TC_AW-1:0]	i7_wb_adr_i;
 input	[`TC_BSW-1:0]	i7_wb_sel_i;
 input			i7_wb_we_i;
@@ -428,7 +403,6 @@ output			i7_wb_err_o;
 //
 output			t0_wb_cyc_o;
 output			t0_wb_stb_o;
-output			t0_wb_cab_o;
 output	[`TC_AW-1:0]	t0_wb_adr_o;
 output	[`TC_BSW-1:0]	t0_wb_sel_o;
 output			t0_wb_we_o;
@@ -442,7 +416,6 @@ input			t0_wb_err_i;
 //
 output			t1_wb_cyc_o;
 output			t1_wb_stb_o;
-output			t1_wb_cab_o;
 output	[`TC_AW-1:0]	t1_wb_adr_o;
 output	[`TC_BSW-1:0]	t1_wb_sel_o;
 output			t1_wb_we_o;
@@ -456,7 +429,6 @@ input			t1_wb_err_i;
 //
 output			t2_wb_cyc_o;
 output			t2_wb_stb_o;
-output			t2_wb_cab_o;
 output	[`TC_AW-1:0]	t2_wb_adr_o;
 output	[`TC_BSW-1:0]	t2_wb_sel_o;
 output			t2_wb_we_o;
@@ -470,7 +442,6 @@ input			t2_wb_err_i;
 //
 output			t3_wb_cyc_o;
 output			t3_wb_stb_o;
-output			t3_wb_cab_o;
 output	[`TC_AW-1:0]	t3_wb_adr_o;
 output	[`TC_BSW-1:0]	t3_wb_sel_o;
 output			t3_wb_we_o;
@@ -484,7 +455,6 @@ input			t3_wb_err_i;
 //
 output			t4_wb_cyc_o;
 output			t4_wb_stb_o;
-output			t4_wb_cab_o;
 output	[`TC_AW-1:0]	t4_wb_adr_o;
 output	[`TC_BSW-1:0]	t4_wb_sel_o;
 output			t4_wb_we_o;
@@ -498,7 +468,6 @@ input			t4_wb_err_i;
 //
 output			t5_wb_cyc_o;
 output			t5_wb_stb_o;
-output			t5_wb_cab_o;
 output	[`TC_AW-1:0]	t5_wb_adr_o;
 output	[`TC_BSW-1:0]	t5_wb_sel_o;
 output			t5_wb_we_o;
@@ -512,7 +481,6 @@ input			t5_wb_err_i;
 //
 output			t6_wb_cyc_o;
 output			t6_wb_stb_o;
-output			t6_wb_cab_o;
 output	[`TC_AW-1:0]	t6_wb_adr_o;
 output	[`TC_BSW-1:0]	t6_wb_sel_o;
 output			t6_wb_we_o;
@@ -526,7 +494,6 @@ input			t6_wb_err_i;
 //
 output			t7_wb_cyc_o;
 output			t7_wb_stb_o;
-output			t7_wb_cab_o;
 output	[`TC_AW-1:0]	t7_wb_adr_o;
 output	[`TC_BSW-1:0]	t7_wb_sel_o;
 output			t7_wb_we_o;
@@ -540,7 +507,6 @@ input			t7_wb_err_i;
 //
 output			t8_wb_cyc_o;
 output			t8_wb_stb_o;
-output			t8_wb_cab_o;
 output	[`TC_AW-1:0]	t8_wb_adr_o;
 output	[`TC_BSW-1:0]	t8_wb_sel_o;
 output			t8_wb_we_o;
@@ -611,7 +577,6 @@ wire			yi7_wb_err_o;
 //
 wire			z_wb_cyc_i;
 wire			z_wb_stb_i;
-wire			z_wb_cab_i;
 wire	[`TC_AW-1:0]	z_wb_adr_i;
 wire	[`TC_BSW-1:0]	z_wb_sel_i;
 wire			z_wb_we_i;
@@ -658,7 +623,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i0_wb_cyc_i(i0_wb_cyc_i),
 	.i0_wb_stb_i(i0_wb_stb_i),
-	.i0_wb_cab_i(i0_wb_cab_i),
 	.i0_wb_adr_i(i0_wb_adr_i),
 	.i0_wb_sel_i(i0_wb_sel_i),
 	.i0_wb_we_i(i0_wb_we_i),
@@ -669,7 +633,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i1_wb_cyc_i(i1_wb_cyc_i),
 	.i1_wb_stb_i(i1_wb_stb_i),
-	.i1_wb_cab_i(i1_wb_cab_i),
 	.i1_wb_adr_i(i1_wb_adr_i),
 	.i1_wb_sel_i(i1_wb_sel_i),
 	.i1_wb_we_i(i1_wb_we_i),
@@ -680,7 +643,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i2_wb_cyc_i(i2_wb_cyc_i),
 	.i2_wb_stb_i(i2_wb_stb_i),
-	.i2_wb_cab_i(i2_wb_cab_i),
 	.i2_wb_adr_i(i2_wb_adr_i),
 	.i2_wb_sel_i(i2_wb_sel_i),
 	.i2_wb_we_i(i2_wb_we_i),
@@ -691,7 +653,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i3_wb_cyc_i(i3_wb_cyc_i),
 	.i3_wb_stb_i(i3_wb_stb_i),
-	.i3_wb_cab_i(i3_wb_cab_i),
 	.i3_wb_adr_i(i3_wb_adr_i),
 	.i3_wb_sel_i(i3_wb_sel_i),
 	.i3_wb_we_i(i3_wb_we_i),
@@ -702,7 +663,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i4_wb_cyc_i(i4_wb_cyc_i),
 	.i4_wb_stb_i(i4_wb_stb_i),
-	.i4_wb_cab_i(i4_wb_cab_i),
 	.i4_wb_adr_i(i4_wb_adr_i),
 	.i4_wb_sel_i(i4_wb_sel_i),
 	.i4_wb_we_i(i4_wb_we_i),
@@ -713,7 +673,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i5_wb_cyc_i(i5_wb_cyc_i),
 	.i5_wb_stb_i(i5_wb_stb_i),
-	.i5_wb_cab_i(i5_wb_cab_i),
 	.i5_wb_adr_i(i5_wb_adr_i),
 	.i5_wb_sel_i(i5_wb_sel_i),
 	.i5_wb_we_i(i5_wb_we_i),
@@ -724,7 +683,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i6_wb_cyc_i(i6_wb_cyc_i),
 	.i6_wb_stb_i(i6_wb_stb_i),
-	.i6_wb_cab_i(i6_wb_cab_i),
 	.i6_wb_adr_i(i6_wb_adr_i),
 	.i6_wb_sel_i(i6_wb_sel_i),
 	.i6_wb_we_i(i6_wb_we_i),
@@ -735,7 +693,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.i7_wb_cyc_i(i7_wb_cyc_i),
 	.i7_wb_stb_i(i7_wb_stb_i),
-	.i7_wb_cab_i(i7_wb_cab_i),
 	.i7_wb_adr_i(i7_wb_adr_i),
 	.i7_wb_sel_i(i7_wb_sel_i),
 	.i7_wb_we_i(i7_wb_we_i),
@@ -746,7 +703,6 @@ tc_mi_to_st #(t0_addr_w, t0_addr,
 
 	.t0_wb_cyc_o(t0_wb_cyc_o),
 	.t0_wb_stb_o(t0_wb_stb_o),
-	.t0_wb_cab_o(t0_wb_cab_o),
 	.t0_wb_adr_o(t0_wb_adr_o),
 	.t0_wb_sel_o(t0_wb_sel_o),
 	.t0_wb_we_o(t0_wb_we_o),
@@ -767,7 +723,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i0_wb_cyc_i(i0_wb_cyc_i),
 	.i0_wb_stb_i(i0_wb_stb_i),
-	.i0_wb_cab_i(i0_wb_cab_i),
 	.i0_wb_adr_i(i0_wb_adr_i),
 	.i0_wb_sel_i(i0_wb_sel_i),
 	.i0_wb_we_i(i0_wb_we_i),
@@ -778,7 +733,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i1_wb_cyc_i(i1_wb_cyc_i),
 	.i1_wb_stb_i(i1_wb_stb_i),
-	.i1_wb_cab_i(i1_wb_cab_i),
 	.i1_wb_adr_i(i1_wb_adr_i),
 	.i1_wb_sel_i(i1_wb_sel_i),
 	.i1_wb_we_i(i1_wb_we_i),
@@ -789,7 +743,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i2_wb_cyc_i(i2_wb_cyc_i),
 	.i2_wb_stb_i(i2_wb_stb_i),
-	.i2_wb_cab_i(i2_wb_cab_i),
 	.i2_wb_adr_i(i2_wb_adr_i),
 	.i2_wb_sel_i(i2_wb_sel_i),
 	.i2_wb_we_i(i2_wb_we_i),
@@ -800,7 +753,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i3_wb_cyc_i(i3_wb_cyc_i),
 	.i3_wb_stb_i(i3_wb_stb_i),
-	.i3_wb_cab_i(i3_wb_cab_i),
 	.i3_wb_adr_i(i3_wb_adr_i),
 	.i3_wb_sel_i(i3_wb_sel_i),
 	.i3_wb_we_i(i3_wb_we_i),
@@ -811,7 +763,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i4_wb_cyc_i(i4_wb_cyc_i),
 	.i4_wb_stb_i(i4_wb_stb_i),
-	.i4_wb_cab_i(i4_wb_cab_i),
 	.i4_wb_adr_i(i4_wb_adr_i),
 	.i4_wb_sel_i(i4_wb_sel_i),
 	.i4_wb_we_i(i4_wb_we_i),
@@ -822,7 +773,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i5_wb_cyc_i(i5_wb_cyc_i),
 	.i5_wb_stb_i(i5_wb_stb_i),
-	.i5_wb_cab_i(i5_wb_cab_i),
 	.i5_wb_adr_i(i5_wb_adr_i),
 	.i5_wb_sel_i(i5_wb_sel_i),
 	.i5_wb_we_i(i5_wb_we_i),
@@ -833,7 +783,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i6_wb_cyc_i(i6_wb_cyc_i),
 	.i6_wb_stb_i(i6_wb_stb_i),
-	.i6_wb_cab_i(i6_wb_cab_i),
 	.i6_wb_adr_i(i6_wb_adr_i),
 	.i6_wb_sel_i(i6_wb_sel_i),
 	.i6_wb_we_i(i6_wb_we_i),
@@ -844,7 +793,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.i7_wb_cyc_i(i7_wb_cyc_i),
 	.i7_wb_stb_i(i7_wb_stb_i),
-	.i7_wb_cab_i(i7_wb_cab_i),
 	.i7_wb_adr_i(i7_wb_adr_i),
 	.i7_wb_sel_i(i7_wb_sel_i),
 	.i7_wb_we_i(i7_wb_we_i),
@@ -855,7 +803,6 @@ tc_mi_to_st #(t1_addr_w, t1_addr,
 
 	.t0_wb_cyc_o(z_wb_cyc_i),
 	.t0_wb_stb_o(z_wb_stb_i),
-	.t0_wb_cab_o(z_wb_cab_i),
 	.t0_wb_adr_o(z_wb_adr_i),
 	.t0_wb_sel_o(z_wb_sel_i),
 	.t0_wb_we_o(z_wb_we_i),
@@ -874,7 +821,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.i0_wb_cyc_i(z_wb_cyc_i),
 	.i0_wb_stb_i(z_wb_stb_i),
-	.i0_wb_cab_i(z_wb_cab_i),
 	.i0_wb_adr_i(z_wb_adr_i),
 	.i0_wb_sel_i(z_wb_sel_i),
 	.i0_wb_we_i(z_wb_we_i),
@@ -885,7 +831,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t0_wb_cyc_o(t1_wb_cyc_o),
 	.t0_wb_stb_o(t1_wb_stb_o),
-	.t0_wb_cab_o(t1_wb_cab_o),
 	.t0_wb_adr_o(t1_wb_adr_o),
 	.t0_wb_sel_o(t1_wb_sel_o),
 	.t0_wb_we_o(t1_wb_we_o),
@@ -896,7 +841,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t1_wb_cyc_o(t2_wb_cyc_o),
 	.t1_wb_stb_o(t2_wb_stb_o),
-	.t1_wb_cab_o(t2_wb_cab_o),
 	.t1_wb_adr_o(t2_wb_adr_o),
 	.t1_wb_sel_o(t2_wb_sel_o),
 	.t1_wb_we_o(t2_wb_we_o),
@@ -907,7 +851,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t2_wb_cyc_o(t3_wb_cyc_o),
 	.t2_wb_stb_o(t3_wb_stb_o),
-	.t2_wb_cab_o(t3_wb_cab_o),
 	.t2_wb_adr_o(t3_wb_adr_o),
 	.t2_wb_sel_o(t3_wb_sel_o),
 	.t2_wb_we_o(t3_wb_we_o),
@@ -918,7 +861,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t3_wb_cyc_o(t4_wb_cyc_o),
 	.t3_wb_stb_o(t4_wb_stb_o),
-	.t3_wb_cab_o(t4_wb_cab_o),
 	.t3_wb_adr_o(t4_wb_adr_o),
 	.t3_wb_sel_o(t4_wb_sel_o),
 	.t3_wb_we_o(t4_wb_we_o),
@@ -929,7 +871,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t4_wb_cyc_o(t5_wb_cyc_o),
 	.t4_wb_stb_o(t5_wb_stb_o),
-	.t4_wb_cab_o(t5_wb_cab_o),
 	.t4_wb_adr_o(t5_wb_adr_o),
 	.t4_wb_sel_o(t5_wb_sel_o),
 	.t4_wb_we_o(t5_wb_we_o),
@@ -940,7 +881,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t5_wb_cyc_o(t6_wb_cyc_o),
 	.t5_wb_stb_o(t6_wb_stb_o),
-	.t5_wb_cab_o(t6_wb_cab_o),
 	.t5_wb_adr_o(t6_wb_adr_o),
 	.t5_wb_sel_o(t6_wb_sel_o),
 	.t5_wb_we_o(t6_wb_we_o),
@@ -951,7 +891,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t6_wb_cyc_o(t7_wb_cyc_o),
 	.t6_wb_stb_o(t7_wb_stb_o),
-	.t6_wb_cab_o(t7_wb_cab_o),
 	.t6_wb_adr_o(t7_wb_adr_o),
 	.t6_wb_sel_o(t7_wb_sel_o),
 	.t6_wb_we_o(t7_wb_we_o),
@@ -962,7 +901,6 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 
 	.t7_wb_cyc_o(t8_wb_cyc_o),
 	.t7_wb_stb_o(t8_wb_stb_o),
-	.t7_wb_cab_o(t8_wb_cab_o),
 	.t7_wb_adr_o(t8_wb_adr_o),
 	.t7_wb_sel_o(t8_wb_sel_o),
 	.t7_wb_we_o(t8_wb_we_o),
@@ -984,7 +922,6 @@ module tc_mi_to_st (
 
 	i0_wb_cyc_i,
 	i0_wb_stb_i,
-	i0_wb_cab_i,
 	i0_wb_adr_i,
 	i0_wb_sel_i,
 	i0_wb_we_i,
@@ -995,7 +932,6 @@ module tc_mi_to_st (
 
 	i1_wb_cyc_i,
 	i1_wb_stb_i,
-	i1_wb_cab_i,
 	i1_wb_adr_i,
 	i1_wb_sel_i,
 	i1_wb_we_i,
@@ -1006,7 +942,6 @@ module tc_mi_to_st (
 
 	i2_wb_cyc_i,
 	i2_wb_stb_i,
-	i2_wb_cab_i,
 	i2_wb_adr_i,
 	i2_wb_sel_i,
 	i2_wb_we_i,
@@ -1017,7 +952,6 @@ module tc_mi_to_st (
 
 	i3_wb_cyc_i,
 	i3_wb_stb_i,
-	i3_wb_cab_i,
 	i3_wb_adr_i,
 	i3_wb_sel_i,
 	i3_wb_we_i,
@@ -1028,7 +962,6 @@ module tc_mi_to_st (
 
 	i4_wb_cyc_i,
 	i4_wb_stb_i,
-	i4_wb_cab_i,
 	i4_wb_adr_i,
 	i4_wb_sel_i,
 	i4_wb_we_i,
@@ -1039,7 +972,6 @@ module tc_mi_to_st (
 
 	i5_wb_cyc_i,
 	i5_wb_stb_i,
-	i5_wb_cab_i,
 	i5_wb_adr_i,
 	i5_wb_sel_i,
 	i5_wb_we_i,
@@ -1050,7 +982,6 @@ module tc_mi_to_st (
 
 	i6_wb_cyc_i,
 	i6_wb_stb_i,
-	i6_wb_cab_i,
 	i6_wb_adr_i,
 	i6_wb_sel_i,
 	i6_wb_we_i,
@@ -1061,7 +992,6 @@ module tc_mi_to_st (
 
 	i7_wb_cyc_i,
 	i7_wb_stb_i,
-	i7_wb_cab_i,
 	i7_wb_adr_i,
 	i7_wb_sel_i,
 	i7_wb_we_i,
@@ -1072,7 +1002,6 @@ module tc_mi_to_st (
 
 	t0_wb_cyc_o,
 	t0_wb_stb_o,
-	t0_wb_cab_o,
 	t0_wb_adr_o,
 	t0_wb_sel_o,
 	t0_wb_we_o,
@@ -1103,7 +1032,6 @@ input			wb_rst_i;
 //
 input			i0_wb_cyc_i;
 input			i0_wb_stb_i;
-input			i0_wb_cab_i;
 input	[`TC_AW-1:0]	i0_wb_adr_i;
 input	[`TC_BSW-1:0]	i0_wb_sel_i;
 input			i0_wb_we_i;
@@ -1117,7 +1045,6 @@ output			i0_wb_err_o;
 //
 input			i1_wb_cyc_i;
 input			i1_wb_stb_i;
-input			i1_wb_cab_i;
 input	[`TC_AW-1:0]	i1_wb_adr_i;
 input	[`TC_BSW-1:0]	i1_wb_sel_i;
 input			i1_wb_we_i;
@@ -1131,7 +1058,6 @@ output			i1_wb_err_o;
 //
 input			i2_wb_cyc_i;
 input			i2_wb_stb_i;
-input			i2_wb_cab_i;
 input	[`TC_AW-1:0]	i2_wb_adr_i;
 input	[`TC_BSW-1:0]	i2_wb_sel_i;
 input			i2_wb_we_i;
@@ -1145,7 +1071,6 @@ output			i2_wb_err_o;
 //
 input			i3_wb_cyc_i;
 input			i3_wb_stb_i;
-input			i3_wb_cab_i;
 input	[`TC_AW-1:0]	i3_wb_adr_i;
 input	[`TC_BSW-1:0]	i3_wb_sel_i;
 input			i3_wb_we_i;
@@ -1159,7 +1084,6 @@ output			i3_wb_err_o;
 //
 input			i4_wb_cyc_i;
 input			i4_wb_stb_i;
-input			i4_wb_cab_i;
 input	[`TC_AW-1:0]	i4_wb_adr_i;
 input	[`TC_BSW-1:0]	i4_wb_sel_i;
 input			i4_wb_we_i;
@@ -1173,7 +1097,6 @@ output			i4_wb_err_o;
 //
 input			i5_wb_cyc_i;
 input			i5_wb_stb_i;
-input			i5_wb_cab_i;
 input	[`TC_AW-1:0]	i5_wb_adr_i;
 input	[`TC_BSW-1:0]	i5_wb_sel_i;
 input			i5_wb_we_i;
@@ -1187,7 +1110,6 @@ output			i5_wb_err_o;
 //
 input			i6_wb_cyc_i;
 input			i6_wb_stb_i;
-input			i6_wb_cab_i;
 input	[`TC_AW-1:0]	i6_wb_adr_i;
 input	[`TC_BSW-1:0]	i6_wb_sel_i;
 input			i6_wb_we_i;
@@ -1201,7 +1123,6 @@ output			i6_wb_err_o;
 //
 input			i7_wb_cyc_i;
 input			i7_wb_stb_i;
-input			i7_wb_cab_i;
 input	[`TC_AW-1:0]	i7_wb_adr_i;
 input	[`TC_BSW-1:0]	i7_wb_sel_i;
 input			i7_wb_we_i;
@@ -1215,7 +1136,6 @@ output			i7_wb_err_o;
 //
 output			t0_wb_cyc_o;
 output			t0_wb_stb_o;
-output			t0_wb_cab_o;
 output	[`TC_AW-1:0]	t0_wb_adr_o;
 output	[`TC_BSW-1:0]	t0_wb_sel_o;
 output			t0_wb_we_o;
@@ -1245,63 +1165,63 @@ reg	[2:0]		req_r;
 //
 // Group WB initiator 0 i/f inputs and outputs
 //
-assign i0_in = {i0_wb_cyc_i, i0_wb_stb_i, i0_wb_cab_i, i0_wb_adr_i,
+assign i0_in = {i0_wb_cyc_i, i0_wb_stb_i, i0_wb_adr_i,
 		i0_wb_sel_i, i0_wb_we_i, i0_wb_dat_i};
 assign {i0_wb_dat_o, i0_wb_ack_o, i0_wb_err_o} = i0_out;
 
 //
 // Group WB initiator 1 i/f inputs and outputs
 //
-assign i1_in = {i1_wb_cyc_i, i1_wb_stb_i, i1_wb_cab_i, i1_wb_adr_i,
+assign i1_in = {i1_wb_cyc_i, i1_wb_stb_i, i1_wb_adr_i,
 		i1_wb_sel_i, i1_wb_we_i, i1_wb_dat_i};
 assign {i1_wb_dat_o, i1_wb_ack_o, i1_wb_err_o} = i1_out;
 
 //
 // Group WB initiator 2 i/f inputs and outputs
 //
-assign i2_in = {i2_wb_cyc_i, i2_wb_stb_i, i2_wb_cab_i, i2_wb_adr_i,
+assign i2_in = {i2_wb_cyc_i, i2_wb_stb_i, i2_wb_adr_i,
 		i2_wb_sel_i, i2_wb_we_i, i2_wb_dat_i};
 assign {i2_wb_dat_o, i2_wb_ack_o, i2_wb_err_o} = i2_out;
 
 //
 // Group WB initiator 3 i/f inputs and outputs
 //
-assign i3_in = {i3_wb_cyc_i, i3_wb_stb_i, i3_wb_cab_i, i3_wb_adr_i,
+assign i3_in = {i3_wb_cyc_i, i3_wb_stb_i, i3_wb_adr_i,
 		i3_wb_sel_i, i3_wb_we_i, i3_wb_dat_i};
 assign {i3_wb_dat_o, i3_wb_ack_o, i3_wb_err_o} = i3_out;
 
 //
 // Group WB initiator 4 i/f inputs and outputs
 //
-assign i4_in = {i4_wb_cyc_i, i4_wb_stb_i, i4_wb_cab_i, i4_wb_adr_i,
+assign i4_in = {i4_wb_cyc_i, i4_wb_stb_i, i4_wb_adr_i,
 		i4_wb_sel_i, i4_wb_we_i, i4_wb_dat_i};
 assign {i4_wb_dat_o, i4_wb_ack_o, i4_wb_err_o} = i4_out;
 
 //
 // Group WB initiator 5 i/f inputs and outputs
 //
-assign i5_in = {i5_wb_cyc_i, i5_wb_stb_i, i5_wb_cab_i, i5_wb_adr_i,
+assign i5_in = {i5_wb_cyc_i, i5_wb_stb_i, i5_wb_adr_i,
 		i5_wb_sel_i, i5_wb_we_i, i5_wb_dat_i};
 assign {i5_wb_dat_o, i5_wb_ack_o, i5_wb_err_o} = i5_out;
 
 //
 // Group WB initiator 6 i/f inputs and outputs
 //
-assign i6_in = {i6_wb_cyc_i, i6_wb_stb_i, i6_wb_cab_i, i6_wb_adr_i,
+assign i6_in = {i6_wb_cyc_i, i6_wb_stb_i, i6_wb_adr_i,
 		i6_wb_sel_i, i6_wb_we_i, i6_wb_dat_i};
 assign {i6_wb_dat_o, i6_wb_ack_o, i6_wb_err_o} = i6_out;
 
 //
 // Group WB initiator 7 i/f inputs and outputs
 //
-assign i7_in = {i7_wb_cyc_i, i7_wb_stb_i, i7_wb_cab_i, i7_wb_adr_i,
+assign i7_in = {i7_wb_cyc_i, i7_wb_stb_i, i7_wb_adr_i,
 		i7_wb_sel_i, i7_wb_we_i, i7_wb_dat_i};
 assign {i7_wb_dat_o, i7_wb_ack_o, i7_wb_err_o} = i7_out;
 
 //
 // Group WB target 0 i/f inputs and outputs
 //
-assign {t0_wb_cyc_o, t0_wb_stb_o, t0_wb_cab_o, t0_wb_adr_o,
+assign {t0_wb_cyc_o, t0_wb_stb_o, t0_wb_adr_o,
 		t0_wb_sel_o, t0_wb_we_o, t0_wb_dat_o} = t0_out;
 assign t0_in = {t0_wb_dat_i, t0_wb_ack_i, t0_wb_err_i};
 
@@ -1416,7 +1336,6 @@ module tc_si_to_mt (
 
 	i0_wb_cyc_i,
 	i0_wb_stb_i,
-	i0_wb_cab_i,
 	i0_wb_adr_i,
 	i0_wb_sel_i,
 	i0_wb_we_i,
@@ -1427,7 +1346,6 @@ module tc_si_to_mt (
 
 	t0_wb_cyc_o,
 	t0_wb_stb_o,
-	t0_wb_cab_o,
 	t0_wb_adr_o,
 	t0_wb_sel_o,
 	t0_wb_we_o,
@@ -1438,7 +1356,6 @@ module tc_si_to_mt (
 
 	t1_wb_cyc_o,
 	t1_wb_stb_o,
-	t1_wb_cab_o,
 	t1_wb_adr_o,
 	t1_wb_sel_o,
 	t1_wb_we_o,
@@ -1449,7 +1366,6 @@ module tc_si_to_mt (
 
 	t2_wb_cyc_o,
 	t2_wb_stb_o,
-	t2_wb_cab_o,
 	t2_wb_adr_o,
 	t2_wb_sel_o,
 	t2_wb_we_o,
@@ -1460,7 +1376,6 @@ module tc_si_to_mt (
 
 	t3_wb_cyc_o,
 	t3_wb_stb_o,
-	t3_wb_cab_o,
 	t3_wb_adr_o,
 	t3_wb_sel_o,
 	t3_wb_we_o,
@@ -1471,7 +1386,6 @@ module tc_si_to_mt (
 
 	t4_wb_cyc_o,
 	t4_wb_stb_o,
-	t4_wb_cab_o,
 	t4_wb_adr_o,
 	t4_wb_sel_o,
 	t4_wb_we_o,
@@ -1482,7 +1396,6 @@ module tc_si_to_mt (
 
 	t5_wb_cyc_o,
 	t5_wb_stb_o,
-	t5_wb_cab_o,
 	t5_wb_adr_o,
 	t5_wb_sel_o,
 	t5_wb_we_o,
@@ -1493,7 +1406,6 @@ module tc_si_to_mt (
 
 	t6_wb_cyc_o,
 	t6_wb_stb_o,
-	t6_wb_cab_o,
 	t6_wb_adr_o,
 	t6_wb_sel_o,
 	t6_wb_we_o,
@@ -1504,7 +1416,6 @@ module tc_si_to_mt (
 
 	t7_wb_cyc_o,
 	t7_wb_stb_o,
-	t7_wb_cab_o,
 	t7_wb_adr_o,
 	t7_wb_sel_o,
 	t7_wb_we_o,
@@ -1538,7 +1449,6 @@ parameter		t7_addr = 3'd7;
 //
 input			i0_wb_cyc_i;
 input			i0_wb_stb_i;
-input			i0_wb_cab_i;
 input	[`TC_AW-1:0]	i0_wb_adr_i;
 input	[`TC_BSW-1:0]	i0_wb_sel_i;
 input			i0_wb_we_i;
@@ -1552,7 +1462,6 @@ output			i0_wb_err_o;
 //
 output			t0_wb_cyc_o;
 output			t0_wb_stb_o;
-output			t0_wb_cab_o;
 output	[`TC_AW-1:0]	t0_wb_adr_o;
 output	[`TC_BSW-1:0]	t0_wb_sel_o;
 output			t0_wb_we_o;
@@ -1566,7 +1475,6 @@ input			t0_wb_err_i;
 //
 output			t1_wb_cyc_o;
 output			t1_wb_stb_o;
-output			t1_wb_cab_o;
 output	[`TC_AW-1:0]	t1_wb_adr_o;
 output	[`TC_BSW-1:0]	t1_wb_sel_o;
 output			t1_wb_we_o;
@@ -1580,7 +1488,6 @@ input			t1_wb_err_i;
 //
 output			t2_wb_cyc_o;
 output			t2_wb_stb_o;
-output			t2_wb_cab_o;
 output	[`TC_AW-1:0]	t2_wb_adr_o;
 output	[`TC_BSW-1:0]	t2_wb_sel_o;
 output			t2_wb_we_o;
@@ -1594,7 +1501,6 @@ input			t2_wb_err_i;
 //
 output			t3_wb_cyc_o;
 output			t3_wb_stb_o;
-output			t3_wb_cab_o;
 output	[`TC_AW-1:0]	t3_wb_adr_o;
 output	[`TC_BSW-1:0]	t3_wb_sel_o;
 output			t3_wb_we_o;
@@ -1608,7 +1514,6 @@ input			t3_wb_err_i;
 //
 output			t4_wb_cyc_o;
 output			t4_wb_stb_o;
-output			t4_wb_cab_o;
 output	[`TC_AW-1:0]	t4_wb_adr_o;
 output	[`TC_BSW-1:0]	t4_wb_sel_o;
 output			t4_wb_we_o;
@@ -1622,7 +1527,6 @@ input			t4_wb_err_i;
 //
 output			t5_wb_cyc_o;
 output			t5_wb_stb_o;
-output			t5_wb_cab_o;
 output	[`TC_AW-1:0]	t5_wb_adr_o;
 output	[`TC_BSW-1:0]	t5_wb_sel_o;
 output			t5_wb_we_o;
@@ -1636,7 +1540,6 @@ input			t5_wb_err_i;
 //
 output			t6_wb_cyc_o;
 output			t6_wb_stb_o;
-output			t6_wb_cab_o;
 output	[`TC_AW-1:0]	t6_wb_adr_o;
 output	[`TC_BSW-1:0]	t6_wb_sel_o;
 output			t6_wb_we_o;
@@ -1650,7 +1553,6 @@ input			t6_wb_err_i;
 //
 output			t7_wb_cyc_o;
 output			t7_wb_stb_o;
-output			t7_wb_cab_o;
 output	[`TC_AW-1:0]	t7_wb_adr_o;
 output	[`TC_BSW-1:0]	t7_wb_sel_o;
 output			t7_wb_we_o;
@@ -1677,63 +1579,63 @@ wire	[7:0]		req_t;
 //
 // Group WB initiator 0 i/f inputs and outputs
 //
-assign i0_in = {i0_wb_cyc_i, i0_wb_stb_i, i0_wb_cab_i, i0_wb_adr_i,
+assign i0_in = {i0_wb_cyc_i, i0_wb_stb_i, i0_wb_adr_i,
 		i0_wb_sel_i, i0_wb_we_i, i0_wb_dat_i};
 assign {i0_wb_dat_o, i0_wb_ack_o, i0_wb_err_o} = i0_out;
 
 //
 // Group WB target 0 i/f inputs and outputs
 //
-assign {t0_wb_cyc_o, t0_wb_stb_o, t0_wb_cab_o, t0_wb_adr_o,
+assign {t0_wb_cyc_o, t0_wb_stb_o, t0_wb_adr_o,
 		t0_wb_sel_o, t0_wb_we_o, t0_wb_dat_o} = t0_out;
 assign t0_in = {t0_wb_dat_i, t0_wb_ack_i, t0_wb_err_i};
 
 //
 // Group WB target 1 i/f inputs and outputs
 //
-assign {t1_wb_cyc_o, t1_wb_stb_o, t1_wb_cab_o, t1_wb_adr_o,
+assign {t1_wb_cyc_o, t1_wb_stb_o, t1_wb_adr_o,
 		t1_wb_sel_o, t1_wb_we_o, t1_wb_dat_o} = t1_out;
 assign t1_in = {t1_wb_dat_i, t1_wb_ack_i, t1_wb_err_i};
 
 //
 // Group WB target 2 i/f inputs and outputs
 //
-assign {t2_wb_cyc_o, t2_wb_stb_o, t2_wb_cab_o, t2_wb_adr_o,
+assign {t2_wb_cyc_o, t2_wb_stb_o, t2_wb_adr_o,
 		t2_wb_sel_o, t2_wb_we_o, t2_wb_dat_o} = t2_out;
 assign t2_in = {t2_wb_dat_i, t2_wb_ack_i, t2_wb_err_i};
 
 //
 // Group WB target 3 i/f inputs and outputs
 //
-assign {t3_wb_cyc_o, t3_wb_stb_o, t3_wb_cab_o, t3_wb_adr_o,
+assign {t3_wb_cyc_o, t3_wb_stb_o, t3_wb_adr_o,
 		t3_wb_sel_o, t3_wb_we_o, t3_wb_dat_o} = t3_out;
 assign t3_in = {t3_wb_dat_i, t3_wb_ack_i, t3_wb_err_i};
 
 //
 // Group WB target 4 i/f inputs and outputs
 //
-assign {t4_wb_cyc_o, t4_wb_stb_o, t4_wb_cab_o, t4_wb_adr_o,
+assign {t4_wb_cyc_o, t4_wb_stb_o, t4_wb_adr_o,
 		t4_wb_sel_o, t4_wb_we_o, t4_wb_dat_o} = t4_out;
 assign t4_in = {t4_wb_dat_i, t4_wb_ack_i, t4_wb_err_i};
 
 //
 // Group WB target 5 i/f inputs and outputs
 //
-assign {t5_wb_cyc_o, t5_wb_stb_o, t5_wb_cab_o, t5_wb_adr_o,
+assign {t5_wb_cyc_o, t5_wb_stb_o, t5_wb_adr_o,
 		t5_wb_sel_o, t5_wb_we_o, t5_wb_dat_o} = t5_out;
 assign t5_in = {t5_wb_dat_i, t5_wb_ack_i, t5_wb_err_i};
 
 //
 // Group WB target 6 i/f inputs and outputs
 //
-assign {t6_wb_cyc_o, t6_wb_stb_o, t6_wb_cab_o, t6_wb_adr_o,
+assign {t6_wb_cyc_o, t6_wb_stb_o, t6_wb_adr_o,
 		t6_wb_sel_o, t6_wb_we_o, t6_wb_dat_o} = t6_out;
 assign t6_in = {t6_wb_dat_i, t6_wb_ack_i, t6_wb_err_i};
 
 //
 // Group WB target 7 i/f inputs and outputs
 //
-assign {t7_wb_cyc_o, t7_wb_stb_o, t7_wb_cab_o, t7_wb_adr_o,
+assign {t7_wb_cyc_o, t7_wb_stb_o, t7_wb_adr_o,
 		t7_wb_sel_o, t7_wb_we_o, t7_wb_dat_o} = t7_out;
 assign t7_in = {t7_wb_dat_i, t7_wb_ack_i, t7_wb_err_i};
 

@@ -1,75 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-////                                                              ////
-////  OR1K test application for XESS XSV board, Top Level         ////
-////                                                              ////
-////  This file is part of the OR1K test application              ////
-////  http://www.opencores.org/cores/or1k/                        ////
-////                                                              ////
-////  Description                                                 ////
-////  Top level instantiating all the blocks.                     ////
-////                                                              ////
-////  To Do:                                                      ////
-////   - nothing really                                           ////
-////                                                              ////
-////  Author(s):                                                  ////
-////      - Damjan Lampret, lampret@opencores.org                 ////
-////                                                              ////
-//////////////////////////////////////////////////////////////////////
-////                                                              ////
-//// Copyright (C) 2001 Authors                                   ////
-////                                                              ////
-//// This source file may be used and distributed without         ////
-//// restriction provided that this copyright statement is not    ////
-//// removed from the file and that any derivative work contains  ////
-//// the original copyright notice and the associated disclaimer. ////
-////                                                              ////
-//// This source file is free software; you can redistribute it   ////
-//// and/or modify it under the terms of the GNU Lesser General   ////
-//// Public License as published by the Free Software Foundation; ////
-//// either version 2.1 of the License, or (at your option) any   ////
-//// later version.                                               ////
-////                                                              ////
-//// This source is distributed in the hope that it will be       ////
-//// useful, but WITHOUT ANY WARRANTY; without even the implied   ////
-//// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR      ////
-//// PURPOSE.  See the GNU Lesser General Public License for more ////
-//// details.                                                     ////
-////                                                              ////
-//// You should have received a copy of the GNU Lesser General    ////
-//// Public License along with this source; if not, download it   ////
-//// from http://www.opencores.org/lgpl.shtml                     ////
-////                                                              ////
-//////////////////////////////////////////////////////////////////////
-//
-// CVS Revision History
-//
-// $Log: xsv_fpga_top.v,v $
-// Revision 1.10  2004/04/05 08:44:35  lampret
-// Merged branch_qmem into main tree.
-//
-// Revision 1.8  2003/04/07 21:05:58  lampret
-// WB = 1/2 RISC clock test code enabled.
-//
-// Revision 1.7  2003/04/07 01:28:17  lampret
-// Adding OR1200_CLMODE_1TO2 test code.
-//
-// Revision 1.6  2002/08/12 05:35:12  lampret
-// rty_i are unused - tied to zero.
-//
-// Revision 1.5  2002/03/29 20:58:51  lampret
-// Changed hardcoded address for fake MC to use a define.
-//
-// Revision 1.4  2002/03/29 16:30:47  lampret
-// Fixed port names that changed.
-//
-// Revision 1.3  2002/03/29 15:50:03  lampret
-// Added response from memory controller (addr 0x60000000)
-//
-// Revision 1.2  2002/03/21 17:39:16  lampret
-// Fixed some typos
-//
-//
-
 `include "minsoc_defines.v"
 `include "or1200_defines.v"
 
@@ -164,7 +92,11 @@ assign jtag_gnd = 1'b0;
 
 wire rstn;
 
+`ifdef POSITIVE_RESET
 assign rstn = ~reset;
+`elsif NEGATIVE_RESET
+assign rstn = reset;
+`endif
 
 //
 // Internal wires
@@ -180,7 +112,6 @@ wire 	[3:0]		wb_dm_sel_o;
 wire			wb_dm_we_o;
 wire 			wb_dm_stb_o;
 wire			wb_dm_cyc_o;
-wire			wb_dm_cab_o;
 wire			wb_dm_ack_i;
 wire			wb_dm_err_i;
 
@@ -212,7 +143,6 @@ wire			wb_rim_err_i;
 wire			wb_rim_rty_i = 1'b0;
 wire			wb_rim_we_o;
 wire			wb_rim_stb_o;
-wire			wb_rim_cab_o;
 wire	[31:0]		wb_rif_dat_i;
 wire			wb_rif_ack_i;
 
@@ -229,7 +159,6 @@ wire			wb_rdm_err_i;
 wire			wb_rdm_rty_i = 1'b0;
 wire			wb_rdm_we_o;
 wire			wb_rdm_stb_o;
-wire			wb_rdm_cab_o;
 
 //
 // RISC misc
@@ -293,7 +222,6 @@ wire 	[3:0]		wb_em_sel_o;
 wire			wb_em_we_o;
 wire 			wb_em_stb_o;
 wire			wb_em_cyc_o;
-wire			wb_em_cab_o;
 wire			wb_em_ack_i;
 wire			wb_em_err_i;
 
@@ -344,11 +272,7 @@ reg			wb_rst;
 //
 // Global clock
 //
-`ifdef OR1200_CLMODE_1TO2
-reg			wb_clk;
-`else
 wire			wb_clk;
-`endif
 
 //
 // Reset debounce
@@ -366,15 +290,8 @@ always @(posedge wb_clk)
 	wb_rst <= #1 rst_r;
 
 //
-// This is purely for testing 1/2 WB clock
-// This should never be used when implementing in
-// an FPGA. It is used only for simulation regressions.
+// Clock Divider
 //
-`ifdef OR1200_CLMODE_1TO2
-initial wb_clk = 0;
-always @(posedge clk)
-	wb_clk = ~wb_clk;
-`else
 minsoc_clock_manager #
 (
    .divisor(`CLOCK_DIVISOR)
@@ -383,13 +300,11 @@ clk_adjust (
 	.clk_i(clk),
 	.clk_o(wb_clk)
 );
-`endif // OR1200_CLMODE_1TO2
 
 //
 // Unused WISHBONE signals
 //
 assign wb_us_err_o = 1'b0;
-assign wb_em_cab_o = 1'b0;
 assign wb_fs_err_o = 1'b0;
 assign wb_sp_err_o = 1'b0;
 
@@ -510,7 +425,6 @@ adbg_top dbg_top  (
       .wb_we_o   ( wb_dm_we_o  ),
       .wb_stb_o  ( wb_dm_stb_o ),
       .wb_cyc_o  ( wb_dm_cyc_o ),
-      .wb_cab_o  ( wb_dm_cab_o ),
       .wb_ack_i  ( wb_dm_ack_i ),
       .wb_err_i  ( wb_dm_err_i ),
       .wb_cti_o  ( ),
@@ -629,7 +543,6 @@ or1200_top or1200_top (
 	.iwb_rty_i	( wb_rim_rty_i ),
 	.iwb_we_o	( wb_rim_we_o  ),
 	.iwb_stb_o	( wb_rim_stb_o ),
-	.iwb_cab_o	( wb_rim_cab_o ),
 
 	// WISHBONE Data Master
 	.dwb_clk_i	( wb_clk ),
@@ -644,7 +557,6 @@ or1200_top or1200_top (
 	.dwb_rty_i	( wb_rdm_rty_i ),
 	.dwb_we_o	( wb_rdm_we_o  ),
 	.dwb_stb_o	( wb_rdm_stb_o ),
-	.dwb_cab_o	( wb_rdm_cab_o ),
 
 	// Debug
 	.dbg_stall_i	( dbg_stall ),
@@ -880,7 +792,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 0
 	.i0_wb_cyc_i	( 1'b0 ),
 	.i0_wb_stb_i	( 1'b0 ),
-	.i0_wb_cab_i	( 1'b0 ),
 	.i0_wb_adr_i	( 32'h0000_0000 ),
 	.i0_wb_sel_i	( 4'b0000 ),
 	.i0_wb_we_i	( 1'b0 ),
@@ -892,7 +803,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 1
 	.i1_wb_cyc_i	( wb_em_cyc_o ),
 	.i1_wb_stb_i	( wb_em_stb_o ),
-	.i1_wb_cab_i	( wb_em_cab_o ),
 	.i1_wb_adr_i	( wb_em_adr_o ),
 	.i1_wb_sel_i	( wb_em_sel_o ),
 	.i1_wb_we_i	( wb_em_we_o  ),
@@ -904,7 +814,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 2
 	.i2_wb_cyc_i	( 1'b0 ),
 	.i2_wb_stb_i	( 1'b0 ),
-	.i2_wb_cab_i	( 1'b0 ),
 	.i2_wb_adr_i	( 32'h0000_0000 ),
 	.i2_wb_sel_i	( 4'b0000 ),
 	.i2_wb_we_i	( 1'b0 ),
@@ -916,7 +825,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 3
 	.i3_wb_cyc_i	( wb_dm_cyc_o ),
 	.i3_wb_stb_i	( wb_dm_stb_o ),
-	.i3_wb_cab_i	( wb_dm_cab_o ),
 	.i3_wb_adr_i	( wb_dm_adr_o ),
 	.i3_wb_sel_i	( wb_dm_sel_o ),
 	.i3_wb_we_i	( wb_dm_we_o  ),
@@ -928,7 +836,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 4
 	.i4_wb_cyc_i	( wb_rdm_cyc_o ),
 	.i4_wb_stb_i	( wb_rdm_stb_o ),
-	.i4_wb_cab_i	( wb_rdm_cab_o ),
 	.i4_wb_adr_i	( wb_rdm_adr_o ),
 	.i4_wb_sel_i	( wb_rdm_sel_o ),
 	.i4_wb_we_i	( wb_rdm_we_o  ),
@@ -940,7 +847,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 5
 	.i5_wb_cyc_i	( wb_rim_cyc_o ),
 	.i5_wb_stb_i	( wb_rim_stb_o ),
-	.i5_wb_cab_i	( wb_rim_cab_o ),
 	.i5_wb_adr_i	( wb_rim_adr_o ),
 	.i5_wb_sel_i	( wb_rim_sel_o ),
 	.i5_wb_we_i	( wb_rim_we_o  ),
@@ -952,7 +858,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 6
 	.i6_wb_cyc_i	( 1'b0 ),
 	.i6_wb_stb_i	( 1'b0 ),
-	.i6_wb_cab_i	( 1'b0 ),
 	.i6_wb_adr_i	( 32'h0000_0000 ),
 	.i6_wb_sel_i	( 4'b0000 ),
 	.i6_wb_we_i	( 1'b0 ),
@@ -964,7 +869,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Initiator 7
 	.i7_wb_cyc_i	( 1'b0 ),
 	.i7_wb_stb_i	( 1'b0 ),
-	.i7_wb_cab_i	( 1'b0 ),
 	.i7_wb_adr_i	( 32'h0000_0000 ),
 	.i7_wb_sel_i	( 4'b0000 ),
 	.i7_wb_we_i	( 1'b0 ),
@@ -976,7 +880,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 0
 	.t0_wb_cyc_o	( wb_ss_cyc_i ),
 	.t0_wb_stb_o	( wb_ss_stb_i ),
-	.t0_wb_cab_o	( wb_ss_cab_i ),
 	.t0_wb_adr_o	( wb_ss_adr_i ),
 	.t0_wb_sel_o	( wb_ss_sel_i ),
 	.t0_wb_we_o	( wb_ss_we_i  ),
@@ -988,7 +891,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 1
 	.t1_wb_cyc_o	( wb_fs_cyc_i ),
 	.t1_wb_stb_o	( wb_fs_stb_i ),
-	.t1_wb_cab_o	( wb_fs_cab_i ),
 	.t1_wb_adr_o	( wb_fs_adr_i ),
 	.t1_wb_sel_o	( wb_fs_sel_i ),
 	.t1_wb_we_o	( wb_fs_we_i  ),
@@ -1000,7 +902,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 2
 	.t2_wb_cyc_o	( wb_sp_cyc_i ),
 	.t2_wb_stb_o	( wb_sp_stb_i ),
-	.t2_wb_cab_o	( wb_sp_cab_i ),
 	.t2_wb_adr_o	( wb_sp_adr_i ),
 	.t2_wb_sel_o	( wb_sp_sel_i ),
 	.t2_wb_we_o	( wb_sp_we_i  ),
@@ -1012,7 +913,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 3
 	.t3_wb_cyc_o	( wb_es_cyc_i ),
 	.t3_wb_stb_o	( wb_es_stb_i ),
-	.t3_wb_cab_o	( wb_es_cab_i ),
 	.t3_wb_adr_o	( wb_es_adr_i ),
 	.t3_wb_sel_o	( wb_es_sel_i ),
 	.t3_wb_we_o	( wb_es_we_i  ),
@@ -1024,7 +924,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 4
 	.t4_wb_cyc_o	( ),
 	.t4_wb_stb_o	( ),
-	.t4_wb_cab_o	( ),
 	.t4_wb_adr_o	( ),
 	.t4_wb_sel_o	( ),
 	.t4_wb_we_o	( ),
@@ -1036,7 +935,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 5
 	.t5_wb_cyc_o	( wb_us_cyc_i ),
 	.t5_wb_stb_o	( wb_us_stb_i ),
-	.t5_wb_cab_o	( wb_us_cab_i ),
 	.t5_wb_adr_o	( wb_us_adr_i ),
 	.t5_wb_sel_o	( wb_us_sel_i ),
 	.t5_wb_we_o	( wb_us_we_i  ),
@@ -1048,7 +946,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 6
 	.t6_wb_cyc_o	( ),
 	.t6_wb_stb_o	( ),
-	.t6_wb_cab_o	( ),
 	.t6_wb_adr_o	( ),
 	.t6_wb_sel_o	( ),
 	.t6_wb_we_o	( ),
@@ -1060,7 +957,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 7
 	.t7_wb_cyc_o	( ),
 	.t7_wb_stb_o	( ),
-	.t7_wb_cab_o	( ),
 	.t7_wb_adr_o	( ),
 	.t7_wb_sel_o	( ),
 	.t7_wb_we_o	( ),
@@ -1072,7 +968,6 @@ minsoc_tc_top #(`APP_ADDR_DEC_W,
 	// WISHBONE Target 8
 	.t8_wb_cyc_o	( ),
 	.t8_wb_stb_o	( ),
-	.t8_wb_cab_o	( ),
 	.t8_wb_adr_o	( ),
 	.t8_wb_sel_o	( ),
 	.t8_wb_we_o	( ),

@@ -46,6 +46,11 @@
 //
 // Revision History
 //
+// Revision 1.1 2009/10/02 16:49      fajardo
+// Not using the oe signal (output enable) from 
+// memories, instead multiplexing the outputs
+// between the different instantiated blocks
+//
 //
 // Revision 1.0 2009/08/18 15:15:00   fajardo
 // Created interface and tested
@@ -62,9 +67,9 @@ module minsoc_onchip_ram_top (
 // 
 // Parameters 
 //
-parameter    aw_int = 11;       	//11 = 2048
 parameter    adr_width = 13;		//Memory address width, is composed by blocks of aw_int, is not allowed to be less than 12
-parameter    blocks = (1<<(adr_width-aw_int)); //generated memory contains "blocks" memory blocks of 2048x32 2048 depth x32 bit data
+localparam    aw_int = 11;       	//11 = 2048
+localparam    blocks = (1<<(adr_width-aw_int)); //generated memory contains "blocks" memory blocks of 2048x32 2048 depth x32 bit data
 
 // 
 // I/O Ports 
@@ -129,6 +134,53 @@ begin
     ack_re <= #1 1'b0; 
 end 
 
+//Generic (multiple inputs x 1 output) MUX
+localparam mux_in_nr = blocks;
+localparam slices = adr_width-aw_int;
+localparam mux_out_nr = blocks-1;
+
+wire [31:0] int_dat_o[0:mux_in_nr-1];
+wire [31:0] mux_out[0:mux_out_nr-1];
+
+generate
+genvar j, k;
+	for (j=0; j<slices; j=j+1) begin : SLICES
+		for (k=0; k<(mux_in_nr>>(j+1)); k=k+1) begin : MUX
+			if (j==0) begin
+				mux2 #
+                (
+                    .dw(32)
+                ) 
+                mux_int(
+                    .sel( wb_adr_i[aw_int+2+j] ), 
+                    .in1( int_dat_o[k*2] ),
+				    .in2( int_dat_o[k*2+1] ), 
+                    .out( mux_out[k] )
+                );
+			end
+			else begin
+				mux2 #
+                (
+                    .dw(32)
+                ) 
+                mux_int(
+                    .sel( wb_adr_i[aw_int+2+j] ), 
+				    .in1( mux_out[(mux_in_nr-(mux_in_nr>>(j-1)))+k*2] ), 
+				    .in2( mux_out[(mux_in_nr-(mux_in_nr>>(j-1)))+k*2+1] ), 
+				    .out( mux_out[(mux_in_nr-(mux_in_nr>>j))+k] )
+                );
+			end
+		end
+	end
+endgenerate
+
+//last output = total output
+assign wb_dat_o = mux_out[mux_out_nr-1];
+
+//(mux_in_nr-(mux_in_nr>>j)): 
+//-Given sum of 2^i | i = x -> y series can be resumed to 2^(y+1)-2^x
+//so, with this expression I'm evaluating how many times the internal loop has been run
+
 wire [blocks-1:0] bank;
  
 generate 
@@ -143,10 +195,11 @@ genvar i;
             .rst(wb_rst_i),
             .addr(wb_adr_i[aw_int+1:2]), 
             .di(wb_dat_i[7:0]), 
-            .doq(wb_dat_o[7:0]), 
+            .doq(int_dat_o[i][7:0]), 
             .we(we & bank[i]), 
-            .oe(bank[i]),
-            .ce(be_i[0])); 
+            .oe(1'b1),
+            .ce(be_i[0])
+        ); 
 
 
         minsoc_onchip_ram block_ram_1 ( 
@@ -154,33 +207,53 @@ genvar i;
             .rst(wb_rst_i),
             .addr(wb_adr_i[aw_int+1:2]), 
             .di(wb_dat_i[15:8]), 
-            .doq(wb_dat_o[15:8]), 
+            .doq(int_dat_o[i][15:8]), 
             .we(we & bank[i]), 
-            .oe(bank[i]),
-            .ce(be_i[1])); 
+            .oe(1'b1),
+            .ce(be_i[1])
+        ); 
 
         minsoc_onchip_ram block_ram_2 ( 
             .clk(wb_clk_i), 
             .rst(wb_rst_i),
             .addr(wb_adr_i[aw_int+1:2]), 
             .di(wb_dat_i[23:16]), 
-            .doq(wb_dat_o[23:16]), 
+            .doq(int_dat_o[i][23:16]), 
             .we(we & bank[i]), 
-            .oe(bank[i]),
-            .ce(be_i[2])); 
+            .oe(1'b1),
+            .ce(be_i[2])
+        ); 
 
         minsoc_onchip_ram block_ram_3 ( 
             .clk(wb_clk_i), 
             .rst(wb_rst_i),
             .addr(wb_adr_i[aw_int+1:2]), 
             .di(wb_dat_i[31:24]), 
-            .doq(wb_dat_o[31:24]), 
+            .doq(int_dat_o[i][31:24]), 
             .we(we & bank[i]), 
-            .oe(bank[i]),
-            .ce(be_i[3])); 
+            .oe(1'b1),
+            .ce(be_i[3])
+        ); 
 
     end
 endgenerate
 
 endmodule 
 
+module mux2(sel,in1,in2,out);
+
+parameter dw = 32;
+
+input sel;
+input [dw-1:0] in1, in2;
+output reg [dw-1:0] out;
+
+always @ (sel or in1 or in2)
+begin
+	case (sel)
+		1'b0: out = in1;
+		1'b1: out = in2;
+	endcase
+end
+
+endmodule

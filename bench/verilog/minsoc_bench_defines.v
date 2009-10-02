@@ -4,6 +4,7 @@
 //set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 `define GENERIC_FPGA
 `define NO_CLOCK_DIVISION
+`define POSITIVE_RESET
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 
 `define FREQ 25000000

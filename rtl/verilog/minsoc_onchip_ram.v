@@ -436,7 +436,6 @@ initial $display("Using Altera LPM.");
 lpm_ram_dq lpm_ram_dq_component (
         .address(addr),
         .inclock(clk),
-//        .outclock(clk),
         .data(di),
         .we(wr),
         .q(doq_internal)
