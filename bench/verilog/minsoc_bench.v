@@ -18,7 +18,7 @@ wire spi_sclk;
 wire [1:0] spi_ss;
 
 wire uart_stx;
-wire uart_srx;
+reg uart_srx;
 
 wire eth_col;
 wire eth_crs;
