@@ -49,7 +49,11 @@ reg [7:0] program_mem[(1<<(`MEMORY_ADR_WIDTH+2))-1:0];
 integer initialize, final, ptr;
 reg [8*64:0] file_name;
 reg load_file;
+
 initial begin
+    reset = 1'b0;
+    clock = 1'b0;
+
 	load_file = 1'b0;
 `ifdef INITIALIZE_MEMORY_MODEL 
 	load_file = 1'b1;
@@ -57,6 +61,7 @@ initial begin
 `ifdef START_UP
 	load_file = 1'b1;
 `endif
+
 	//get firmware hex file from command line input
 	if ( load_file ) begin
 		if ( ! $value$plusargs("file_name=%s", file_name) || file_name == 0 ) begin
@@ -211,18 +216,11 @@ eth_phy my_phy // This PHY model simulate simplified Intel LXT971A PHY
 
 
 //
-//	Regular clocking, reset and output
+//	Regular clocking and output
 //
-initial begin
-    clock <= 1'b0;
-    reset <= 1'b0;
-
-end
-
 always begin
     #((`CLK_PERIOD)/2) clock <= ~clock;
 end
-
 
 `ifdef VCD_OUTPUT
 initial begin
