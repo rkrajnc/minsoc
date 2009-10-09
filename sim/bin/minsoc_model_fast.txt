@@ -1,5 +1,6 @@
 +incdir+../../bench/verilog
 +incdir+../../bench/verilog/vpi
++incdir+../../bench/verilog/sim_lib
 +incdir+../../rtl/verilog
 +incdir+../../rtl/verilog/minsoc_startup
 +incdir+../../rtl/verilog/or1200/rtl/verilog
@@ -15,6 +16,7 @@
 #../../bench/verilog/eth_phy_defines.v
 #../../bench/verilog/eth_phy.v
 ../../bench/verilog/vpi/dbg_comm_vpi.v
+../../bench/verilog/sim_lib/fpga_memory_primitives.v
 ../../rtl/verilog/minsoc_top.v
 ../../rtl/verilog/minsoc_startup/spi_top.v
 ../../rtl/verilog/minsoc_startup/spi_defines.v
