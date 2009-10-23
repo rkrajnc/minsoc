@@ -66,10 +66,8 @@ int int_enable(unsigned long vect)
 /* Main interrupt handler */
 void int_main()
 {
-  unsigned long picsr = mfspr(SPR_PICSR);
+  unsigned long picsr = mfspr(SPR_PICSR);   //process only the interrupts asserted at signal catch, ignore all during process
   unsigned long i = 0;
-
-  mtspr(SPR_PICSR, 0);
 
   while(i < 32) {
     if((picsr & (0x01L << i)) && (int_handlers[i].handler != 0)) {
@@ -77,6 +75,9 @@ void int_main()
     }
     i++;
   }
-}
+
+  mtspr(SPR_PICSR, 0);      //clear interrupt status: all modules have level interrupts, which have to be cleared by software,
+}                           //thus this is safe, since non processed interrupts will get re-asserted soon enough
+
   
 #endif

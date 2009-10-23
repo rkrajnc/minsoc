@@ -54,6 +54,7 @@ reg load_file;
 initial begin
     reset = 1'b0;
     clock = 1'b0;
+    uart_srx = 1'b1;
 
 //dual and two port rams from FPGA memory instances have to be initialized to
 //0
