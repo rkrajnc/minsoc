@@ -165,7 +165,7 @@ module spi_flash_top
 `ifdef SPI_CTRL_TX_NEGEDGE
    assign tx_negedge = 1'b1;
 `else
-   assign tx_negedge = 1'b1;
+   assign tx_negedge = 1'b0;
 `endif
 
    assign ctrl = {ass,1'b0,lsb,tx_negedge,rx_negedge,go,1'b0,1'b0,char_len};
