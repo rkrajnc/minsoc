@@ -757,6 +757,7 @@ eth_top eth_top (
 `else
 assign wb_es_dat_o = 32'h0000_0000;
 assign wb_es_ack_o = 1'b0;
+assign wb_es_err_o = 1'b0;
 
 assign wb_em_adr_o = 32'h0000_0000;
 assign wb_em_sel_o = 4'h0;
