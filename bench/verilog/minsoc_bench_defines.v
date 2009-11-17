@@ -8,12 +8,14 @@
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 
 `define FREQ 25000000
-
 `define CLK_PERIOD (1000000000/`FREQ)
 
-`define VPI_DEBUG
+`define ETH_PHY_FREQ  25000000
+`define ETH_PHY_PERIOD  (1000000000/`ETH_PHY_FREQ)    //40ns
 
 `define UART_BAUDRATE 115200
+
+`define VPI_DEBUG
 
 //`define VCD_OUTPUT
 

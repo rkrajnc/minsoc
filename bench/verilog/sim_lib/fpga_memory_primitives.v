@@ -647,7 +647,7 @@ always @(posedge WCLK)
 
 endmodule
 //
-// XILINX_RAM32X1D
+// ~XILINX_RAM32X1D
 //
 
 
@@ -697,5 +697,5 @@ always @(posedge WCLK)
 
 endmodule
 //
-// USE_RAM16X1D_FOR_RAM32X1D
+// ~USE_RAM16X1D_FOR_RAM32X1D
 //

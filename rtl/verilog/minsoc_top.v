@@ -697,6 +697,7 @@ uart_top uart_top (
 `else
 assign wb_us_dat_o = 32'h0000_0000;
 assign wb_us_ack_o = 1'b0;
+
 assign pic_ints[`APP_INT_UART] = 1'b0;
 `endif
 
@@ -766,6 +767,7 @@ assign wb_em_we_o = 1'b0;
 assign wb_em_dat_o = 32'h0000_0000;
 assign wb_em_cyc_o = 1'b0;
 assign wb_em_stb_o = 1'b0;
+
 assign pic_ints[`APP_INT_ETH] = 1'b0;
 `endif
 

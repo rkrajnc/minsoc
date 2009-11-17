@@ -6,6 +6,7 @@ module minsoc_bench();
 
 reg clock, reset;
 
+//Debug interface
 wire dbg_tms_i;
 wire dbg_tck_i;
 wire dbg_tdi_i;
@@ -13,34 +14,41 @@ wire dbg_tdo_o;
 wire jtag_vref;
 wire jtag_gnd;
 
+//SPI wires
 wire spi_mosi;
 reg spi_miso;
 wire spi_sclk;
 wire [1:0] spi_ss;
 
+//UART wires
 wire uart_stx;
 reg uart_srx;
 
-wire eth_col;
-wire eth_crs;
+//ETH wires
+reg eth_col;
+reg eth_crs;
 wire eth_trst;
-wire eth_tx_clk;
+reg eth_tx_clk;
 wire eth_tx_en;
 wire eth_tx_er;
 wire [3:0] eth_txd;
-wire eth_rx_clk;
-wire eth_rx_dv;
-wire eth_rx_er;
-wire [3:0] eth_rxd;
-wire eth_fds_mdint;
+reg eth_rx_clk;
+reg eth_rx_dv;
+reg eth_rx_er;
+reg [3:0] eth_rxd;
+reg eth_fds_mdint;
 wire eth_mdc;
 wire eth_mdio;
 
 //
 //	TASKS registers to communicate with interfaces
 //
-reg [7:0] tx_data [0:1518];		//receive buffer
-reg [31:0] data_in [1023:0];		//send buffer
+`ifdef ETHERNET
+reg [7:0] eth_rx_data [0:1535];		 //receive buffer ETH (max packet 1536)
+reg [7:0] eth_tx_data [0:1535];     //send buffer ETH (max packet 1536)
+localparam ETH_HDR = 14;
+localparam ETH_PAYLOAD_MAX_LENGTH = 1518;//only able to send up to 1536 bytes with header (14 bytes) and CRC (4 bytes)
+`endif
 
 
 //
@@ -54,10 +62,21 @@ reg load_file;
 initial begin
     reset = 1'b0;
     clock = 1'b0;
+    
     uart_srx = 1'b1;
+    
+	eth_col = 1'b0;
+	eth_crs = 1'b0;
+	eth_fds_mdint = 1'b1;
+	eth_rx_er = 1'b0;
+	
+	eth_tx_clk = 1'b0;
+	eth_rx_clk = 1'b0;
+	eth_rxd = 4'h0;
+	eth_rx_dv = 1'b0;
+    
 
-//dual and two port rams from FPGA memory instances have to be initialized to
-//0
+//dual and two port rams from FPGA memory instances have to be initialized to 0
     init_fpga_memory();
 
 	load_file = 1'b0;
@@ -117,10 +136,38 @@ initial begin
 	$display("Loaded firmware:");
 	$display("%s", file_name);
 `endif
+
+
 	//
     // Testbench START
 	//
+	
+    fork
+        begin 
+`ifdef ETHERNET            
+            get_mac();
+            
+            if ( { eth_rx_data[ETH_HDR] , eth_rx_data[ETH_HDR+1] , eth_rx_data[ETH_HDR+2] , eth_rx_data[ETH_HDR+3] } == 32'hFF2B4050 )
+                $display("eth-nocache firmware started.");
+`endif
+        end
+        begin
+	        #2000000;
+`ifdef UART
+            uart_send(8'h41);       //Character A
+`endif	
+`ifdef ETHERNET    
+	        eth_tx_data[ETH_HDR+0] = 8'hBA;
+	        eth_tx_data[ETH_HDR+1] = 8'h87;	
+	        eth_tx_data[ETH_HDR+2] = 8'hAA;
+	        eth_tx_data[ETH_HDR+3] = 8'hBB;	
+	        eth_tx_data[ETH_HDR+4] = 8'hCC;
+	        eth_tx_data[ETH_HDR+5] = 8'hDD;	
 
+	        send_mac(6);
+`endif        
+        end
+    join
 
 end
 
@@ -190,36 +237,6 @@ minsoc_top minsoc_top_0(
    assign dbg_tms_i = 1;
 `endif
 
-`ifdef ETHERNET
-eth_phy my_phy // This PHY model simulate simplified Intel LXT971A PHY
-(
-	  // COMMON
-	  .m_rst_n_i(1'b1),
-
-	  // MAC TX
-	  .mtx_clk_o(eth_tx_clk),
-	  .mtxd_i(eth_txd),
-	  .mtxen_i(eth_tx_en),
-	  .mtxerr_i(eth_tx_er),
-
-	  // MAC RX
-	  .mrx_clk_o(eth_rx_clk),
-	  .mrxd_o(eth_rxd),
-	  .mrxdv_o(eth_rx_dv),
-	  .mrxerr_o(eth_rx_er),
-
-	  .mcoll_o(eth_col),
-	  .mcrs_o(eth_crs),
-
-	  // MIIM
-	  .mdc_i(eth_mdc),
-	  .md_io(eth_mdio),
-
-	  // SYSTEM
-	  .phy_log()
-);	
-`endif // !ETHERNET
-
 
 //
 //	Regular clocking and output
@@ -255,10 +272,27 @@ endtask
 `endif
 //~SPI START_UP
 
-//UART Monitor (prints uart output on the terminal)
+//UART
 `ifdef UART
-parameter UART_TX_WAIT = (`FREQ / `UART_BAUDRATE) * `CLK_PERIOD;
+localparam UART_TX_WAIT = (`FREQ / `UART_BAUDRATE) * `CLK_PERIOD;
 
+task uart_send;
+    input [7:0] data;
+    integer i;
+    begin
+        uart_srx = 1'b0;
+	    #UART_TX_WAIT;
+        for ( i = 0; i < 8 ; i = i + 1 ) begin
+		    uart_srx = data[i];
+		    #UART_TX_WAIT;
+	    end        
+        uart_srx = 1'b0;
+	    #UART_TX_WAIT;
+	    uart_srx = 1'b1;	    
+    end
+endtask
+
+//UART Monitor (prints uart output on the terminal)
 // Something to trigger the task
 always @(posedge clock)
 	uart_decoder;
@@ -291,8 +325,9 @@ task uart_decoder;
 	$write("%c", tx_byte);
 	end
 endtask
-`endif // !UART
 //~UART Monitor
+`endif // !UART
+//~UART
 
 
 //
@@ -310,12 +345,15 @@ task get_mac;
         conta = 0;
         LSB = 1;
         @ ( posedge eth_tx_en);
+        
+        repeat (16) @ (negedge eth_tx_clk);  //8 bytes, preamble (7 bytes) + start of frame (1 byte)
+                
         while ( eth_tx_en == 1'b1 ) begin
             @ (negedge eth_tx_clk) begin
                 if ( LSB == 1'b1 )
-                    tx_data[conta][3:0] = eth_txd;
+                    eth_rx_data[conta][3:0] = eth_txd;
                 else begin
-                    tx_data[conta][7:4] = eth_txd;
+                    eth_rx_data[conta][7:4] = eth_txd;
                     conta = conta + 1;
                 end
                 LSB = ~LSB;
@@ -324,119 +362,127 @@ task get_mac;
     end
 endtask
 
-task send_mac;
-    input [11:0] command;
-    input [31:0] param1;
-    input [31:0] param2;
-    input [223:0] data;
-
+task send_mac;              //only able to send up to 1536 bytes with header (14 bytes) and CRC (4 bytes)
+    input [31:0] length;    //ETH_PAYLOAD_MAX_LENGTH 1518
     integer conta;
-
     begin
-        //DEST MAC
-        my_phy.rx_mem[0] = 8'h55;
-        my_phy.rx_mem[1] = 8'h47;
-        my_phy.rx_mem[2] = 8'h34;
-        my_phy.rx_mem[3] = 8'h22;
-        my_phy.rx_mem[4] = 8'h88;
-        my_phy.rx_mem[5] = 8'h92;
+        if ( length <= ETH_PAYLOAD_MAX_LENGTH ) begin
+            //DEST MAC
+            eth_tx_data[0] = 8'h55;
+            eth_tx_data[1] = 8'h47;
+            eth_tx_data[2] = 8'h34;
+            eth_tx_data[3] = 8'h22;
+            eth_tx_data[4] = 8'h88;
+            eth_tx_data[5] = 8'h92;
 
-        //SOURCE MAC
-        my_phy.rx_mem[6] = 8'h00;
-        my_phy.rx_mem[7] = 8'h00;
-        my_phy.rx_mem[8] = 8'hC0;
-        my_phy.rx_mem[9] = 8'h41;
-        my_phy.rx_mem[10] = 8'h36;
-        my_phy.rx_mem[11] = 8'hD3;
+            //SOURCE MAC
+            eth_tx_data[6] = 8'h3D;
+            eth_tx_data[7] = 8'h4F;
+            eth_tx_data[8] = 8'h1A;
+            eth_tx_data[9] = 8'hBE;
+            eth_tx_data[10] = 8'h68;
+            eth_tx_data[11] = 8'h72;
 
-        //LEN
-        my_phy.rx_mem[12] = 8'h00;
-        my_phy.rx_mem[13] = 8'h04;
+            //LEN
+            eth_tx_data[12] = length[7:4];
+            eth_tx_data[13] = length[3:0];
 
-        //DATA
-        my_phy.rx_mem[14] = 8'hFF;
-        my_phy.rx_mem[15] = 8'hFA;
-        my_phy.rx_mem[16] = command[11:4];
-        my_phy.rx_mem[17] = { command[3:0] , 4'h7 };
+            //DATA input by task caller
 
-        my_phy.rx_mem[18] = 8'hAA;
-        my_phy.rx_mem[19] = 8'hAA;
+            //PAD
+            for ( conta = length+14; conta < 60; conta = conta + 1 ) begin
+                eth_tx_data[conta] = 8'h00;
+            end
 
-        //parameter 1
-        my_phy.rx_mem[20] = param1[31:24];
-        my_phy.rx_mem[21] = param1[23:16];
-        my_phy.rx_mem[22] = param1[15:8];
-        my_phy.rx_mem[23] = param1[7:0];
+            gencrc32(conta);
 
-        //parameter 2
-        my_phy.rx_mem[24] = param2[31:24];
-        my_phy.rx_mem[25] = param2[23:16];
-        my_phy.rx_mem[26] = param2[15:8];
-        my_phy.rx_mem[27] = param2[7:0];
+            eth_tx_data[conta] = crc32_result[31:24];
+            eth_tx_data[conta+1] = crc32_result[23:16];
+            eth_tx_data[conta+2] = crc32_result[15:8];
+            eth_tx_data[conta+3] = crc32_result[7:0];
 
-        //data
-        my_phy.rx_mem[28] = data[223:216];
-        my_phy.rx_mem[29] = data[215:208];
-        my_phy.rx_mem[30] = data[207:200];
-        my_phy.rx_mem[31] = data[199:192];
-        my_phy.rx_mem[32] = data[191:184];
-        my_phy.rx_mem[33] = data[183:176];
-        my_phy.rx_mem[34] = data[175:168];
-        my_phy.rx_mem[35] = data[167:160];
-        my_phy.rx_mem[36] = data[159:152];
-        my_phy.rx_mem[37] = data[151:144];
-        my_phy.rx_mem[38] = data[143:136];
-        my_phy.rx_mem[39] = data[135:128];
-        my_phy.rx_mem[40] = data[127:120];
-        my_phy.rx_mem[41] = data[119:112];
-        my_phy.rx_mem[42] = data[111:104];
-        my_phy.rx_mem[43] = data[103:96];
-        my_phy.rx_mem[44] = data[95:88];
-        my_phy.rx_mem[45] = data[87:80];
-        my_phy.rx_mem[46] = data[79:72];
-        my_phy.rx_mem[47] = data[71:64];
-        my_phy.rx_mem[48] = data[63:56];
-        my_phy.rx_mem[49] = data[55:48];
-        my_phy.rx_mem[50] = data[47:40];
-        my_phy.rx_mem[51] = data[39:32];
-        my_phy.rx_mem[52] = data[31:24];
-        my_phy.rx_mem[53] = data[23:16];
-        my_phy.rx_mem[54] = data[15:8];
-        my_phy.rx_mem[55] = data[7:0];
-
-        //PAD
-        for ( conta = 56; conta < 60; conta = conta + 1 ) begin
-            my_phy.rx_mem[conta] = 8'h00;
+            send_rx_packet( 64'h0055_5555_5555_5555, 4'h7, 8'hD5, 32'h0000_0000, conta+4, 1'b0 );
         end
-
-        gencrc32;
-
-        my_phy.rx_mem[60] = crc32_result[31:24];
-        my_phy.rx_mem[61] = crc32_result[23:16];
-        my_phy.rx_mem[62] = crc32_result[15:8];
-        my_phy.rx_mem[63] = crc32_result[7:0];
-
-        my_phy.send_rx_packet( 64'h0055_5555_5555_5555, 4'h7, 8'hD5, 32'h0000_0000, 32'h0000_0040, 1'b0 );  
+        else
+            $display("Warning: Ethernet packet is to big to be sent.");
     end
 
 endtask
 
+task send_rx_packet;
+  input  [(8*8)-1:0] preamble_data; // preamble data to be sent - correct is 64'h0055_5555_5555_5555
+  input   [3:0] preamble_len; // length of preamble in bytes - max is 4'h8, correct is 4'h7 
+  input   [7:0] sfd_data; // SFD data to be sent - correct is 8'hD5
+  input  [31:0] start_addr; // start address
+  input  [31:0] len; // length of frame in Bytes (without preamble and SFD)
+  input         plus_drible_nibble; // if length is longer for one nibble
+  integer       rx_cnt;
+  reg    [31:0] eth_tx_data_addr_in; // address for reading from RX memory       
+  reg     [7:0] eth_tx_data_data_out; // data for reading from RX memory
+begin
+      @(posedge eth_rx_clk);
+      #1 eth_rx_dv = 1;
+
+      // set initial rx memory address
+      eth_tx_data_addr_in = start_addr;
+    
+      // send preamble
+      for (rx_cnt = 0; (rx_cnt < (preamble_len << 1)) && (rx_cnt < 16); rx_cnt = rx_cnt + 1)
+      begin
+        #1 eth_rxd = preamble_data[3:0];
+        #1 preamble_data = preamble_data >> 4;
+        @(posedge eth_rx_clk);
+      end
+    
+      // send SFD
+      for (rx_cnt = 0; rx_cnt < 2; rx_cnt = rx_cnt + 1)
+      begin
+        #1 eth_rxd = sfd_data[3:0];
+        #1 sfd_data = sfd_data >> 4;
+        @(posedge eth_rx_clk);
+      end
+
+      // send packet's addresses, type/length, data and FCS
+      for (rx_cnt = 0; rx_cnt < len; rx_cnt = rx_cnt + 1)
+      begin
+        #1;
+        eth_tx_data_data_out = eth_tx_data[eth_tx_data_addr_in[21:0]];
+        eth_rxd = eth_tx_data_data_out[3:0];
+        @(posedge eth_rx_clk);
+        #1;
+        eth_rxd = eth_tx_data_data_out[7:4];
+        eth_tx_data_addr_in = eth_tx_data_addr_in + 1;
+        @(posedge eth_rx_clk);
+        #1;
+      end
+      if (plus_drible_nibble)
+      begin
+        eth_tx_data_data_out = eth_tx_data[eth_tx_data_addr_in[21:0]];
+        eth_rxd = eth_tx_data_data_out[3:0];
+        @(posedge eth_rx_clk);
+      end
+
+      #1 eth_rx_dv = 0;
+      @(posedge eth_rx_clk);
+
+end
+endtask // send_rx_packet
+
 //CRC32
-parameter [31:0] CRC32_POLY = 32'h04C11DB7;
+localparam [31:0] CRC32_POLY = 32'h04C11DB7;
 
 task gencrc32;
+    input [31:0] crc32_length;
+
     integer	byte, bit;
     reg		msb;
     reg [7:0]	current_byte;
     reg [31:0]	temp;
 
-    integer crc32_length;
-
     begin
-        crc32_length = 60;
         crc32_result = 32'hffffffff;
         for (byte = 0; byte < crc32_length; byte = byte + 1) begin
-            current_byte = my_phy.rx_mem[byte];
+            current_byte = eth_tx_data[byte];
             for (bit = 0; bit < 8; bit = bit + 1) begin
                 msb = crc32_result[31];
                 crc32_result = crc32_result << 1;
@@ -458,6 +504,16 @@ task gencrc32;
     end
 endtask
 //~CRC32
+
+//Generate tx and rx clocks
+always begin
+	#((`ETH_PHY_PERIOD)/2) eth_tx_clk <= ~eth_tx_clk;
+end
+always begin
+	#((`ETH_PHY_PERIOD)/2) eth_rx_clk <= ~eth_rx_clk;	
+end
+//~Generate tx and rx clocks
+
 `endif // !ETHERNET
 //~MAC_DATA
 

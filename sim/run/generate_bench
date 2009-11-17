@@ -1,2 +1,2 @@
 #!/bin/bash
-iverilog -c ../bin/minsoc_model_fast.txt -o minsoc_bench
+iverilog -c ../bin/minsoc_model.txt -o minsoc_bench
