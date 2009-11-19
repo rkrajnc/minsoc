@@ -12,9 +12,6 @@
 ../../bench/verilog/minsoc_bench_defines.v
 ../../bench/verilog/minsoc_bench.v
 #../../bench/verilog/minsoc_memory_model.v
-#../../bench/verilog/tb_eth_defines.v
-#../../bench/verilog/eth_phy_defines.v
-#../../bench/verilog/eth_phy.v
 ../../bench/verilog/vpi/dbg_comm_vpi.v
 ../../bench/verilog/sim_lib/fpga_memory_primitives.v
 ../../rtl/verilog/minsoc_top.v
