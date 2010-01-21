@@ -58,8 +58,8 @@
 //
 // Reset polarity
 //
-//`define NEGATIVE_RESET;      //rstn
-`define POSITIVE_RESET;      //rst
+//`define NEGATIVE_RESET      //rstn
+`define POSITIVE_RESET      //rst
 
 //
 // Start-up circuit (only necessary later to load firmware automatically from SPI memory)

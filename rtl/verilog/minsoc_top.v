@@ -127,8 +127,9 @@ wire	[31:0]		dbg_dat_risc;
 wire	[31:0]		dbg_adr;
 wire			dbg_ewt;
 wire			dbg_stall;
-wire	[2:0]		dbg_op;     //dbg_op[0] = dbg_we //dbg_op[2] = dbg_stb  (didn't change for backward compatibility with DBG_IF_MODEL
-wire            	dbg_ack;
+wire            dbg_we;
+wire            dbg_stb;
+wire            dbg_ack;
 
 //
 // RISC instruction master i/f wires
@@ -437,8 +438,8 @@ adbg_top dbg_top  (
       .cpu0_data_o ( dbg_dat_dbg ),
       .cpu0_bp_i   ( dbg_bp ),
       .cpu0_stall_o( dbg_stall ),
-      .cpu0_stb_o  ( dbg_op[2] ),
-      .cpu0_we_o   ( dbg_op[0] ),
+      .cpu0_stb_o  ( dbg_stb ),
+      .cpu0_we_o   ( dbg_we ),
       .cpu0_ack_i  ( dbg_ack ),
       .cpu0_rst_o  ( )
 
@@ -569,8 +570,8 @@ or1200_top or1200_top (
 	.dbg_bp_o	( dbg_bp ),
 	.dbg_dat_o	( dbg_dat_risc ),
 	.dbg_ack_o	( dbg_ack ),
-	.dbg_stb_i	( dbg_op[2] ),
-	.dbg_we_i	( dbg_op[0] ),
+	.dbg_stb_i	( dbg_stb ),
+	.dbg_we_i	( dbg_we ),
 
 	// Power Management
 	.pm_clksd_o	( ),
