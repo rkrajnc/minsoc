@@ -484,7 +484,7 @@ tap_top tap_top(
 `ifdef ALTERA_FPGA
 altera_virtual_jtag tap_top(
 	.tck_o(jtag_tck),
-	.debug_tdo_o(debug_tdo),
+	.debug_tdo_i(debug_tdo),
 	.tdi_o(debug_tdi),
 	.test_logic_reset_o(test_logic_reset),
 	.run_test_idle_o(),
