@@ -13,7 +13,11 @@ module lpm_ram_dq (
 
 parameter lpm_width = 8;
 parameter lpm_widthad = 11;
-
+parameter lpm_indata = "REGISTERED";            //This 4 parameters are included only to avoid warnings
+parameter lpm_address_control = "REGISTERED";   //they are not accessed inside the module. OR1200 uses this 
+parameter lpm_outdata = "UNREGISTERED";         //configuration set on all its instantiations, so this is fine.
+parameter lpm_hint = "USE_EAB=ON";              //It may not be fine, if you are adding this library to your 
+                                                //own system, which uses this module with another configuration.
 localparam dw = lpm_width;
 localparam aw = lpm_widthad;
 
@@ -30,7 +34,7 @@ reg	[aw-1:0]	addr_reg;		// RAM address register
 //
 // Data output drivers
 //
-assign doq = mem[addr_reg];
+assign q = mem[addr_reg];
 
 //
 // RAM address register
