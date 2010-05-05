@@ -62,6 +62,11 @@ reg load_file;
 initial begin
     reset = 1'b0;
     clock = 1'b0;
+
+`ifndef NO_CLOCK_DIVISION
+    minsoc_top_0.clk_adjust.clk_int = 1'b0;
+    minsoc_top_0.clk_adjust.clock_divisor = 32'h0000_0000;
+`endif
     
     uart_srx = 1'b1;
     
@@ -274,7 +279,7 @@ endtask
 
 //UART
 `ifdef UART
-localparam UART_TX_WAIT = (`FREQ / `UART_BAUDRATE) * `CLK_PERIOD;
+localparam UART_TX_WAIT = (`FREQ_NUM_FOR_NS / `UART_BAUDRATE);
 
 task uart_send;
     input [7:0] data;
