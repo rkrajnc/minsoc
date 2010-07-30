@@ -164,7 +164,7 @@ wire			wb_rdm_stb_o;
 //
 // RISC misc
 //
-wire	[19:0]		pic_ints;
+wire	[`OR1200_PIC_INTS-1:0]		pic_ints;
 
 //
 // Flash controller slave i/f wires

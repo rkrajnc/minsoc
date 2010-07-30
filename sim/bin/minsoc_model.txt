@@ -84,6 +84,10 @@
 ../../rtl/verilog/or1200/rtl/verilog/or1200_dc_fsm.v
 ../../rtl/verilog/or1200/rtl/verilog/or1200_wb_biu.v
 ../../rtl/verilog/or1200/rtl/verilog/or1200_spram_64x22.v
+../../rtl/verilog/or1200/rtl/verilog/or1200_fpu.v
+../../rtl/verilog/or1200/rtl/verilog/or1200_spram.v
+../../rtl/verilog/or1200/rtl/verilog/or1200_spram_32_bw.v
+../../rtl/verilog/or1200/rtl/verilog/or1200_dpram.v
 ../../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_biu.v
 ../../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_module.v
 ../../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_or1k_module.v
