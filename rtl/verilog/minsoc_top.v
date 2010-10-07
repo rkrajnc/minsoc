@@ -354,10 +354,13 @@ begin
 			jump_flash <= #1 1'b0;
 		
 		if ( jump_flash == 1'b1 ) begin
-			if ( wb_rim_cyc_o && wb_rim_stb_o && ~wb_rim_we_o ) begin
-				rif_counter <= rif_counter + 1'b1;
+			if ( wb_rim_cyc_o && wb_rim_stb_o && ~wb_rim_we_o )
 				rif_ack_int <= 1'b1;
-			end
+
+            if ( rif_ack_int == 1'b1 ) begin
+				rif_counter <= rif_counter + 1'b1;
+				rif_ack_int <= 1'b0;
+            end
 		end
 	end
 end
