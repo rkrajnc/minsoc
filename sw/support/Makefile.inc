@@ -4,7 +4,7 @@ OR32_TOOL_PREFIX=or32-elf
 
 #GCC_LIB_OPTS= -lgcc -liberty
 
-GCC_OPT=-mhard-mul -g
+GCC_OPT=-mhard-mul -g -nostdlib
 
 ifdef UART_PRINTF
 GCC_OPT += -DUART_PRINTF

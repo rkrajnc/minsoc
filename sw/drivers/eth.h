@@ -1,4 +1,10 @@
 
+void eth_init();
+void eth_interrupt();
+void eth_recv_ack(void);
+
+int eth_send(int length);   //return (-1) or length (still processing previous) or asserted
+
 #define ETH_MODER	        0x00
 #define ETH_INT_SOURCE	    0x04
 #define ETH_INT_MASK	    0x08
@@ -80,8 +86,19 @@
 #define ETH_TXBD_CS	        0x00000001
 
 //user defines
-#define OWN_MAC_ADDRESS		0x554734228892ULL
-#define BROADCAST_ADDRESS	0xFFFFFFFFFFFFULL
+#define OWN_MAC_ADDRESS_5	0x55
+#define OWN_MAC_ADDRESS_4	0x47
+#define OWN_MAC_ADDRESS_3	0x34
+#define OWN_MAC_ADDRESS_2	0x22
+#define OWN_MAC_ADDRESS_1	0x88
+#define OWN_MAC_ADDRESS_0	0x92
+
+#define BROADCAST_ADDRESS_5	0xFF
+#define BROADCAST_ADDRESS_4	0xFF
+#define BROADCAST_ADDRESS_3	0xFF
+#define BROADCAST_ADDRESS_2	0xFF
+#define BROADCAST_ADDRESS_1	0xFF
+#define BROADCAST_ADDRESS_0	0xFF
 
 #define HDR_LEN       14
 #define CRC_LEN       4

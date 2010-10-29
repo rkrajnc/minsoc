@@ -21,6 +21,11 @@
 #define UART_IRQ        2
 #define ETH_BASE        0x92000000
 #define ETH_IRQ         4
+#define I2C_BASE        0x9D000000
+#define I2C_IRQ         3
+#define CAN_BASE        0x94000000
+#define CAN_IRQ         5
+
 #define MC_BASE_ADDR    0x60000000
 #define SPI_BASE        0xa0000000
 

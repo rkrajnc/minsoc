@@ -16,7 +16,7 @@
 #define REG16(add) *((volatile unsigned short *)(add))
 #define REG32(add) *((volatile unsigned long *)(add))
 
-void printf(const char *fmt, ...);
+void or32_printf(const char *fmt, ...);
 
 /* For writing into SPR. */
 void mtspr(unsigned long spr, unsigned long value);
@@ -29,6 +29,8 @@ unsigned long mfspr(unsigned long spr);
 #include <stdio.h>
 
 #endif /* OR1K */
+
+#define	printf	or32_printf
 
 /* Function to be called at entry point - not defined here.  */
 int main ();
@@ -63,4 +65,5 @@ extern unsigned long excpt_syscall;
 extern unsigned long excpt_break;
 extern unsigned long excpt_trap;
 
-#endif
+
+#endif /* SUPPORT_H */

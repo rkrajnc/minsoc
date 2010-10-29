@@ -64,7 +64,7 @@ _except_500:
 
     l.movhi r9,hi(end_except)		//set return addr to end_except instruction
     l.ori   r9,r9,lo(end_except)	//set return addr to end_except instruction
-	l.j	_lpint_except
+	l.j	_tick_except
 	l.nop
 
 .org 0x400
@@ -106,7 +106,7 @@ _except_800:
 
     l.movhi r9,hi(end_except)		//set return addr to end_except instruction
     l.ori   r9,r9,lo(end_except)	//set return addr to end_except instruction
-    l.j _hpint_except			//jmp to C interrupt handler (returns later to end_except)
+    l.j _ext_except			    //jmp to C interrupt handler (returns later to end_except)
     l.nop
 
 

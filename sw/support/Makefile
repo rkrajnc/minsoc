@@ -1,5 +1,3 @@
-include Makefile.inc
-
 all: libsupport.a reset-nocache.o reset-ic.o reset-dc.o reset-icdc.o
 
 libsupport.a: support.o int.o except.o uart.o vfnprintf.o
@@ -35,3 +33,5 @@ vfnprintf.o: vfnprintf.c
 
 int.o: int.c
 	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
+
+include Makefile.inc

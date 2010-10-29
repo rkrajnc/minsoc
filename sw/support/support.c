@@ -15,24 +15,9 @@
 #endif
 
 #if OR32
-void excpt_dummy();
 void int_main();
 
-unsigned long excpt_buserr = (unsigned long) excpt_dummy;
-unsigned long excpt_dpfault = (unsigned long) excpt_dummy;
-unsigned long excpt_ipfault = (unsigned long) excpt_dummy;
-unsigned long excpt_tick = (unsigned long) excpt_dummy;
-unsigned long excpt_align = (unsigned long) excpt_dummy;
-unsigned long excpt_illinsn = (unsigned long) excpt_dummy;
-unsigned long excpt_int = (unsigned long) int_main;
-unsigned long excpt_dtlbmiss = (unsigned long) excpt_dummy;
-unsigned long excpt_itlbmiss = (unsigned long) excpt_dummy;
-unsigned long excpt_range = (unsigned long) excpt_dummy;
-unsigned long excpt_syscall = (unsigned long) excpt_dummy;
-unsigned long excpt_break = (unsigned long) excpt_dummy;
-unsigned long excpt_trap = (unsigned long) excpt_dummy;
-
-void hpint_except()
+void ext_except()
 {
 	int_main();
 }
@@ -59,7 +44,7 @@ static int uart_init_done = 0;
 #define PRINTFBUFFER_SIZE 512
 char PRINTFBUFFER[PRINTFBUFFER_SIZE]; // Declare a global printf buffer
 
-void printf(const char *fmt, ...)
+void minsoc_printf(const char *fmt, ...)
 {
   // init uart if not done already
   if (!uart_init_done)
@@ -82,12 +67,11 @@ void printf(const char *fmt, ...)
     uart_putc(PRINTFBUFFER[c++]);
   
   va_end(args);
-  
 }
 
 #else
 /* activate printf support in simulator */
-void printf(const char *fmt, ...)
+void minsoc_printf(const char *fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -181,6 +165,3 @@ unsigned int read_timer(int tmrnum)
 }
 
 #endif
-
-
-void excpt_dummy() {}

@@ -96,7 +96,7 @@
 
 // INCLUDES
 
-#include <stdlib.h> // For mbtowc()
+//#include <stdlib.h> // For mbtowc()
 #include <stddef.h>
 
 
@@ -113,9 +113,6 @@
 CYG_MACRO_END
 
 #include <stdarg.h>               // Variable argument definitions
-//#include <stdio.h>                // Standard header for all stdio files
-#include <string.h>               // memchr() and strlen() functions
-//#include <cyg/libc/stdio/stream.hxx> // C library streams
 
 #include "vfnprintf.h"
 
@@ -150,6 +147,30 @@ CYG_MACRO_END
 #define FPT             0x100           /* Floating point number */
 #define SIZET           0x200           /* size_t */
 
+int
+strlen(const char *s)
+{
+	const char *p;
+
+	for (p = s; *p != '\0'; p++)
+		;
+	return (s - p);
+}
+
+void *
+memcpy(void *dst, const void *src, size_t len)
+{
+	const char *csrc;
+	char *cdst;
+	int i;
+
+	cdst = dst;
+	csrc = src;
+	for (i = len; i >= 0; i--) {
+		cdst[i] = csrc[i];
+	}
+	return dst;
+}
 
 // Function which prints back to the buffer, ptr, len bytes
 // returns 1 if it should finish up, otherwise 0 to continue
