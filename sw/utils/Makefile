@@ -52,16 +52,7 @@ CFLAGS = -O2 -Wall
 	@/bin/rm -f $@
 	$(CC) -o $@ $(CFLAGS) $<
 
-all: $(PROGRAMS) or32-idecode
-
-# redundant stanza:
-loader: loader.c
-	$(CC) -o $@ $(CFLAGS) $<
-
-.PHONY or32-idecode:
-or32-idecode:
-	$(MAKE) -C or32-idecode
+all: $(PROGRAMS)
 
 clean:
 	/bin/rm -f $(PROGRAMS) *~ *.bak
-	$(MAKE) -C ./or32-idecode clean

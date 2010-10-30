@@ -34,11 +34,11 @@ void eth_init()
 									 | (OWN_MAC_ADDRESS_1 << 8) | OWN_MAC_ADDRESS_0;		//mac address rest
 
 	//configure TXBD0
-	REG32(ETH_BASE + ETH_TXBD0H) = eth_tx_packet;		//address used for tx_data
+	REG32(ETH_BASE + ETH_TXBD0H) = (unsigned long)eth_tx_packet;		//address used for tx_data
 	REG32(ETH_BASE + ETH_TXBD0L) = TX_READY;	//length = 0 | PAD & CRC = 1 | IRQ & WR = 1
 
 	//configure RXBD0
-	REG32(ETH_BASE + ETH_RXBD0H) = eth_rx_packet;		//address used for tx_data
+	REG32(ETH_BASE + ETH_RXBD0H) = (unsigned long)eth_rx_packet;		//address used for tx_data
 	REG32(ETH_BASE + ETH_RXBD0L) = RX_READY;	//len = 0 | IRQ & WR = 1 | EMPTY = 1
 
 	//set txdata
