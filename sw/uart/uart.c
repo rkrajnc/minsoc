@@ -10,7 +10,7 @@ int main()
 	uart_init();
 
 	int_init();
-	int_add(2,&uart_interrupt);
+	int_add(UART_IRQ, &uart_interrupt);
 	
 	/* We can't use printf because in this simple example
 	   we don't link C library. */
