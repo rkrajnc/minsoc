@@ -13,14 +13,6 @@ function errormsg
 	exit 1;
 }
 
-function readpass
-{
-        stty_orig=`stty -g`
-        stty -echo
-        read `echo $1`
-        stty $stty_orig
-}
-
 function execcmd
 {
         # Print Message
@@ -40,23 +32,6 @@ function execcmd
                 exit 1;
 
         fi
-}
-
-function changelinefile
-{
-        a=0;
-        b=0;
-        sed -e "s/$1/$2/" $3 > /tmp/changedfile;
-        if [ $? -eq 0 ]
-        then
-                a=1;
-        fi
-        mv /tmp/changedfile $3;
-        if [ $? -eq 0 ]
-        then
-                b=1;
-        fi
-        execcmd "Change file $3" "test $a -eq 1 -a $b -eq 1"
 }
 
 if [ $DEBUG -eq 1 ]
