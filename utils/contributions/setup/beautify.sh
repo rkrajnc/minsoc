@@ -7,6 +7,11 @@ function cecho
 	 echo -e "\033[1m\033[33m$1\033[0m"
 }
 
+function cnecho
+{
+	 echo -e -n "\033[0m\033[33m$1\033[0m"
+}
+
 function errormsg
 {	
 	echo -e "\033[1m\033[31mError: $1\033[0m\n";

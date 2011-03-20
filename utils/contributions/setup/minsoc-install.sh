@@ -1,6 +1,7 @@
 #!/bin/bash
-# Xanthopoulos Constantinos
-
+# Author: Constantinos Xanthopoulos
+# This script install MinSOC tree
+# under a specific directory.
 
 # ===== CONFIGURATIONS =====
 # ==========================
@@ -27,50 +28,51 @@ ENV=""
 # Debug ?
 export DEBUG=0;
 . beautify.sh
-. func.sh
 
 # User check!
-if [ `whoami` == "root" ];
+if [ `whoami` = "root" ];
 then
 	errormsg "You shouldn't be root for this script to run.";
 fi;
 
 # Wizard
-if [ $DIR_TO_INSTALL == "" ]
+if [ -z ${DIR_TO_INSTALL} ]
 then
-	read $DIR_TO_INSTALL;
+	cnecho "Give full path (ex. /home/foo/): ";
+	read DIR_TO_INSTALL;
 fi
 
 # Directory exists?
-if [ ! -d $DIR_TO_INSTALL ]
+if [ ! -d ${DIR_TO_INSTALL} ]
 then
 	errormsg "Directory doesn't exist. Please create it";	
 fi;
 
-cd $DIR_TO_INSTALL
+cd ${DIR_TO_INSTALL}
 
-
-if [ $VERSION == "" ]
+# Which Version?
+if [ -z ${VERSION} ]
 then
-	while [ $VERSION != "trunk" -a $VERSION != "stable"]
+	while [ "$VERSION" != "trunk" -a   "$VERSION" != "stable" ]
 	do
-		cecho "Which version you want to install [stable/trunk]?"
-		read $VERSION;
+		cnecho "Select MinSOC Version [stable/trunk]: "
+		read VERSION;
 	done
 fi
 
-if [ $ENV == "" ]
+if [ -z ${ENV} ]
 then
-	while [ $ENV != "linux" -a $ENV != "cygwin" -a $ENV != "freebsd" ]
+	while [ "$ENV" != "linux" -a "$ENV" != "cygwin" -a "$ENV" != "freebsd" ]
 	do
-		cecho "In which environement are you installing MinSOC [linux/cygwin/freebsd]?"
-		read $ENV;
+		cnecho "Select build environment [linux/cygwin/freebsd]: "
+		read ENV;
 	done
 fi
+
 
 
 # Checkout MinSOC
-if [ $VERSION == "trunk" ]
+if [ "${VERSION}" = "trunk" ]
 then
 	execcmd "Download minsoc" "svn co -q http://opencores.org/ocsvn/minsoc/minsoc/trunk/ minsoc"
 else
@@ -86,7 +88,7 @@ execcmd "Checkout uart" "svn co -q http://opencores.org/ocsvn/uart16550/uart1655
 
 cecho "I will now start to compile everything that's needed";
 
-cd $DIR_TO_INSTALL/minsoc/sw/utils
+cd ${DIR_TO_INSTALL}/minsoc/sw/utils
 
 echo $PWD
 
@@ -108,9 +110,10 @@ execcmd "Make UART" "make"
 # adv_jtag_bridge install
 cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge
 
-cecho "Installing FTDI headers! You will be asked to give root pass"
+# FIXME: install FTDI headers for all build environments
+#cecho "Installing FTDI headers! You will be asked to give root pass"
 
-execcmd "Install FTDI headers" "su -c \"aptitude install libftdi-dev\""; #FIXME
+#execcmd "Install FTDI headers" "su -c \"aptitude install libftdi-dev\"";
 
 if [ `grep "INCLUDE_JSP_SERVER=true" Makefile` != "" ]
 then
@@ -118,7 +121,7 @@ then
 	sed 's/INCLUDE_JSP_SERVER=true/INCLUDE_JSP_SERVER=false/' Makefile > TMPFILE && mv TMPFILE Makefile
 fi
 
-if [ $ENV != "cygwin" ] 
+if [ "${ENV}" != "cygwin" ] 
 then
 	cecho "Setting the right build environment";
 	sed "s/BUILD_ENVIRONMENT=cygwin/BUILD_ENVIRONMENT=${ENV}/" Makefile > TMPFILE && mv TMPFILE Makefile
