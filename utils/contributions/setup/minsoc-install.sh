@@ -7,16 +7,16 @@
 
 # Where should I put the dir. minsoc?
 # ex. /home/conx/Thesis/
-DIR_TO_INSTALL="/home/conx/Thesis/tmp/"
+DIR_TO_INSTALL=""
 
 # This variable should be set to trunk
 # or to stable.
-VERSION="trunk"
+VERSION=""
 
 # This variable should take one of
 # the following values depending
 # to your system: linux, cygwin, freebsd
-ENV="linux"
+ENV=""
 
 # !!! DO NOT EDIT BELLOW THIS LINE !!!
 # ===================================
@@ -86,7 +86,9 @@ execcmd "Checkout uart" "svn co -q http://opencores.org/ocsvn/uart16550/uart1655
 
 cecho "I will now start to compile everything that's needed";
 
-cd ../../sw/utils
+cd $DIR_TO_INSTALL/minsoc/sw/utils
+
+echo $PWD
 
 execcmd "Make utils" "make"
 
@@ -98,9 +100,6 @@ cd ../drivers
 
 execcmd "Make drivers" "make"
 
-cd ../gpio
-
-execcmd "Make GPIO" "make"
 
 cd ../uart
 
@@ -109,9 +108,9 @@ execcmd "Make UART" "make"
 # adv_jtag_bridge install
 cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge
 
-#cecho "Installing FTDI headers! You will be asked to give root pass"
+cecho "Installing FTDI headers! You will be asked to give root pass"
 
-#execcmd "Install FTDI headers" "su -c \"aptitude install libftdi-dev\""; #FIXME
+execcmd "Install FTDI headers" "su -c \"aptitude install libftdi-dev\""; #FIXME
 
 if [ `grep "INCLUDE_JSP_SERVER=true" Makefile` != "" ]
 then
