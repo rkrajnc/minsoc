@@ -11,216 +11,78 @@ _reset:
     l.j    _reset_except
     l.nop
 */
-.org 0x000
- 
-_except_200:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                    //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
+
+/*  This cannot be a regular function because it would waste the return register r9 of the interrupted procedure. */
+/*  Furthermore, if this would be a function and l.j handler would be outside of this, the return register set here would be use upon return of this function. */
+/*  However, the desired behavior is to finish the handler and let the return of the service routine simply restore the registers and return to the interrupted procedure.  */
+#define intr_handler(handler)   \
+    l.nop ;\
+    l.addi  r1,r1,-244          /*free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)*/;\
+                                /*plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading) */;\
+    l.sw    0x18(r1),r9         /*save register r9(return addr) to stack*/;\
+    l.jal   store_regs          /*save registers r3-r31 (except r9) to stack (r9 is changed here)*/;\
+    l.nop                       ;\
+                                ;\
+    l.movhi r9,hi(end_except)   /*set return addr to end_except instruction*/;\
+    l.ori   r9,r9,lo(end_except)/*set return addr to end_except instruction*/;\
+    l.j    handler              ;\
     l.nop
 
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    buserr_except
-    l.nop
+.org 0x000
+_except_200:
+    intr_handler(buserr_except)
 
 .org 0x100
- 
 _except_300:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    dpf_except
-    l.nop
+    intr_handler(dpf_except)
 
 .org 0x200
- 
 _except_400:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    ipf_except
-    l.nop
+    intr_handler(ipf_except)
 
 .org 0x300
- 
 _except_500:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    tick_except
-    l.nop
+    intr_handler(tick_except)
 
 .org 0x400
- 
 _except_600:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    align_except
-    l.nop
+    intr_handler(align_except)
 
 .org 0x500
- 
 _except_700:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    illegal_except
-    l.nop
+    intr_handler(illegal_except)
 
 .org 0x600
- 
 _except_800:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j ext_except                //jmp to C interrupt handler (returns later to end_except)
-    l.nop
-
+    intr_handler(ext_except)
 
 .org 0x700
- 
 _except_900:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    dtlbmiss_except
-    l.nop
+    intr_handler(dtlbmiss_except)
 
 .org 0x800
- 
 _except_a00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    itlbmiss_except
-    l.nop
+    intr_handler(itlbmiss_except)
 
 .org 0x900
- 
 _except_b00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    range_except
-    l.nop
+    intr_handler(range_except)
 
 .org 0xa00
- 
 _except_c00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    syscall_except
-    l.nop
+    intr_handler(syscall_except)
 
 .org 0xb00
- 
 _except_d00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    res1_except
-    l.nop
+    intr_handler(res1_except)
 
 .org 0xc00
- 
 _except_e00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    trap_except
-    l.nop
+    intr_handler(trap_except)
 
 .org 0xd00
- 
 _except_f00:
-    l.nop
-    l.addi  r1,r1,-244            //free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)
-                                        //plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading)
-    l.sw    0x18(r1),r9            //save register r9(return addr) to stack
-    l.jal   store_regs            //save registers r3-r31 (except r9) to stack (r9 is changed here)
-    l.nop
-
-    l.movhi r9,hi(end_except)        //set return addr to end_except instruction
-    l.ori   r9,r9,lo(end_except)    //set return addr to end_except instruction
-    l.j    res2_except
-    l.nop
+    intr_handler(res2_except)
 
 store_regs:        //save registers r3-r31 (except r9) to stack
     l.sw    0x00(r1),r3

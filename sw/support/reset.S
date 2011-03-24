@@ -1,7 +1,6 @@
 /* Support file for c based tests */
 #include "spr_defs.h"
 #include "board.h"
-#include "mc.h"
 
     .section .stack
     .space STACK_SIZE
