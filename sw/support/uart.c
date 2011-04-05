@@ -44,8 +44,8 @@ void uart_init(void)
         /* Set baud rate */
         divisor = IN_CLK/(16 * UART_BAUD_RATE);
         REG8(UART_BASE + UART_LCR) |= UART_LCR_DLAB;
-        REG8(UART_BASE + UART_DLL) = divisor & 0x000000ff;
         REG8(UART_BASE + UART_DLM) = (divisor >> 8) & 0x000000ff;
+        REG8(UART_BASE + UART_DLL) = divisor & 0x000000ff;
         REG8(UART_BASE + UART_LCR) &= ~(UART_LCR_DLAB);
  
         return;
