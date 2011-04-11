@@ -45,15 +45,20 @@
 //
 //`define NO_CLOCK_DIVISION
 //`define GENERIC_CLOCK_DIVISION
-`define FPGA_CLOCK_DIVISION		//Altera ALTPLL is not implemented, didn't find the code for its verilog instantiation
-								//if you selected altera and this, the GENERIC_CLOCK_DIVISION will be automatically taken
+`define FPGA_CLOCK_DIVISION		// Altera ALTPLL is yet implemented in Verilog and will be used with this option
 
 //
 // Define division
 //
-`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
-							//in FPGA case, check minsoc_clock_manager for allowed divisors
-							//DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION INSTEAD
+`define CLOCK_DIVISOR 4		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
+                                //in FPGA case, check minsoc_clock_manager for allowed divisors
+				//DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION INSTEAD
+
+//
+// Define multiply
+//
+`define CLOCK_MULTIPLIER 2      // In case of FPGA_CLOCK_DIVISION for Altera FPGAs, ALTPLL Megafunction will be used
+                                // and this will need a clock multiply factor.
 
 //
 // Reset polarity

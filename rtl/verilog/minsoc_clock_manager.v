@@ -10,6 +10,7 @@ module minsoc_clock_manager(
 // Parameters 
 // 
 parameter    divisor = 5;
+parameter    multiplier = 1;
 
 input clk_i;
 output clk_o;
@@ -32,18 +33,17 @@ assign clk_o = clk_int;
 `elsif FPGA_CLOCK_DIVISION
 
 `ifdef ALTERA_FPGA
-reg [31:0] clock_divisor;
-reg clk_int;
-always @ (posedge clk_i)
-begin
-	clock_divisor <= clock_divisor + 1'b1;
-	if ( clock_divisor >= divisor/2 - 1 ) begin
-		clk_int <= ~clk_int;
-		clock_divisor <= 32'h0000_0000;
-	end
-end
-assign clk_o = clk_int;
-
+minsoc_pll
+#(
+   multiplier,
+   divisor
+)
+systemPll
+(
+    .inclk0(clk_i),
+    .c0(clk_o)
+);
+   
 `elsif XILINX_FPGA
 
 `ifdef SPARTAN2
