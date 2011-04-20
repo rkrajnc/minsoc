@@ -1,5 +1,5 @@
 cases = uart-nocache uart-icdc
-common = ../support/libsupport.a ../support/except.o
+common = ../support/except.o ../support/libsupport.a 
 drivers = ../drivers/libdrivers.a
 
 all: $(cases)

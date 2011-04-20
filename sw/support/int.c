@@ -5,8 +5,6 @@
 #include "or1200.h"
 #include "int.h"
 
-#ifdef OR1K
-
 /* Interrupt handlers table */
 struct ihnd int_handlers[MAX_INT_HANDLERS];
 
@@ -79,5 +77,3 @@ void int_main()
 	mtspr(SPR_PICSR, 0);      //clear interrupt status: all modules have level interrupts, which have to be cleared by software,
 }                           //thus this is safe, since non processed interrupts will get re-asserted soon enough
 
-
-#endif

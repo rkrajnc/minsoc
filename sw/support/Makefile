@@ -1,7 +1,7 @@
-all: libsupport.a reset-nocache.o reset-ic.o reset-dc.o reset-icdc.o
+all: libsupport.a reset-nocache.o reset-ic.o reset-dc.o reset-icdc.o except.o
 
-libsupport.a: support.o int.o except.o tick.o
-	$(OR32_TOOL_PREFIX)-ar cru libsupport.a support.o except.o int.o tick.o
+libsupport.a: support.o tick.o int.o 
+	$(OR32_TOOL_PREFIX)-ar cru libsupport.a support.o tick.o int.o 
 	$(OR32_TOOL_PREFIX)-ranlib libsupport.a
 
 support.o: support.c
@@ -26,6 +26,6 @@ int.o: int.c
 	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
 
 tick.o: tick.c
-	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) $? -c -o $@
+	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
 
 include Makefile.inc
