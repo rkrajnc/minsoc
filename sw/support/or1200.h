@@ -1,24 +1,24 @@
-/* spr_defs.h -- Defines OR1K architecture specific special-purpose registers
+/* or1200.h -- Defines OR1K architecture specific special-purpose registers
    Copyright (C) 1999 Damjan Lampret, lampret@opencores.org
 
-This file is part of OpenRISC 1000 Architectural Simulator.
+   This file is part of OpenRISC 1000 Architectural Simulator.
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 
 /* This file is also used by microkernel test bench. Among
-others it is also used in assembly file(s). */
+   others it is also used in assembly file(s). */
 
 /* Definition of special-purpose registers (SPRs) */
 
@@ -75,13 +75,14 @@ others it is also used in assembly file(s). */
 #define SPR_ITLBTR_BASE(WAY)	(SPRGROUP_IMMU + 0x300 + (WAY) * 0x200)
 #define SPR_ITLBTR_LAST(WAY)	(SPRGROUP_IMMU + 0x3ff + (WAY) * 0x200)
 #else
+
 /* Data MMU group */
 #define SPR_DMMUCR  (SPRGROUP_DMMU + 0)
 #define SPR_DTLBMR_BASE(WAY)  (SPRGROUP_DMMU + 0x200 + (WAY) * 0x100)
 #define SPR_DTLBMR_LAST(WAY)  (SPRGROUP_DMMU + 0x27f + (WAY) * 0x100)
 #define SPR_DTLBTR_BASE(WAY)  (SPRGROUP_DMMU + 0x280 + (WAY) * 0x100)
 #define SPR_DTLBTR_LAST(WAY)  (SPRGROUP_DMMU + 0x2ff + (WAY) * 0x100)
- 
+
 /* Instruction MMU group */
 #define SPR_IMMUCR  (SPRGROUP_IMMU + 0)
 #define SPR_ITLBMR_BASE(WAY)  (SPRGROUP_IMMU + 0x200 + (WAY) * 0x100)
@@ -234,9 +235,9 @@ others it is also used in assembly file(s). */
 #define SPR_DTLBTR_SWE	0x00000200  /* Supervisor Write Enable */
 #define SPR_DTLBTR_PPN	0xfffff000  /* Physical Page Number */
 #define DTLB_PR_NOLIMIT  (SPR_DTLBTR_URE  | \
-                          SPR_DTLBTR_UWE  | \
-                          SPR_DTLBTR_SRE  | \
-                          SPR_DTLBTR_SWE  )
+		SPR_DTLBTR_UWE  | \
+		SPR_DTLBTR_SRE  | \
+		SPR_DTLBTR_SWE  )
 /*
  * Bit definitions for the Instruction TLB Match Register
  *
@@ -261,7 +262,7 @@ others it is also used in assembly file(s). */
 #define SPR_ITLBTR_UXE	0x00000080  /* User Write Enable */
 #define SPR_ITLBTR_PPN	0xfffff000  /* Physical Page Number */
 #define ITLB_PR_NOLIMIT  (SPR_ITLBTR_SXE  | \
-                          SPR_ITLBTR_UXE  )
+		SPR_ITLBTR_UXE  )
 
 
 /*
