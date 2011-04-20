@@ -1,7 +1,7 @@
 all: libsupport.a reset-nocache.o reset-ic.o reset-dc.o reset-icdc.o
 
-libsupport.a: support.o int.o except.o uart.o vfnprintf.o
-	$(OR32_TOOL_PREFIX)-ar cru libsupport.a support.o except.o int.o uart.o vfnprintf.o
+libsupport.a: support.o int.o except.o tick.o
+	$(OR32_TOOL_PREFIX)-ar cru libsupport.a support.o except.o int.o tick.o
 	$(OR32_TOOL_PREFIX)-ranlib libsupport.a
 
 support.o: support.c
@@ -22,16 +22,10 @@ reset-icdc.o: reset.S
 except.o: except.S
 	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
 
-uart.o: uart.c
-	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
-
-#snprintf.o: snprintf.c
-#	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -O2 -c -o $@ $?
-
-vfnprintf.o: vfnprintf.c
-	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
-
 int.o: int.c
 	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) -c -o $@ $?
+
+tick.o: tick.c
+	$(OR32_TOOL_PREFIX)-gcc $(GCC_OPT) $? -c -o $@
 
 include Makefile.inc

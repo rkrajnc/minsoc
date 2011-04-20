@@ -4,14 +4,12 @@
 #include <sys/time.h>
 #endif
 
-#include "spr_defs.h"
+#include "or1200.h"
 #include "support.h"
 #include "int.h"
 
 #ifdef UART_PRINTF
-//#include "snprintf.h"
-#include "vfnprintf.h"
-#include "uart.h"
+#include "../drivers/uart.h"
 #endif
 
 #if OR32
@@ -25,16 +23,16 @@ void ext_except()
 /* Start function, called by reset exception handler.  */
 void reset ()
 {
-  int i = main();
-  or32_exit (i);  
+	int i = main();
+	or32_exit (i);  
 }
 
 /* return value by making a syscall */
 void or32_exit (int i)
 {
-  asm("l.add r3,r0,%0": : "r" (i));
-  asm("l.nop %0": :"K" (NOP_EXIT));
-  while (1);
+	asm("l.add r3,r0,%0": : "r" (i));
+	asm("l.nop %0": :"K" (NOP_EXIT));
+	while (1);
 }
 
 #ifdef UART_PRINTF
@@ -46,52 +44,40 @@ char PRINTFBUFFER[PRINTFBUFFER_SIZE]; // Declare a global printf buffer
 
 void minsoc_printf(const char *fmt, ...)
 {
-  // init uart if not done already
-  if (!uart_init_done)
-    {
-      uart_init();
-      uart_init_done = 1;
-    }
+	// init uart if not done already
+	if (!uart_init_done)
+	{
+		uart_init();
+		uart_init_done = 1;
+	}
 
-  va_list args;
-  va_start(args, fmt);
-  
-  //int str_l = vsnprintf(PRINTFBUFFER, PRINTFBUFFER_SIZE, fmt, args);
-  int str_l = vfnprintf(PRINTFBUFFER, PRINTFBUFFER_SIZE, fmt, args);
-  
-  if (!str_l) return; // no length string - just return
-  
-  int c=0;
-  // now print each char via the UART
-  while (c < str_l)
-    uart_putc(PRINTFBUFFER[c++]);
-  
-  va_end(args);
+	va_list args;
+	va_start(args, fmt);
+
+	//int str_l = vsnprintf(PRINTFBUFFER, PRINTFBUFFER_SIZE, fmt, args);
+	int str_l = vfnprintf(PRINTFBUFFER, PRINTFBUFFER_SIZE, fmt, args);
+
+	if (!str_l) return; // no length string - just return
+
+	int c=0;
+	// now print each char via the UART
+	while (c < str_l)
+		uart_putc(PRINTFBUFFER[c++]);
+
+	va_end(args);
 }
 
 #else
 /* activate printf support in simulator */
 void minsoc_printf(const char *fmt, ...)
 {
-  va_list args;
-  va_start(args, fmt);
-  __asm__ __volatile__ ("  l.addi\tr3,%1,0\n \
-                           l.addi\tr4,%2,0\n \
-                           l.nop %0": :"K" (NOP_PRINTF), "r" (fmt), "r"  (args));
+	va_list args;
+	va_start(args, fmt);
+	__asm__ __volatile__ ("  l.addi\tr3,%1,0\n \
+			l.addi\tr4,%2,0\n \
+			l.nop %0": :"K" (NOP_PRINTF), "r" (fmt), "r"  (args));
 }
 
-/*
-void *memcpy (void *__restrict dstvoid,
-              __const void *__restrict srcvoid, size_t length)
-{
-  char *dst = dstvoid;
-  const char *src = (const char *) srcvoid;
-
-  while (length--)
-    *dst++ = *src++;
-  return dst;
-}
-*/
 #endif
 
 
@@ -101,8 +87,8 @@ void *memcpy (void *__restrict dstvoid,
 /* print long */
 void report(unsigned long value)
 {
-  asm("l.addi\tr3,%0,0": :"r" (value));
-  asm("l.nop %0": :"K" (NOP_REPORT));
+	asm("l.addi\tr3,%0,0": :"r" (value));
+	asm("l.nop %0": :"K" (NOP_REPORT));
 }
 
 /* just to satisfy linker */
@@ -115,53 +101,24 @@ void start_timer(int x)
 {
 }
 
-/* read_TIMER                    */
-/*  Returns a value since started in uS */
-unsigned int read_timer(int x)
-{
-  unsigned long count = 0;
-
-  /* Read the Time Stamp Counter */
-/*        asm("simrdtsc %0" :"=r" (count)); */
-  /*asm("l.sys 201"); */
-  return count;
-}
-
 /* For writing into SPR. */
 void mtspr(unsigned long spr, unsigned long value)
 {	
-  asm("l.mtspr\t\t%0,%1,0": : "r" (spr), "r" (value));
+	asm("l.mtspr\t\t%0,%1,0": : "r" (spr), "r" (value));
 }
 
 /* For reading SPR. */
 unsigned long mfspr(unsigned long spr)
 {	
-  unsigned long value;
-  asm("l.mfspr\t\t%0,%1,0" : "=r" (value) : "r" (spr));
-  return value;
+	unsigned long value;
+	asm("l.mfspr\t\t%0,%1,0" : "=r" (value) : "r" (spr));
+	return value;
 }
 
 #else
 void report(unsigned long value)
 {
-  printf("report(0x%x);\n", (unsigned) value);
-}
-
-/* start_TIMER                    */
-void start_timer(int tmrnum)
-{
-}
-
-/* read_TIMER                    */
-/*  Returns a value since started in uS */
-unsigned int read_timer(int tmrnum)
-{
-  struct timeval tv;
-  struct timezone tz;
-
-  gettimeofday(&tv, &tz);
-	
-  return(tv.tv_sec*1000000+tv.tv_usec);
+	printf("report(0x%x);\n", (unsigned) value);
 }
 
 #endif

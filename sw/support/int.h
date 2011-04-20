@@ -1,4 +1,3 @@
-
 /* Number of interrupt handlers */
 #define MAX_INT_HANDLERS	32
 

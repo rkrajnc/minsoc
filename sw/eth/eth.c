@@ -1,7 +1,7 @@
 #include "../support/support.h"
 #include "../support/board.h"
 
-#include "../support/spr_defs.h"
+#include "../support/or1200.h"
 
 #include "../drivers/uart.h"
 #include "../drivers/eth.h"
@@ -14,29 +14,29 @@ extern unsigned char * eth_tx_data;
 
 void eth_receive()
 {
-    int i;
-    uart_print_str("Length: \n");
-    uart_print_long(eth_rx_len);
-    uart_print_str("\n");
-    uart_print_str("Data: \n");
-    for ( i = 0; i < eth_rx_len; i++ )
-    {
-        uart_print_short(eth_rx_data[i]);
-        uart_print_str("\n");
-    }
-    eth_recv_ack();
+	int i;
+	uart_print_str("Length: \n");
+	uart_print_long(eth_rx_len);
+	uart_print_str("\n");
+	uart_print_str("Data: \n");
+	for ( i = 0; i < eth_rx_len; i++ )
+	{
+		uart_print_short(eth_rx_data[i]);
+		uart_print_str("\n");
+	}
+	eth_recv_ack();
 }
 
 int main()
 {
-    unsigned long lalala;
+	unsigned long lalala;
 	uart_init();
 
 	int_init();
 	eth_init();
 	int_add(UART_IRQ, &uart_interrupt);
 	int_add(ETH_IRQ, &eth_interrupt);
-	
+
 	/* We can't use printf because in this simple example
 	   we don't link C library. */
 	uart_print_str("Hello World.\n\r");
@@ -48,14 +48,14 @@ int main()
 
 	eth_send(4);
 
-    while(1)
-    {
-        if (eth_rx_done)
-        {
-            eth_receive();
-        }
-    }
-	
+	while(1)
+	{
+		if (eth_rx_done)
+		{
+			eth_receive();
+		}
+	}
+
 	report(0xdeaddead);
 	or32_exit(0);
 }

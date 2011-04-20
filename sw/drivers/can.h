@@ -1,10 +1,9 @@
-
 struct can_type 
 {
-    unsigned char rtr;
-    unsigned char len;
-    unsigned short identifier;
-    unsigned char data[8];
+	unsigned char rtr;
+	unsigned char len;
+	unsigned short identifier;
+	unsigned char data[8];
 };
 
 typedef struct can_type can_type;
@@ -147,12 +146,11 @@ void can_abort(void);
 #define CAN_IRQ_EN_EXT_RX                 0x01
 
 //EXTENDED ERROR CODES
-#define CAN_ERROR_CAPTURE_CODE_TYPE_SHIFT 6
-#define CAN_ERROR_CAPTURE_CODE_TYPE       0xC0
-#define CAN_ERROR_CAPTURE_CODE_TYPE_BIT   0x0
-#define CAN_ERROR_CAPTURE_CODE_TYPE_FORM  0x1
-#define CAN_ERROR_CAPTURE_CODE_TYPE_STUFF 0x2
-#define CAN_ERROR_CAPTURE_CODE_TYPE_OTHER 0x3
-#define CAN_ERROR_CAPTURE_CODE_DIR        0x40  //1 = TX | 0 = RX
-#define CAN_ERROR_CAPTURE_CODE_SEG        0x1F
-
+#define CAN_ERROR_CAPTURE_CODE_TYPE_SHIFT	  6
+#define CAN_ERROR_CAPTURE_CODE_TYPE		  0xC0
+#define CAN_ERROR_CAPTURE_CODE_TYPE_BIT		  0x0
+#define CAN_ERROR_CAPTURE_CODE_TYPE_FORM	  0x1
+#define CAN_ERROR_CAPTURE_CODE_TYPE_STUFF	  0x2
+#define CAN_ERROR_CAPTURE_CODE_TYPE_OTHER	  0x3
+#define CAN_ERROR_CAPTURE_CODE_DIR		  0x40  //1 = TX | 0 = RX
+#define CAN_ERROR_CAPTURE_CODE_SEG		  0x1F

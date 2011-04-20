@@ -1,5 +1,5 @@
 /* Support file for c based tests */
-#include "spr_defs.h"
+#include "or1200.h"
 #include "board.h"
 
     .section .stack

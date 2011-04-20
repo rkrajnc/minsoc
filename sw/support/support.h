@@ -8,29 +8,17 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <limits.h>
-#define OR1K 1  //ME added
-#if OR1K
 
 /* Register access macros */
 #define REG8(add) *((volatile unsigned char *)(add))
 #define REG16(add) *((volatile unsigned short *)(add))
 #define REG32(add) *((volatile unsigned long *)(add))
 
-void or32_printf(const char *fmt, ...);
-
 /* For writing into SPR. */
 void mtspr(unsigned long spr, unsigned long value);
 
 /* For reading SPR. */
 unsigned long mfspr(unsigned long spr);
-
-#else /* OR1K */
-
-#include <stdio.h>
-
-#endif /* OR1K */
-
-#define	printf	or32_printf
 
 /* Function to be called at entry point - not defined here.  */
 int main ();
@@ -47,10 +35,6 @@ extern void *memcpy (void *__restrict __dest,
                      __const void *__restrict __src, size_t __n);
 */
 
-/* Timer functions */
-extern void start_timer(int);
-extern unsigned int read_timer(int);
-
 extern unsigned long excpt_buserr;
 extern unsigned long excpt_dpfault;
 extern unsigned long excpt_ipfault;
@@ -64,6 +48,5 @@ extern unsigned long excpt_range;
 extern unsigned long excpt_syscall;
 extern unsigned long excpt_break;
 extern unsigned long excpt_trap;
-
 
 #endif /* SUPPORT_H */

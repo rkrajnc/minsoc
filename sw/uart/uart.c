@@ -1,7 +1,6 @@
 #include "../support/support.h"
 #include "../support/board.h"
-
-#include "../support/spr_defs.h"
+#include "../support/or1200.h"
 
 #include "../drivers/uart.h"
 
