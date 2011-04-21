@@ -26,6 +26,7 @@ module minsoc_pll (
 
         parameter FREQ_MULT = 1;
         parameter FREQ_DIV = 1;
+        parameter FAMILY = "Cyclone III";
 
 	input	  inclk0;
 	output	  c0;
@@ -83,7 +84,7 @@ module minsoc_pll (
 		altpll_component.clk0_phase_shift = "0",
 		altpll_component.compensate_clock = "CLK0",
 		altpll_component.inclk0_input_frequency = 20000,
-		altpll_component.intended_device_family = "Cyclone III",
+		altpll_component.intended_device_family = FAMILY,
 		altpll_component.lpm_hint = "CBX_MODULE_PREFIX=minsocPll",
 		altpll_component.lpm_type = "altpll",
 		altpll_component.operation_mode = "NORMAL",
@@ -130,8 +131,6 @@ module minsoc_pll (
 		altpll_component.port_extclk2 = "PORT_UNUSED",
 		altpll_component.port_extclk3 = "PORT_UNUSED",
 		altpll_component.width_clock = 5;
-
-
 endmodule
 
 // ============================================================

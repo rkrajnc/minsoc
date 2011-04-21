@@ -9,9 +9,8 @@ module minsoc_clock_manager(
 // 
 // Parameters 
 // 
-parameter    divisor = 5;
-parameter    multiplier = 1;
-
+   parameter    divisor = 2;
+  
 input clk_i;
 output clk_o;
    
@@ -32,17 +31,52 @@ end
 assign clk_o = clk_int;
 `elsif FPGA_CLOCK_DIVISION
 
-`ifdef ALTERA_FPGA
-minsoc_pll
-#(
-   multiplier,
-   divisor
-)
-systemPll
-(
-    .inclk0(clk_i),
-    .c0(clk_o)
-);
+ `ifdef ALTERA_FPGA
+    `ifdef ARRIA_GX
+      defparam systemPll.FAMILY = "Arria GX";
+    `elsif ARRIA_II_GX
+      defparam systemPll.FAMILY = "Arria II GX";
+    `elsif CYCLONE_I
+      defparam systemPll.FAMILY = "Cyclone I";
+    `elsif CYCLONE_II
+      defparam systemPll.FAMILY = "Cyclone II";
+    `elsif CYCLONE_III
+      defparam systemPll.FAMILY = "Cyclone III";
+    `elsif CYCLONE_III_LS
+      defparam systemPll.FAMILY = "Cyclone III LS";
+    `elsif CYCLONE_IV_E
+      defparam systemPll.FAMILY = "Cyclone IV E";
+    `elsif CYCLONE_IV_GS
+      defparam systemPll.FAMILY = "Cyclone IV GS";
+    `elsif MAX_II
+      defparam systemPll.FAMILY = "MAX II";
+    `elsif MAX_V
+      defparam systemPll.FAMILY = "MAX V";
+    `elsif MAX3000A
+      defparam systemPll.FAMILY = "MAX3000A";
+    `elsif MAX7000AE
+      defparam systemPll.FAMILY = "MAX7000AE";
+    `elsif MAX7000B
+      defparam systemPll.FAMILY = "MAX7000B";
+    `elsif MAX7000S
+      defparam systemPll.FAMILY = "MAX7000S";
+    `elsif STRATIX
+      defparam systemPll.FAMILY = "Stratix";
+    `elsif STRATIX_II
+      defapram systemPll.FAMILY = "Stratix II";
+    `elsif STRATIX_II_GX
+      defparam systemPll.FAMILY = "Stratix II GX";
+    `elsif STRATIX_III
+      defparam systemPll.FAMILY = "Stratix III"
+    `endif
+     
+    defparam systemPll.FREQ_DIV = divisor;
+   
+    minsoc_pll systemPll
+      (
+       .inclk0(clk_i),
+       .c0(clk_o)
+      );
    
 `elsif XILINX_FPGA
 

@@ -2,8 +2,8 @@
 // Define FPGA manufacturer
 //
 //`define GENERIC_FPGA
-//`define ALTERA_FPGA
-`define XILINX_FPGA
+`define ALTERA_FPGA
+//`define XILINX_FPGA
 
 // 
 // Define FPGA Model (comment all out for ALTERA)
@@ -11,12 +11,32 @@
 //`define SPARTAN2
 //`define SPARTAN3
 //`define SPARTAN3E
-`define SPARTAN3A
+//`define SPARTAN3A
 //`define VIRTEX
 //`define VIRTEX2
 //`define VIRTEX4
 //`define VIRTEX5
 
+//
+// Define Altera FPGA Family (comment all out for XILINX)
+//`define ARRIA_GX
+//`define ARRIA_II_GX
+//`define CYCLONE_I
+//`define CYCLONE_II
+`define CYCLONE_III
+//`define CYCLONE_III_LS
+//`define CYCLONE_IV_E
+//`define CYCLONE_IV_GS
+//`define MAX_II
+//`define MAX_V
+//`define MAX3000A
+//`define MAX7000AE
+//`define MAX7000B
+//`define MAX7000S
+//`define STRATIX
+//`define STRATIX_II
+//`define STRATIX_II_GX
+//`define STRATIX_III
 
 //
 // Memory
@@ -46,25 +66,20 @@
 //`define NO_CLOCK_DIVISION
 //`define GENERIC_CLOCK_DIVISION
 `define FPGA_CLOCK_DIVISION		// Altera ALTPLL is yet implemented in Verilog and will be used with this option
+                                        // Note that only CYCLONE_III family has been tested.
 
 //
 // Define division
 //
-`define CLOCK_DIVISOR 4		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
+`define CLOCK_DIVISOR 1		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
                                 //in FPGA case, check minsoc_clock_manager for allowed divisors
 				//DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION INSTEAD
 
 //
-// Define multiply
-//
-`define CLOCK_MULTIPLIER 2      // In case of FPGA_CLOCK_DIVISION for Altera FPGAs, ALTPLL Megafunction will be used
-                                // and this will need a clock multiply factor.
-
-//
 // Reset polarity
 //
-//`define NEGATIVE_RESET      //rstn
-`define POSITIVE_RESET      //rst
+`define NEGATIVE_RESET      //rstn
+//`define POSITIVE_RESET      //rst
 
 //
 // Start-up circuit (only necessary later to load firmware automatically from SPI memory)

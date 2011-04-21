@@ -295,8 +295,7 @@ always @(posedge wb_clk)
 //
 minsoc_clock_manager #
 (
-   .divisor(`CLOCK_DIVISOR),
-   .multiplier(`CLOCK_MULTIPLIER)
+   .divisor(`CLOCK_DIVISOR)
 )
 clk_adjust (
 	.clk_i(clk),
