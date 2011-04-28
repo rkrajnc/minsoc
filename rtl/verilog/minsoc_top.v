@@ -640,7 +640,11 @@ assign wb_sp_ack_o = 1'b0;
 //
 // Instantiation of the SRAM controller
 //
+`ifdef MEMORY_MODEL
+minsoc_memory_model # 
+`else
 minsoc_onchip_ram_top # 
+`endif
 (
     .adr_width(`MEMORY_ADR_WIDTH)     //16 blocks of 2048 bytes memory 32768
 )

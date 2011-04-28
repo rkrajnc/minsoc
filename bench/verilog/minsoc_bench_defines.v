@@ -1,16 +1,9 @@
 
 `timescale 1ns/100ps
 
-`ifdef POSITIVE_RESET
-    `define RESET_LEVEL 1'b1
-`elsif NEGATIVE_RESET
-    `define RESET_LEVEL 1'b0
-`else
-    `define RESET_LEVEL 1'b1
-`endif
-
 //set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 `define GENERIC_FPGA
+`define MEMORY_MODEL        //simulation uses a memory model enabling INITIALIZE_MEMORY_MODEL. If you comment this, START_UP might be interesting.
 `define NO_CLOCK_DIVISION   //if commented out, generic clock division is implemented (odd divisors are rounded down)
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 

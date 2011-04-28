@@ -52,7 +52,7 @@
 //
 
 
-module minsoc_onchip_ram_top ( 
+module minsoc_memory_model ( 
   wb_clk_i, wb_rst_i, 
  
   wb_dat_i, wb_dat_o, wb_adr_i, wb_sel_i, wb_we_i, wb_cyc_i, 

@@ -4,6 +4,14 @@
 
 module minsoc_bench();
 
+`ifdef POSITIVE_RESET
+    localparam RESET_LEVEL = 1'b1;
+`elsif NEGATIVE_RESET
+    localparam RESET_LEVEL = 1'b0;
+`else
+    localparam RESET_LEVEL = 1'b1;
+`endif
+
 reg clock, reset;
 
 //Debug interface
@@ -60,7 +68,7 @@ reg [8*64:0] file_name;
 reg load_file;
 
 initial begin
-    reset = ~`RESET_LEVEL;
+    reset = ~RESET_LEVEL;
     clock = 1'b0;
 
 `ifndef NO_CLOCK_DIVISION
@@ -120,9 +128,9 @@ initial begin
 
     // Reset controller
     repeat (2) @ (negedge clock);
-    reset = `RESET_LEVEL;
+    reset = RESET_LEVEL;
     repeat (16) @ (negedge clock);
-    reset = ~`RESET_LEVEL;
+    reset = ~RESET_LEVEL;
 
 `ifdef START_UP
 	// Pass firmware over spi to or1k_startup
