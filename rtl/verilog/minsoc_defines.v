@@ -132,6 +132,9 @@
 // and GENERIC_CLOCK_DIVISION if NO_CLOCK_DIVISION was not set
 //
 `ifdef GENERIC_FPGA
+    `undef FPGA_TAP
+    `undef FPGA_CLOCK_DIVISION
+
 	`define GENERIC_TAP
 	`define GENERIC_MEMORY
 	`ifndef NO_CLOCK_DIVISION

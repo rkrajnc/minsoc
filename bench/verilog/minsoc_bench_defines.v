@@ -4,6 +4,7 @@
 //set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 `define GENERIC_FPGA
 `define NO_CLOCK_DIVISION   //if commented out, generic clock division is implemented (odd divisors are rounded down)
+`undef NEGATIVE_RESET
 `define POSITIVE_RESET
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 
