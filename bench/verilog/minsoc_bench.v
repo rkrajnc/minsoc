@@ -60,7 +60,7 @@ reg [8*64:0] file_name;
 reg load_file;
 
 initial begin
-    reset = 1'b0;
+    reset = ~`RESET_LEVEL;
     clock = 1'b0;
 
 `ifndef NO_CLOCK_DIVISION
@@ -120,9 +120,9 @@ initial begin
 
     // Reset controller
     repeat (2) @ (negedge clock);
-    reset = 1'b1;
+    reset = `RESET_LEVEL;
     repeat (16) @ (negedge clock);
-    reset = 1'b0;
+    reset = ~`RESET_LEVEL;
 
 `ifdef START_UP
 	// Pass firmware over spi to or1k_startup

@@ -1,11 +1,17 @@
 
 `timescale 1ns/100ps
 
+`ifdef POSITIVE_RESET
+    `define RESET_LEVEL 1'b1
+`elsif NEGATIVE_RESET
+    `define RESET_LEVEL 1'b0
+`else
+    `define RESET_LEVEL 1'b1
+`endif
+
 //set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 `define GENERIC_FPGA
 `define NO_CLOCK_DIVISION   //if commented out, generic clock division is implemented (odd divisors are rounded down)
-`undef NEGATIVE_RESET
-`define POSITIVE_RESET
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 
 `define FREQ_NUM_FOR_NS 1000000000
