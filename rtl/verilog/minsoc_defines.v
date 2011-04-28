@@ -2,23 +2,26 @@
 // Define FPGA manufacturer
 //
 //`define GENERIC_FPGA
-`define ALTERA_FPGA
-//`define XILINX_FPGA
+//`define ALTERA_FPGA
+`define XILINX_FPGA
 
 // 
-// Define FPGA Model (comment all out for ALTERA)
+// Define Xilinx FPGA family
 //
+`ifdef XILINX_FPGA
 //`define SPARTAN2
 //`define SPARTAN3
 //`define SPARTAN3E
-//`define SPARTAN3A
+`define SPARTAN3A
 //`define VIRTEX
 //`define VIRTEX2
 //`define VIRTEX4
 //`define VIRTEX5
 
 //
-// Define Altera FPGA Family (comment all out for XILINX)
+// Define Altera FPGA family
+//
+`elsif ALTERA_FPGA
 //`define ARRIA_GX
 //`define ARRIA_II_GX
 //`define CYCLONE_I
@@ -37,6 +40,7 @@
 //`define STRATIX_II
 //`define STRATIX_II_GX
 //`define STRATIX_III
+`endif
 
 //
 // Memory
@@ -65,13 +69,12 @@
 //
 //`define NO_CLOCK_DIVISION
 //`define GENERIC_CLOCK_DIVISION
-`define FPGA_CLOCK_DIVISION		// Altera ALTPLL is yet implemented in Verilog and will be used with this option
-                                        // Note that only CYCLONE_III family has been tested.
+`define FPGA_CLOCK_DIVISION		// For Altera ALTPLL, only CYCLONE_III family has been tested.
 
 //
 // Define division
 //
-`define CLOCK_DIVISOR 1		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
+`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
                                 //in FPGA case, check minsoc_clock_manager for allowed divisors
 				//DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION INSTEAD
 
