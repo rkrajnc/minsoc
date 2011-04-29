@@ -29,24 +29,5 @@ void report(unsigned long value);
 /* return value by making a syscall */
 extern void or32_exit (int i) __attribute__ ((__noreturn__));
 
-/* memcpy clone */
-/*
-extern void *memcpy (void *__restrict __dest,
-                     __const void *__restrict __src, size_t __n);
-*/
-
-extern unsigned long excpt_buserr;
-extern unsigned long excpt_dpfault;
-extern unsigned long excpt_ipfault;
-extern unsigned long excpt_tick;
-extern unsigned long excpt_align;
-extern unsigned long excpt_illinsn;
-extern unsigned long excpt_int;
-extern unsigned long excpt_dtlbmiss;
-extern unsigned long excpt_itlbmiss;
-extern unsigned long excpt_range;
-extern unsigned long excpt_syscall;
-extern unsigned long excpt_break;
-extern unsigned long excpt_trap;
 
 #endif /* SUPPORT_H */
