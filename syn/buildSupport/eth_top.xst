@@ -1,0 +1,12 @@
+set -tmpdir "./xst"
+run
+-vlgincdir {"../rtl/verilog/ethmac/rtl/verilog/"}
+-ifn ./buildSupport/eth_top.prj
+-ifmt Verilog
+-ofn eth_top
+-ofmt NGC
+-p xc3sd1800a-4-fg676
+-top eth_top
+-opt_mode Speed
+-opt_level 1
+-iobuf no

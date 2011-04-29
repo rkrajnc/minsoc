@@ -1,0 +1,12 @@
+set -tmpdir "./xst"
+run
+-vlgincdir {"../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/"}
+-ifn ./buildSupport/adbg_top.prj
+-ifmt Verilog
+-ofn adbg_top
+-ofmt NGC
+-p xc3sd1800a-4-fg676
+-top adbg_top
+-opt_mode Speed
+-opt_level 1
+-iobuf no

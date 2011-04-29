@@ -1,0 +1,12 @@
+set -tmpdir "./xst"
+run
+-vlgincdir {"../rtl/verilog/uart16550/rtl/verilog/"}
+-ifn ./buildSupport/uart_top.prj
+-ifmt Verilog
+-ofn uart_top
+-ofmt NGC
+-p xc3sd1800a-4-fg676
+-top uart_top
+-opt_mode Speed
+-opt_level 1
+-iobuf no

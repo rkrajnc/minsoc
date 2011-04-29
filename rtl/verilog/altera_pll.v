@@ -58,6 +58,7 @@ module altera_pll (
 	wire  sub_wire2 = inclk0;
 	wire [1:0] sub_wire3 = {sub_wire4, sub_wire2};
 
+`ifdef ALTERA_FPGA
 	altpll	altpll_component (
 				.inclk (sub_wire3),
 				.clk (sub_wire0),
@@ -151,5 +152,7 @@ module altera_pll (
 		altpll_component.port_extclk2 = "PORT_UNUSED",
 		altpll_component.port_extclk3 = "PORT_UNUSED",
 		altpll_component.width_clock = 5;
+`endif
+
 endmodule
 

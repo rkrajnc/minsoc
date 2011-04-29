@@ -41,32 +41,32 @@ net "uart_srx" loc = "n21";
 ##
 ## ETH
 ##
-NET "eth_txd(3)" LOC = "b1";
-NET "eth_txd(2)" LOC = "b2";
-NET "eth_txd(1)" LOC = "j9";
-NET "eth_txd(0)" LOC = "j8";
-
-NET "eth_tx_en" LOC = "d3";
-NET "eth_tx_clk" LOC = "p2";
-NET "eth_tx_er" LOC = "e4";
-
-NET "eth_rxd(3)" LOC = "d2";
-NET "eth_rxd(2)" LOC = "g5";
-NET "eth_rxd(1)" LOC = "g2";
-NET "eth_rxd(0)" LOC = "c2";
-
-NET "eth_rx_er" LOC = "j3";
-NET "eth_rx_dv" LOC = "d1";
-
-NET "eth_rx_clk" LOC = "p1";
-
-NET "eth_mdio" LOC = "f5" | PULLUP;
-NET "eth_crs" LOC = "g1";
-NET "eth_col" LOC = "y3";
-NET "eth_mdc" LOC = "f4";
-
-NET "eth_trste" LOC = "g4";
-
-NET "eth_fds_mdint" LOC = "j1";
+#NET "eth_txd(3)" LOC = "b1";
+#NET "eth_txd(2)" LOC = "b2";
+#NET "eth_txd(1)" LOC = "j9";
+#NET "eth_txd(0)" LOC = "j8";
+#
+#NET "eth_tx_en" LOC = "d3";
+#NET "eth_tx_clk" LOC = "p2";
+#NET "eth_tx_er" LOC = "e4";
+#
+#NET "eth_rxd(3)" LOC = "d2";
+#NET "eth_rxd(2)" LOC = "g5";
+#NET "eth_rxd(1)" LOC = "g2";
+#NET "eth_rxd(0)" LOC = "c2";
+#
+#NET "eth_rx_er" LOC = "j3";
+#NET "eth_rx_dv" LOC = "d1";
+#
+#NET "eth_rx_clk" LOC = "p1";
+#
+#NET "eth_mdio" LOC = "f5" | PULLUP;
+#NET "eth_crs" LOC = "g1";
+#NET "eth_col" LOC = "y3";
+#NET "eth_mdc" LOC = "f4";
+#
+#NET "eth_trste" LOC = "g4";
+#
+#NET "eth_fds_mdint" LOC = "j1";
 ###########################
 
