@@ -45,7 +45,7 @@
 //
 // Memory
 //
-`define MEMORY_ADR_WIDTH   13	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, 
+`define MEMORY_ADR_WIDTH   15	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, 
                                 //memory is composed by blocks of address width 11
 								//Address width of memory -> select memory depth, 
                                 //2 powers MEMORY_ADR_WIDTH defines the memory depth 
