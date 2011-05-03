@@ -1,0 +1,12 @@
+set -tmpdir "./xst"
+run
+-vlgincdir {"../backend" "../rtl/verilog/" "../rtl/verilog/minsoc_startup" "../rtl/verilog/or1200/rtl/verilog/" "../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/" "../rtl/verilog/ethmac/rtl/verilog/" "../rtl/verilog/uart16550/rtl/verilog/"}
+-ifn ./buildSupport/minsoc_top.prj
+-ifmt Verilog
+-ofn minsoc_top
+-ofmt NGC
+-p DEVICE_PART
+-top minsoc_top
+-opt_mode Speed
+-opt_level 1
+-iobuf yes

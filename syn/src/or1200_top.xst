@@ -5,7 +5,7 @@ run
 -ifmt Verilog
 -ofn or1200_top
 -ofmt NGC
--p xc3sd1800a-4-fg676
+-p DEVICE_PART
 -top or1200_top
 -opt_mode Speed
 -opt_level 1

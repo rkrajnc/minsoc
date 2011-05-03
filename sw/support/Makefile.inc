@@ -1,18 +1,40 @@
 # File to be included in all makefiles
 
+ROOTDIR = ..
+
+BACKEND_DIR := $(ROOTDIR)/../backend
+SUPPORT_DIR := $(ROOTDIR)/support
+DRIVERS_DIR := $(ROOTDIR)/drivers
+UTILS_DIR := $(ROOTDIR)/utils
+
+OR1200_HDR := $(SUPPORT_DIR)/or1200.h
+BOARD_HDR := $(BACKEND_DIR)/board.h
+SUPPORT_HDR := $(SUPPORT_DIR)/support.h
+UART_HDR := $(DRIVERS_DIR)/uart.h
+ETH_HDR := $(DRIVERS_DIR)/eth.h
+
+RESET_NOCACHE := $(SUPPORT_DIR)/reset-nocache.o
+RESET_ICDC := $(SUPPORT_DIR)/reset-icdc.o
+
+EXCPT_HNDLR := $(SUPPORT_DIR)/except.o
+LIB_SUPPORT := $(SUPPORT_DIR)/libsupport.a
+
+SUPPORT := $(EXCPT_HNDLR) $(LIB_SUPPORT)
+DRIVERS := $(DRIVERS_DIR)/libdrivers.a
+
+LINKER_SCRIPT := $(BACKEND_DIR)/orp.ld
+
 OR32_TOOL_PREFIX=or32-elf
 
-#GCC_LIB_OPTS= -lgcc -liberty
+GCC_OPT=-mhard-mul -mhard-div -g -nostdlib
 
-GCC_OPT=-mhard-mul -g -nostdlib
+BIN2HEX = $(UTILS_DIR)/bin2hex
 
 ifdef UART_PRINTF
 GCC_OPT += -DUART_PRINTF
 endif
 
-FLASH_MEM_HEX_FILE_SUFFIX=-twobyte-sizefirst
-SRAM_MEM_HEX_FILE_SUFFIX=-fourbyte
-
+all: all_internal
 
 # Global clean rule
 clean:

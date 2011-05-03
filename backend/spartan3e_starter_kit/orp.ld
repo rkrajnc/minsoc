@@ -1,12 +1,3 @@
-/*
-MEMORY
-        {
-        vectors : ORIGIN = 0x00000000, LENGTH = 0x00002000
-        flash   : ORIGIN = 0x04000000, LENGTH = 0x00200000
-        ram     : ORIGIN = 0x00002000, LENGTH = 0x001fe000
-        icm     : ORIGIN = 0x00800000, LENGTH = 0x00004000
-        }
- */
 MEMORY
 	{
 	reset	: ORIGIN = 0x00000000, LENGTH = 0x00000200

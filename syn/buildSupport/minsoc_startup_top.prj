@@ -1,5 +1,0 @@
-`include "../rtl/verilog/minsoc_startup/spi_shift.v"
-`include "../rtl/verilog/minsoc_startup/spi_clgen.v"
-`include "../rtl/verilog/minsoc_startup/spi_top.v"
-`include "../rtl/verilog/minsoc_startup/spi_defines.v"
-`include "../rtl/verilog/minsoc_startup/OR1K_startup_generic.v"

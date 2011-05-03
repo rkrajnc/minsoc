@@ -5,7 +5,7 @@ run
 -ifmt Verilog
 -ofn uart_top
 -ofmt NGC
--p xc3sd1800a-4-fg676
+-p DEVICE_PART
 -top uart_top
 -opt_mode Speed
 -opt_level 1

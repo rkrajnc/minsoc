@@ -1,0 +1,81 @@
+#!/bin/bash
+
+#new boards have to udpate this
+BOARD=spartan3a_dsp_kit						#this has to have the name of the directory this file is in
+DEVICE_PART='xc3sd1800a-4-fg676'
+CONSTRAINT_FILE='spartan3a_dsp_kit.ucf'
+#~new boards update
+
+#system workings
+MINSOC_DIR=`pwd`/../..
+BACKEND_DIR=$MINSOC_DIR/backend
+SYN_DIR=$MINSOC_DIR/syn
+SYNSRC_DIR=$SYN_DIR/src
+SYNSUPPORT_DIR=$SYN_DIR/buildSupport
+
+SYN_FILES=(eth_top.xst uart_top.xst adbg_top.xst or1200_top.xst minsoc_top.xst Makefile)
+
+FIND_PART='DEVICE_PART'
+FIND_CONSTRAINT='CONSTRAINT_FILE'
+
+BOARD_DIR=$BACKEND_DIR/$BOARD
+BOARD_FILES=(board.h orp.ld minsoc_defines.v $CONSTRAINT_FILE)
+
+in_minsoc=`pwd | grep minsoc/backend/${BOARD}$`
+if [ -z $in_minsoc ]
+then
+	echo ""
+	echo "			!!!WARNING!!!"
+	echo "This script cannot be run out of a board directory inside minsoc/backend,"
+	echo "because it relies on the directory structure of the minsoc system."
+	echo ""
+	exit 1
+fi
+
+echo ""
+echo "Configuring SoC board's specific files for firmware compilation, "
+echo "testbench generation and synthesis."
+echo "Firmware and testbench looks for board specific files under minsoc/backend."
+echo "Synthesis work under minsoc/syn."
+echo ""
+echo ""
+
+if [ $CONSTRAINT_FILE == 'NONE' ]
+then
+    echo "Skipping synthesis preparation. Standard implementation can only be simulated."
+else
+    echo "Device part for files under minsoc/syn/src will be patched and stored "
+    echo "temporarily." 
+    echo "Afterwards, they are copied to minsoc/syn/buildSupport."
+    echo "__________________________________________________________________________"
+    echo ""
+    for file in "${SYN_FILES[@]}"
+    do
+        echo "Updating synthesis file, $file..."
+        echo "Copying $file to synthesis directory..."
+        echo ""
+        sed "s/$FIND_PART/$DEVICE_PART/g" $SYNSRC_DIR/$file > TMPFILE
+        sed "s/$FIND_CONSTRAINT/$CONSTRAINT_FILE/g" TMPFILE > TMPFILE2 && mv TMPFILE2 $SYNSUPPORT_DIR/$file
+        rm TMPFILE
+    done
+
+    echo "Moving Makefile back from minsoc/syn/buildSupport to minsoc/syn..."
+    mv $SYNSUPPORT_DIR/Makefile $SYN_DIR
+fi
+echo ""
+echo ""
+
+
+echo "Copying board specific SoC files to backend directory."
+echo "__________________________________________________________________________"
+echo ""
+for file in "${BOARD_FILES[@]}"
+do
+    if [ $file != NONE ]
+    then
+        echo "Copying $file, to backend directory..."
+        cp $BOARD_DIR/$file $BACKEND_DIR
+    fi
+done
+echo ""
+echo ""

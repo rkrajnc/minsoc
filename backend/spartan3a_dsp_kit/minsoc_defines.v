@@ -45,9 +45,12 @@
 //
 // Memory
 //
-`define MEMORY_ADR_WIDTH   13	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, memory is composed by blocks of address width 11
-								//Address width of memory -> select memory depth, 2 powers MEMORY_ADR_WIDTH defines the memory depth 
-								//the memory data width is 32 bit, memory amount in Bytes = 4*memory depth
+`define MEMORY_ADR_WIDTH   13	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, 
+                                //memory is composed by blocks of address width 11
+								//Address width of memory -> select memory depth, 
+                                //2 powers MEMORY_ADR_WIDTH defines the memory depth 
+								//the memory data width is 32 bit, 
+                                //memory amount in Bytes = 4*memory depth
 
 //
 // Memory type	(uncomment something if ASIC or generic memory)
@@ -74,9 +77,11 @@
 //
 // Define division
 //
-`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded down to an even value
-                                //in FPGA case, check minsoc_clock_manager for allowed divisors
-				//DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION INSTEAD
+`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded 
+                            //down to an even value in FPGA case, check minsoc_clock_manager 
+                            //for allowed divisors.
+				            //DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION 
+                            //INSTEAD.
 
 //
 // Reset polarity
@@ -93,7 +98,7 @@
 // Connected modules
 //
 `define UART
-//`define ETHERNET
+`define ETHERNET
 
 //
 // Ethernet reset

@@ -1,5 +1,5 @@
-#include "../support/or1200.h"
-#include "../support/support.h"
+#include "or1200.h"
+#include "support.h"
 #include "tick.h"
 
 int tick_int;

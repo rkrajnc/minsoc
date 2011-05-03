@@ -24,5 +24,6 @@
 //`define START_UP						//pass firmware over spi to or1k_startup
 
 `define INITIALIZE_MEMORY_MODEL			//instantaneously initialize memory model with firmware
-										//only use with the memory model (it is safe to 
-										//comment this and include the original memory instead)
+										//only use with the memory model. 
+                                        //If you use the original memory (`define MEMORY_MODEL 
+                                        //commented out), comment this too.

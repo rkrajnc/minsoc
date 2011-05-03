@@ -1,3 +1,4 @@
++incdir+../../backend
 +incdir+../../bench/verilog
 +incdir+../../bench/verilog/vpi
 +incdir+../../bench/verilog/sim_lib
@@ -9,6 +10,7 @@
 +incdir+../../rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge/sim_rtl
 +incdir+../../rtl/verilog/uart16550/rtl/verilog
 +incdir+../../rtl/verilog/ethmac/rtl/verilog
+../../backend/minsoc_defines.v
 ../../bench/verilog/minsoc_bench_defines.v
 ../../bench/verilog/minsoc_bench.v
 ../../bench/verilog/minsoc_memory_model.v
@@ -24,7 +26,6 @@
 ../../rtl/verilog/minsoc_onchip_ram.v
 ../../rtl/verilog/minsoc_clock_manager.v
 ../../rtl/verilog/minsoc_onchip_ram_top.v
-../../rtl/verilog/minsoc_defines.v
 ../../rtl/verilog/or1200/rtl/verilog/or1200_spram_512x20.v
 ../../rtl/verilog/or1200/rtl/verilog/or1200_spram_64x24.v
 ../../rtl/verilog/or1200/rtl/verilog/or1200_du.v

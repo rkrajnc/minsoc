@@ -1,6 +1,6 @@
 /* Support file for c based tests */
 #include "or1200.h"
-#include "board.h"
+#include "../../backend/board.h"
 
     .section .stack
     .space STACK_SIZE
