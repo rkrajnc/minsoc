@@ -22,11 +22,11 @@ net "reset" loc = "j17";					#SW5
 ##
 ## SPI Flash External Memory
 ##
-NET "spi_flash_mosi" LOC = "ab15";
-NET "spi_flash_miso" LOC = "af24";
-NET "spi_flash_sclk" LOC = "ae24";
-NET "spi_flash_ss(1)" LOC = "ac25";
-NET "spi_flash_ss(0)" LOC = "aa7";
+#NET "spi_flash_mosi" LOC = "ab15";
+#NET "spi_flash_miso" LOC = "af24";
+#NET "spi_flash_sclk" LOC = "ae24";
+#NET "spi_flash_ss(1)" LOC = "ac25";
+#NET "spi_flash_ss(0)" LOC = "aa7";
 ###########################
 
 ###########################
