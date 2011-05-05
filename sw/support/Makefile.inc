@@ -26,7 +26,7 @@ LINKER_SCRIPT := $(BACKEND_DIR)/orp.ld
 
 OR32_TOOL_PREFIX=or32-elf
 
-GCC_OPT=-mhard-mul -mhard-div -g -nostdlib
+include ../../backend/gcc-opt.mk
 
 BIN2HEX = $(UTILS_DIR)/bin2hex
 

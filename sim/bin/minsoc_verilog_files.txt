@@ -11,7 +11,7 @@
 +incdir+../../rtl/verilog/uart16550/rtl/verilog
 +incdir+../../rtl/verilog/ethmac/rtl/verilog
 ../../backend/minsoc_defines.v
-../../bench/verilog/minsoc_bench_defines.v
+../../backend/minsoc_bench_defines.v
 ../../bench/verilog/minsoc_bench.v
 ../../bench/verilog/minsoc_memory_model.v
 ../../bench/verilog/vpi/dbg_comm_vpi.v

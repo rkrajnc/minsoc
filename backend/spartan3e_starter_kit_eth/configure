@@ -1,9 +1,11 @@
 #!/bin/bash
 
+#NON STANDARD SCRIPT, USE ANOTHER AS TEMPLATE, NON STANDARD PART IS MARKED AS COMMENT
+
 #new boards have to udpate this
-BOARD=std						#this has to have the name of the directory this file is in
-DEVICE_PART='NONE'
-CONSTRAINT_FILE='NONE'
+BOARD=spartan3e_starter_kit_eth						#this has to have the name of the directory this file is in
+DEVICE_PART='xc3s500e-4-fg320'
+CONSTRAINT_FILE='spartan3e_starter_kit_eth.ucf'
 #~new boards update
 
 #system workings
@@ -31,6 +33,23 @@ then
 	echo ""
 	exit 1
 fi
+
+#NON STANDARD SCRIPT PART
+echo "THIS SCRIPT HAS A NON-STANDARD BEGINNING."
+echo "__________________________________________________________________________"
+echo "Ethernet on Spartan3E Starter Kit requires another configuration for or1200."
+echo "For minsoc release-1.0 or1200_r1 will be used." 
+echo "This will need or1200_defines.v of or1200_r1 with same configuration."
+
+echo ""
+echo "Copying or1200_defines.v, to or1200 implementation directory..."   
+echo "(minsoc/rtl/verilog/or1200/rtl/verilog)"
+echo "__________________________________________________________________________"
+cp $BOARD_DIR/or1200_defines.v $MINSOC_DIR/rtl/verilog/or1200/rtl/verilog
+echo ""
+echo "REGULAR SCRIPT STARTS NOW"
+echo "__________________________________________________________________________"
+#~NON STANDARD SCRIPT PART
 
 echo ""
 echo "Configuring SoC board's specific files for firmware compilation, "

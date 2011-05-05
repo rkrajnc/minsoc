@@ -21,7 +21,7 @@ FIND_PART='DEVICE_PART'
 FIND_CONSTRAINT='CONSTRAINT_FILE'
 
 BOARD_DIR=$BACKEND_DIR/$BOARD
-BOARD_FILES=(board.h orp.ld minsoc_defines.v $CONSTRAINT_FILE)
+BOARD_FILES=(board.h orp.ld minsoc_defines.v minsoc_bench_defines.v gcc-opt.mk $CONSTRAINT_FILE)
 
 in_minsoc=`pwd | grep minsoc/backend/${BOARD}$`
 if [ -z $in_minsoc ]
