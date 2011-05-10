@@ -39,8 +39,8 @@ prepare:
 	rm -rf xst
 	mkdir xst
 clean:
-	rm -rf *.xst *.xrpt *.srp *.lso *.log *.bld *.lst *.twr *.ise *.map *.mrp *.ngm *.pcf *.psr *.xml *.pad *.par *.ptwx *.bgn *.unroutes *.xpi minsoc_par_pad* *.xwbt
 	rm -rf _xmsgs xst xlnx_auto_0_xdb
+	rm -rf *.xst *.xrpt *.srp *.lso *.log *.bld *.lst *.twr *.ise *.map *.mrp *.ngm *.pcf *.psr *.xml *.pad *.par *.ptwx *.bgn *.unroutes *.xpi minsoc_par_pad* *.xwbt *.html
 distclean:
 	rm -rf *.ngc *.ncd *.ngd *.bit
 	make clean
@@ -48,44 +48,35 @@ distclean:
 minsoc_top.ngc: ${MINSOC_RTL}/*.v ${MINSOC_DEFINES}/minsoc_defines.v buildSupport/minsoc_top.xst buildSupport/minsoc_top.prj
 	make prepare
 	xst -ifn "buildSupport/minsoc_top.xst"
-	make clean
 
 uart: uart_top.ngc
 uart_top.ngc: ${UART_RTL}/*.v buildSupport/uart_top.xst buildSupport/uart_top.prj
 	make prepare
 	xst -ifn "buildSupport/uart_top.xst"
-	make clean
 
 eth: eth_top.ngc
 eth_top.ngc: ${ETH_RTL}/*.v buildSupport/eth_top.xst buildSupport/eth_top.prj
 	make prepare
 	xst -ifn "buildSupport/eth_top.xst"
-	make clean
 
 debug: adbg_top.ngc
 adbg_top.ngc: ${DEBUG_RTL}/*.v buildSupport/adbg_top.xst buildSupport/adbg_top.prj
 	make prepare
 	xst -ifn "buildSupport/adbg_top.xst"
-	make clean
 
 or1200: or1200_top.ngc
 or1200_top.ngc: ${OR1200_RTL}/*.v buildSupport/or1200_top.xst buildSupport/or1200_top.prj
 	make prepare
 	xst -ifn "buildSupport/or1200_top.xst"
-	make clean
 
 minsoc.ngd: ${MINSOC}/backend/CONSTRAINT_FILE minsoc_top.ngc $(MODULES)
 	ngdbuild -p DEVICE_PART -uc ${MINSOC}/backend/CONSTRAINT_FILE -aul minsoc_top.ngc minsoc.ngd
-	make clean
 
 minsoc.ncd: minsoc.ngd
 	map -bp -timing -cm speed -equivalent_register_removal on -logic_opt on -ol high -power off -register_duplication on -retiming on -w -xe n minsoc.ngd
-	make clean
 
 minsoc_par.ncd: minsoc.ncd
 	par -ol high -w -xe n minsoc.ncd minsoc_par.ncd
-	make clean
 
 minsoc.bit: minsoc_par.ncd
 	bitgen -d -w minsoc_par.ncd minsoc.bit
-	make clean
