@@ -1,6 +1,3 @@
-
-`timescale 1ns/100ps
-
 //set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 `define GENERIC_FPGA
 `define MEMORY_MODEL        //simulation uses a memory model enabling INITIALIZE_MEMORY_MODEL. If you comment this, START_UP might be interesting.

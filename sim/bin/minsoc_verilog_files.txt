@@ -16,6 +16,7 @@
 ../../bench/verilog/minsoc_memory_model.v
 ../../bench/verilog/vpi/dbg_comm_vpi.v
 ../../bench/verilog/sim_lib/fpga_memory_primitives.v
+../../rtl/verilog/timescale.v
 ../../rtl/verilog/minsoc_top.v
 ../../rtl/verilog/minsoc_startup/spi_top.v
 ../../rtl/verilog/minsoc_startup/spi_defines.v
