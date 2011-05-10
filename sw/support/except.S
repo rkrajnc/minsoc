@@ -16,7 +16,7 @@
 /*  Furthermore, if this would be a function and l.j handler would be outside of this, the return register set here would be use upon return of this function. */
 /*  However, the desired behavior is to finish the handler and let the return of the service routine simply restore the registers and return to the interrupted procedure.  */
 #define intr_handler(handler)   \
-	l.nop ;\
+	l.nop                   ;\
 l.addi  r1,r1,-244          /*free 29 words (29 x 4 = 112) + 4 because stack points to contained data (stack is r1)*/;\
 /*plus 128 bytes not to mess with the previous frame pointer (32 register x 4 bytes = 128 bytes ) (required by C++ multiple threading) */;\
 l.sw    0x18(r1),r9         /*save register r9(return addr) to stack*/;\
@@ -25,7 +25,7 @@ l.nop                       ;\
 ;\
 l.movhi r9,hi(end_except)   /*set return addr to end_except instruction*/;\
 l.ori   r9,r9,lo(end_except)/*set return addr to end_except instruction*/;\
-l.j    handler              ;\
+l.j    CLABEL(handler)      ;\
 l.nop
 
 .org 0x000

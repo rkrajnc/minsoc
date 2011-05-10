@@ -105,8 +105,8 @@ loop:
     l.ori   r1,r1,lo(_stack)
 
 /* Jump to main */
-    l.movhi r2,hi(reset)
-    l.ori   r2,r2,lo(reset)
+    l.movhi r2,hi(CLABEL(reset))
+    l.ori   r2,r2,lo(CLABEL(reset))
     l.jr    r2
     l.nop
 

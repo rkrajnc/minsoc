@@ -20,6 +20,10 @@
 /* This file is also used by microkernel test bench. Among
    others it is also used in assembly file(s). */
 
+#define __CLABEL(prefix, label) prefix ## label
+#define _CLABEL(prefix, label) __CLABEL(prefix, label)
+#define CLABEL(label) _CLABEL(__USER_LABEL_PREFIX__, label)
+
 /* Definition of special-purpose registers (SPRs) */
 
 #define MAX_GRPS (32)
