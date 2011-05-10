@@ -51,6 +51,7 @@
 // Created interface and tested
 //
 
+`include "timescale.v"
 
 module minsoc_memory_model ( 
   wb_clk_i, wb_rst_i, 

@@ -74,6 +74,7 @@
 //
 //
 
+`include "timescale.v"
 
 `define JP_PORT "4567"
 `define TIMEOUT_COUNT 6'd20  // 1/2 of a TCK clock will be this many SYS_CLK ticks.  Must be less than 6 bits. 

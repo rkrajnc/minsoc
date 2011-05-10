@@ -2,6 +2,8 @@
 `include "minsoc_defines.v"
 `include "or1200_defines.v"
 
+`include "timescale.v"
+
 module minsoc_bench();
 
 `ifdef POSITIVE_RESET
