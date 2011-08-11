@@ -117,7 +117,7 @@
 ../../rtl/verilog/ethmac/rtl/verilog/eth_registers.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_rxethmac.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_miim.v
-../../rtl/verilog/ethmac/rtl/verilog/eth_top.v
+../../rtl/verilog/ethmac/rtl/verilog/ethmac.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_rxaddrcheck.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_outputcontrol.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_rxstatem.v
@@ -125,7 +125,7 @@
 ../../rtl/verilog/ethmac/rtl/verilog/eth_wishbone.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_maccontrol.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_txstatem.v
-../../rtl/verilog/ethmac/rtl/verilog/eth_defines.v
+../../rtl/verilog/ethmac/rtl/verilog/ethmac_defines.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_spram_256x32.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_shiftreg.v
 ../../rtl/verilog/ethmac/rtl/verilog/eth_clockgen.v

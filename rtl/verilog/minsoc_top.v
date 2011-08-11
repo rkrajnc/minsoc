@@ -713,7 +713,7 @@ assign pic_ints[`APP_INT_UART] = 1'b0;
 // Instantiation of the Ethernet 10/100 MAC
 //
 `ifdef ETHERNET
-eth_top eth_top (
+ethmac ethmac (
 
 	// WISHBONE common
 	.wb_clk_i	( wb_clk ),
