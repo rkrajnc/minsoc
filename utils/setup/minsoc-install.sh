@@ -240,7 +240,7 @@ fi
 sed "s%prefix = /usr/local%prefix = ${DIR_TO_INSTALL}/tools%" Makefile > TMPFILE && mv TMPFILE Makefile
 sed "s%\$(CC) \$(CFLAGS)%\$(CC) \$(CFLAGS) \$(INCLUDEDIRS)%" Makefile > TMPFILE && mv TMPFILE Makefile
 sed "s%INCLUDEDIRS =%INCLUDEDIRS = -I${DIR_TO_INSTALL}/tools/include%" Makefile > TMPFILE && mv TMPFILE Makefile
-sed "s%LIBS =%LIBS = -L${DIR_TO_INSTALL}/tools/lib -Wl,-R-L${DIR_TO_INSTALL}/tools/lib%" Makefile > TMPFILE && mv TMPFILE Makefile
+sed "s%LIBS =%LIBS = -L${DIR_TO_INSTALL}/tools/lib -Wl,-R${DIR_TO_INSTALL}/tools/lib%" Makefile > TMPFILE && mv TMPFILE Makefile
 
 execcmd "Make adv_jtag_bridge" "make"
 execcmd "Installing adv_jtag_bridge" "make install"

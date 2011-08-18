@@ -6,3 +6,5 @@ make
 libncurses-devel
 ioperm
 libusb-win32
+flex
+bison
