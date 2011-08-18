@@ -1,0 +1,8 @@
+packages: 
+util-linux (for whereis)
+wget
+gcc
+make
+libncurses-devel
+ioperm
+libusb-win32
