@@ -88,6 +88,8 @@ testtool patch
 testtool gcc
 testtool make
 testtool libncurses
+testtool flex
+testtool bison
 if [ "$ENV" == "Cygwin" ]
 then
     testtool ioperm
