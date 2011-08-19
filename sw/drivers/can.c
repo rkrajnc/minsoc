@@ -1,5 +1,5 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
+#include <board.h>
+#include <support.h>
 #include "can.h"
 
 int can_rx_done, can_tx_done;

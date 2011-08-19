@@ -1,5 +1,5 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
+#include <board.h>
+#include <support.h>
 #include "uart.h"
 
 #define BOTH_EMPTY (UART_LSR_TEMT | UART_LSR_THRE)
@@ -68,10 +68,7 @@ void uart_putc(char c)
 
 char uart_getc()
 {
-	unsigned char lsr;
 	char c;
-
-	//        WAIT_FOR_CHAR;
 	c = REG8(UART_BASE + UART_RX);
 	return c;
 }

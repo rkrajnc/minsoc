@@ -9,7 +9,7 @@
 #include "int.h"
 
 #ifdef UART_PRINTF
-#include "../drivers/uart.h"
+#include <uart.h>
 #endif
 
 #if OR32

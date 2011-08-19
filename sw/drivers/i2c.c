@@ -1,5 +1,5 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
+#include <board.h>
+#include <support.h>
 #include "i2c.h"
 
 int i2c_rd_done, i2c_wr_done;

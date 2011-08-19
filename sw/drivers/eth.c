@@ -1,5 +1,5 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
+#include <board.h>
+#include <support.h>
 #include "eth.h"
 
 int eth_tx_done;
@@ -70,8 +70,6 @@ int eth_send(int length)
 {
 	if (!eth_tx_done)       //if previous command not fully processed, bail out
 		return -1;
-
-	int i;
 
 	eth_tx_done = 0;
 	eth_tx_packet[12] = length >> 8;

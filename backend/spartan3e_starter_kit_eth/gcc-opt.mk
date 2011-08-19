@@ -1,1 +1,1 @@
-GCC_OPT=-mhard-mul -msoft-div -g -nostdlib
+GCC_OPT=-mhard-mul -msoft-div -nostdlib

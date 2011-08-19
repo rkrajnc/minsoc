@@ -1,10 +1,10 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
+#include <board.h>
+#include <support.h>
+#include <or1200.h>
+#include <int.h>
 
-#include "../support/or1200.h"
-
-#include "../drivers/uart.h"
-#include "../drivers/eth.h"
+#include <uart.h>
+#include <eth.h>
 
 
 extern int eth_rx_len;
@@ -29,13 +29,12 @@ void eth_receive()
 
 int main()
 {
-	unsigned long lalala;
 	uart_init();
 
 	int_init();
 	eth_init();
-	int_add(UART_IRQ, &uart_interrupt);
-	int_add(ETH_IRQ, &eth_interrupt);
+	int_add(UART_IRQ, &uart_interrupt, NULL);
+	int_add(ETH_IRQ, &eth_interrupt, NULL);
 
 	/* We can't use printf because in this simple example
 	   we don't link C library. */

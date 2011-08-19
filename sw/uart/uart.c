@@ -1,15 +1,16 @@
-#include "../../backend/board.h"
-#include "../support/support.h"
-#include "../support/or1200.h"
+#include <board.h>
+#include <support.h>
+#include <or1200.h>
+#include <int.h>
 
-#include "../drivers/uart.h"
+#include <uart.h>
 
 int main()
 {
 	uart_init();
 
 	int_init();
-	int_add(UART_IRQ, &uart_interrupt);
+	int_add(UART_IRQ, &uart_interrupt, NULL);
 	
 	/* We can't use printf because in this simple example
 	   we don't link C library. */
