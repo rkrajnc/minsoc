@@ -1,6 +1,8 @@
 packages: 
 util-linux (for whereis)
 wget
+subversion
+patch
 gcc
 make
 libncurses-devel
