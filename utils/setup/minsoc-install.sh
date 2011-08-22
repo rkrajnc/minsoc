@@ -166,7 +166,18 @@ execcmd "tar zxf verilog-0.9.4.tar.gz"
 #Compiling and Installing all packages
 cecho "\nCompiling and installing packages"
 # Installing the GNU Toolchain
-execcmd "Installing GNU Toolchain" "cp -Rp or32-elf $DIR_TO_INSTALL/tools"
+if [ "$ENV" == "Cygwin" ]
+then
+    execcmd "Installing GNU Toolchain" "tar xf or32-elf-cygwin-1.7.tar.bz2 -C $DIR_TO_INSTALL/tools";
+else
+    if [ $KERNEL_ARCH == "32" ];
+    then
+        execcmd "Installing GNU Toolchain" "tar xf or32-elf-linux-x86.tar.bz2 -C $DIR_TO_INSTALL/tools";
+    elif [ $KERNEL_ARCH == "64" ];
+    then
+        execcmd "Installing GNU Toolchain" "tar xf or32-elf-linux-x86_64.tar.bz2 -C $DIR_TO_INSTALL/tools";
+    fi
+fi
 PATH=$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin
 
 
