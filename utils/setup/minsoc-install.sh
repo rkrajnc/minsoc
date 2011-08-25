@@ -53,6 +53,7 @@ fi;
 cecho "Testing if necessary tools are installed, program "whereis" is required."
 testtool wget
 testtool svn
+testtool bzip2
 testtool tar
 testtool sed
 testtool patch
