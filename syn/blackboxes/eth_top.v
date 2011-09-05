@@ -1,8 +1,8 @@
 
 
-`include "eth_defines.v"
+`include "ethmac_defines.v"
 
-module eth_top
+module ethmac
 (
   // WISHBONE common
   wb_clk_i, wb_rst_i, wb_dat_i, wb_dat_o, 
