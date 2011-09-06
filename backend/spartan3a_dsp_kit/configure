@@ -49,7 +49,7 @@ if [ $CONSTRAINT_FILE == 'NONE' ]
 then
     echo "Skipping synthesis preparation. Standard implementation can only be simulated."
 else
-    echo "Device part for files under minsoc/syn/src will be patched and stored "
+    echo "Device part for files under minsoc/prj/xilinx will be patched and stored "
     echo "temporarily." 
     echo "Afterwards, they are copied to minsoc/syn/buildSupport."
     echo "__________________________________________________________________________"
