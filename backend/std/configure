@@ -10,10 +10,12 @@ CONSTRAINT_FILE='NONE'
 MINSOC_DIR=`pwd`/../..
 BACKEND_DIR=$MINSOC_DIR/backend
 SYN_DIR=$MINSOC_DIR/syn
-SYNSRC_DIR=$SYN_DIR/xilinx
+SYNSRC_DIR=$MINSOC_DIR/prj/xilinx
 SYNSUPPORT_DIR=$SYN_DIR/buildSupport
+MAKEFILE_DIR=$SYN_DIR/xilinx
 
-SYN_FILES=(ethmac.xst uart_top.xst adbg_top.xst or1200_top.xst minsoc_top.xst Makefile)
+SYN_FILES=(ethmac.xst uart_top.xst adbg_top.xst or1200_top.xst minsoc_top.xst)
+MAKEFILE=Makefile
 
 FIND_PART='DEVICE_PART'
 FIND_CONSTRAINT='CONSTRAINT_FILE'
@@ -32,6 +34,7 @@ then
 	echo "Possibly your minsoc directory is named differently, minsoc_trunk for example."
 	echo "Its name must be minsoc only."
 	echo ""
+    exit 1
 fi
 
 echo ""
@@ -46,7 +49,7 @@ if [ $CONSTRAINT_FILE == 'NONE' ]
 then
     echo "Skipping synthesis preparation. Standard implementation can only be simulated."
 else
-    echo "Device part for files under minsoc/syn/src will be patched and stored "
+    echo "Device part for files under minsoc/prj/xilinx will be patched and stored "
     echo "temporarily." 
     echo "Afterwards, they are copied to minsoc/syn/buildSupport."
     echo "__________________________________________________________________________"
@@ -61,8 +64,12 @@ else
         rm TMPFILE
     done
 
-    echo "Moving Makefile back from minsoc/syn/buildSupport to minsoc/syn..."
-    mv $SYNSUPPORT_DIR/Makefile $SYN_DIR
+    echo "Updating Makefile file..."
+    echo "Copying Makefile to synthesis directory..."
+    echo ""
+    sed "s/$FIND_PART/$DEVICE_PART/g" $MAKEFILE_DIR/$MAKEFILE > TMPFILE
+    sed "s/$FIND_CONSTRAINT/$CONSTRAINT_FILE/g" TMPFILE > TMPFILE2 && mv TMPFILE2 $SYN_DIR/$MAKEFILE
+    rm TMPFILE
 fi
 echo ""
 echo ""

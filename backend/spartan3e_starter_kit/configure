@@ -36,6 +36,7 @@ then
 	echo "Possibly your minsoc directory is named differently, minsoc_trunk for example."
 	echo "Its name must be minsoc only."
 	echo ""
+    exit 1
 fi
 
 #NON STANDARD SCRIPT PART
