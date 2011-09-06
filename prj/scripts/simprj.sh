@@ -17,6 +17,7 @@ then
     echo "Second argument should be the destintion file for the file and directory inclusions."
     exit 1
 fi
+echo -n "" > $OUTPUT
 
 source $PROJECT
 

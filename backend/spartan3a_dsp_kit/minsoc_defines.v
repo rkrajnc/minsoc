@@ -139,6 +139,8 @@
 `ifdef GENERIC_FPGA
     `undef FPGA_TAP
     `undef FPGA_CLOCK_DIVISION
+    `undef XILINX_FPGA
+    `undef SPARTAN3A
 
 	`define GENERIC_TAP
 	`define GENERIC_MEMORY

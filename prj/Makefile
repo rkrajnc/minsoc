@@ -1,4 +1,4 @@
-PROJECTS = minsoc_top.prj or1200_top.prj adbg_top.prj jtag_top.prj uart_top.prj ethmac.prj
+PROJECTS = minsoc_bench.prj minsoc_top.prj or1200_top.prj adbg_top.prj jtag_top.prj uart_top.prj ethmac.prj
 
 SRC_DIR = src
 SCRIPTS_DIR = scripts

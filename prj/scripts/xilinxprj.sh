@@ -18,6 +18,7 @@ then
     echo "Third argument should be the destintion file for the source inclusions."
     exit 1
 fi
+echo -n "" > $SRC_OUTPUT
 
 source $PROJECT
 

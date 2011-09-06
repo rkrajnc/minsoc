@@ -53,6 +53,8 @@ wire CLK0_BUF;
 wire CLKFB_IN;
 wire CLKDV_BUF;
 
+`ifdef XILINX_FPGA
+
 IBUFG CLKIN_IBUFG_INST (
 	.I(CLKIN_IN), 
         .O(CLKIN_IBUFG)
@@ -218,6 +220,7 @@ DCM_ADV #(
 );
 
 `endif	// !XILINX_DLL/XILINX_DCM/XILINX_DCM_SP/XILINX_DCM_ADV
+`endif  // !XILINX_FPGA
 
 
 endmodule

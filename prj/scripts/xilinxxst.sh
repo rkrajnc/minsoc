@@ -20,6 +20,7 @@ then
     echo "Second argument should be the destintion file for the directory inclusions."
     exit 1
 fi
+echo -n "" > $DIR_OUTPUT
 
 source $PROJECT
 
@@ -36,7 +37,7 @@ done
 DIR_PATH="$DIR_PATH }"
 echo $DIR_PATH >> $DIR_OUTPUT
 
-echo "-ifn $MINSOC_DIR/prj/${PROJECT_FILE}" >> $DIR_OUTPUT
+echo "-ifn $MINSOC_DIR/prj/xilinx/${PROJECT_FILE}" >> $DIR_OUTPUT
 echo "-ifmt Verilog" >> $DIR_OUTPUT
 echo "-ofn ${TOP_MODULE_NAME}" >> $DIR_OUTPUT
 echo "-ofmt NGC" >> $DIR_OUTPUT
