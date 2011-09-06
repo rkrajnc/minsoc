@@ -10,10 +10,10 @@ CONSTRAINT_FILE='NONE'
 MINSOC_DIR=`pwd`/../..
 BACKEND_DIR=$MINSOC_DIR/backend
 SYN_DIR=$MINSOC_DIR/syn
-SYNSRC_DIR=$SYN_DIR/src
+SYNSRC_DIR=$SYN_DIR/xilinx
 SYNSUPPORT_DIR=$SYN_DIR/buildSupport
 
-SYN_FILES=(eth_top.xst uart_top.xst adbg_top.xst or1200_top.xst minsoc_top.xst Makefile)
+SYN_FILES=(ethmac.xst uart_top.xst adbg_top.xst or1200_top.xst minsoc_top.xst Makefile)
 
 FIND_PART='DEVICE_PART'
 FIND_CONSTRAINT='CONSTRAINT_FILE'
@@ -26,10 +26,12 @@ if [ -z $in_minsoc ]
 then
 	echo ""
 	echo "			!!!WARNING!!!"
-	echo "This script cannot be run out of a board directory inside minsoc/backend,"
+	echo "This script cannot be run if not in a board directory inside minsoc/backend,"
 	echo "because it relies on the directory structure of the minsoc system."
 	echo ""
-	exit 1
+	echo "Possibly your minsoc directory is named differently, minsoc_trunk for example."
+	echo "Its name must be minsoc only."
+	echo ""
 fi
 
 echo ""

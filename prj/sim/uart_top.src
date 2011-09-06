@@ -1,0 +1,12 @@
++incdir+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_top.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_sync_flops.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_transmitter.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_debug_if.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_wb.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_receiver.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_tfifo.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_regs.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_rfifo.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/uart_defines.v
+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/raminfr.v

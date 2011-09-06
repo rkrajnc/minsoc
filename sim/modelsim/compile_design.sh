@@ -1,3 +1,3 @@
 #!/bin/bash
 
-vlog -incr -work minsoc -f ../bin/minsoc_verilog_files.txt
+vlog -incr -work minsoc -f ../../prj/sim/minsoc.src

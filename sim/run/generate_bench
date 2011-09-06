@@ -1,2 +1,2 @@
 #!/bin/sh
-iverilog -c ../bin/minsoc_verilog_files.txt -o minsoc_bench
+iverilog -c ../../prj/sim/minsoc.src -o minsoc_bench

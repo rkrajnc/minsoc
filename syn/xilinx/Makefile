@@ -7,6 +7,7 @@ ADV_DEBUG_ROOT = ${MINSOC_RTL}/adv_debug_sys/Hardware
 DEBUG_RTL = ${ADV_DEBUG_ROOT}/adv_dbg_if/rtl/verilog
 OR1200_RTL = ${MINSOC_RTL}/or1200/rtl/verilog
 ETH_RTL = ${MINSOC_RTL}/ethmac/rtl/verilog
+BUILD_SUPPORT = $(MINSOC)/syn/buildSupport
 
 help:
 	@echo "  all: Synthesize and implement the SoC, then generate a bit stream"
@@ -33,7 +34,7 @@ map: minsoc.ncd
 par: minsoc_par.ncd
 bitgen: minsoc.bit
 modules: or1200 debug uart eth
-MODULES = or1200_top.ngc adbg_top.ngc uart_top.ngc eth_top.ngc
+MODULES = or1200_top.ngc adbg_top.ngc uart_top.ngc ethmac.ngc
 
 prepare: 
 	rm -rf xst
@@ -45,29 +46,29 @@ distclean:
 	rm -rf *.ngc *.ncd *.ngd *.bit
 	make clean
 
-minsoc_top.ngc: ${MINSOC_RTL}/*.v ${MINSOC_DEFINES}/minsoc_defines.v buildSupport/minsoc_top.xst buildSupport/minsoc_top.prj
+minsoc_top.ngc: ${MINSOC_RTL}/*.v ${MINSOC_DEFINES}/minsoc_defines.v $(BUILD_SUPPORT)/minsoc_top.xst $(BUILD_SUPPORT)/minsoc_top.prj
 	make prepare
-	xst -ifn "buildSupport/minsoc_top.xst"
+	xst -ifn "$(BUILD_SUPPORT)/minsoc_top.xst"
 
 uart: uart_top.ngc
-uart_top.ngc: ${UART_RTL}/*.v buildSupport/uart_top.xst buildSupport/uart_top.prj
+uart_top.ngc: ${UART_RTL}/*.v $(BUILD_SUPPORT)/uart_top.xst $(BUILD_SUPPORT)/uart_top.prj
 	make prepare
-	xst -ifn "buildSupport/uart_top.xst"
+	xst -ifn "$(BUILD_SUPPORT)/uart_top.xst"
 
-eth: eth_top.ngc
-eth_top.ngc: ${ETH_RTL}/*.v buildSupport/eth_top.xst buildSupport/eth_top.prj
+eth: ethmac.ngc
+ethmac.ngc: ${ETH_RTL}/*.v $(BUILD_SUPPORT)/ethmac.xst $(BUILD_SUPPORT)/ethmac.prj
 	make prepare
-	xst -ifn "buildSupport/eth_top.xst"
+	xst -ifn "$(BUILD_SUPPORT)/ethmac.xst"
 
 debug: adbg_top.ngc
-adbg_top.ngc: ${DEBUG_RTL}/*.v buildSupport/adbg_top.xst buildSupport/adbg_top.prj
+adbg_top.ngc: ${DEBUG_RTL}/*.v $(BUILD_SUPPORT)/adbg_top.xst $(BUILD_SUPPORT)/adbg_top.prj
 	make prepare
-	xst -ifn "buildSupport/adbg_top.xst"
+	xst -ifn "$(BUILD_SUPPORT)/adbg_top.xst"
 
 or1200: or1200_top.ngc
-or1200_top.ngc: ${OR1200_RTL}/*.v buildSupport/or1200_top.xst buildSupport/or1200_top.prj
+or1200_top.ngc: ${OR1200_RTL}/*.v $(BUILD_SUPPORT)/or1200_top.xst $(BUILD_SUPPORT)/or1200_top.prj
 	make prepare
-	xst -ifn "buildSupport/or1200_top.xst"
+	xst -ifn "$(BUILD_SUPPORT)/or1200_top.xst"
 
 minsoc.ngd: ${MINSOC}/backend/CONSTRAINT_FILE minsoc_top.ngc $(MODULES)
 	ngdbuild -p DEVICE_PART -uc ${MINSOC}/backend/CONSTRAINT_FILE -aul minsoc_top.ngc minsoc.ngd

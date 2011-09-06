@@ -1,0 +1,12 @@
+set -tmpdir ./xst
+run
+-vlgincdir { "/home/raul/or1k/minsoc/prj/../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog" }
+-ifn /home/raul/or1k/minsoc/prj/../prj/adbg_top.prj
+-ifmt Verilog
+-ofn adbg_top
+-ofmt NGC
+-p DEVICE_PART
+-top adbg_top
+-opt_mode Speed
+-opt_level 1
+-iobuf no
