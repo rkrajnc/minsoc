@@ -10,9 +10,6 @@
 /home/raul/or1k/minsoc/prj/../bench/verilog/sim_lib/fpga_memory_primitives.v
 /home/raul/or1k/minsoc/prj/../rtl/verilog/timescale.v
 +incdir+/home/raul/or1k/minsoc/prj/../backend
-+incdir+/home/raul/or1k/minsoc/prj/../bench/verilog
-+incdir+/home/raul/or1k/minsoc/prj/../bench/verilog/vpi
-+incdir+/home/raul/or1k/minsoc/prj/../bench/verilog/sim_lib
 +incdir+/home/raul/or1k/minsoc/prj/../rtl/verilog
 +incdir+/home/raul/or1k/minsoc/prj/../rtl/verilog/minsoc_startup
 +incdir+/home/raul/or1k/minsoc/prj/../rtl/verilog/or1200/rtl/verilog
