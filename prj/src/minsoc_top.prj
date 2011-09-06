@@ -1,4 +1,4 @@
-PROJECT_DIR=(backend bench/verilog bench/verilog/vpi bench/verilog/sim_lib rtl/verilog rtl/verilog/minsoc_startup rtl/verilog/or1200/rtl/verilog rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog rtl/verilog/ethmac/rtl/verilog rtl/verilog/uart16550/rtl/verilog)
+PROJECT_DIR=(backend rtl/verilog rtl/verilog/minsoc_startup rtl/verilog/or1200/rtl/verilog rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog rtl/verilog/ethmac/rtl/verilog rtl/verilog/uart16550/rtl/verilog)
 PROJECT_SRC=(minsoc_defines.v
 timescale.v
 minsoc_top.v
