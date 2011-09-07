@@ -34,6 +34,7 @@ do
             echo -n "$MINSOC_DIR/$dir/$file" >> $SRC_OUTPUT
             echo '"' >> $SRC_OUTPUT
             FOUND=1
+            break
         fi
     done
 

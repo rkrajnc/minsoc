@@ -7,9 +7,6 @@
 +incdir+/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog
 /home/raul/or1k/minsoc/prj/../backend/minsoc_defines.v
 /home/raul/or1k/minsoc/prj/../rtl/verilog/timescale.v
-/home/raul/or1k/minsoc/prj/../rtl/verilog/or1200/rtl/verilog/timescale.v
-/home/raul/or1k/minsoc/prj/../rtl/verilog/ethmac/rtl/verilog/timescale.v
-/home/raul/or1k/minsoc/prj/../rtl/verilog/uart16550/rtl/verilog/timescale.v
 /home/raul/or1k/minsoc/prj/../rtl/verilog/minsoc_top.v
 /home/raul/or1k/minsoc/prj/../rtl/verilog/minsoc_tc_top.v
 /home/raul/or1k/minsoc/prj/../rtl/verilog/minsoc_onchip_ram.v

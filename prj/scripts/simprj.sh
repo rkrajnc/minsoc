@@ -36,6 +36,7 @@ do
         then
             echo "$MINSOC_DIR/$dir/$file" >> $OUTPUT
             FOUND=1
+            break
         fi
     done
 
