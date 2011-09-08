@@ -1,0 +1,1 @@
+set_global_assignment -name SEARCH_PATH ../rtl/verilog/adv_debug_sys/Hardware/altera_virtual_jtag/rtl/vhdl

@@ -1,0 +1,100 @@
+#!/bin/bash
+
+#new boards have to udpate this
+BOARD=altera_3c25_board						#this has to have the name of the directory this file is in
+DEVICE_PART=EP3C25Q240C8
+FAMILY_PART="Cyclone III"
+CONSTRAINT_FILE='altera_3c25_board.ucf'
+PROJECT_FILE=minsoc_top.qsf
+#SW_VERSION=`quartus_map -v | grep Version`
+#~new boards update
+
+#system workings
+MINSOC_DIR=`pwd`/../..
+BACKEND_DIR=$MINSOC_DIR/backend
+SYN_DIR=$MINSOC_DIR/syn
+SYNSRC_DIR=$MINSOC_DIR/prj/altera
+SYNSUPPORT_DIR=$SYN_DIR/buildSupport
+MAKEFILE_DIR=$SYN_DIR/altera
+
+SYN_FILES=(adv_dbg.prj altera_jtag.prj ethmac.prj or1k.prj uart16550.prj minsoc_top.prj)
+MAKEFILE=Makefile
+
+FIND_PART='DEVICE_PART'
+FIND_FAMILY='FAMILY_PART'
+FIND_VERSION='SW_VERSION'
+FIND_CONSTRAINT='CONSTRAINT_FILE'
+
+BOARD_DIR=$BACKEND_DIR/$BOARD
+BOARD_FILES=(board.h orp.ld minsoc_defines.v minsoc_bench_defines.v gcc-opt.mk $CONSTRAINT_FILE)
+
+in_minsoc=`pwd | grep minsoc/backend/${BOARD}$`
+if [ -z $in_minsoc ]
+then
+	echo ""
+	echo "			!!!WARNING!!!"
+	echo "This script cannot be run if not in a board directory inside minsoc/backend,"
+	echo "because it relies on the directory structure of the minsoc system."
+	echo ""
+	echo "Possibly your minsoc directory is named differently, minsoc_trunk for example."
+	echo "Its name must be minsoc only."
+	echo ""
+	exit 1
+fi
+
+echo ""
+echo "Configuring SoC board's specific files for firmware compilation, "
+echo "testbench generation and synthesis."
+echo "Firmware and testbench looks for board specific files under minsoc/backend."
+echo "Synthesis work under minsoc/syn."
+echo ""
+echo ""
+
+if [ $CONSTRAINT_FILE == 'NONE' ]
+then
+    echo "Skipping synthesis preparation. Standard implementation can only be simulated."
+else
+    echo "Device part for files under minsoc/prj/altera will be patched and stored "
+    echo "temporarily." 
+    echo "Afterwards, they are copied to minsoc/syn/buildSupport."
+    echo "__________________________________________________________________________"
+    echo ""
+    echo "Generating quartus settings file from templates..."
+    sed "s/$FIND_PART/$DEVICE_PART/g" $SYNSRC_DIR/$PROJECT_FILE > TMPFILE
+    sed "s/$FIND_FAMILY/$FAMILY_PART/g" TMPFILE > TMPFILE2
+    #sed "s/$FIND_VERSION/$SW_VERSION/g" TMPFILE> TMPFILE
+    echo "Adding settings from constraint file..."
+    cat $CONSTRAINT_FILE >> TMPFILE2
+
+    for file in "${SYN_FILES[@]}"
+    do
+        echo "Adding settings from file $file..."
+    	cat $SYNSRC_DIR/$file >> TMPFILE2 
+    done
+    mv TMPFILE2 $SYN_DIR/$PROJECT_FILE
+    rm TMPFILE
+    echo ""
+    echo "Generated quartus settings file in $SYN_DIR/$PROJECT_FILE"
+    echo ""
+
+    echo "Updating Makefile file..."
+    echo "Copying Makefile to synthesis directory..."
+    cp $MAKEFILE_DIR/$MAKEFILE $SYN_DIR/$MAKEFILE
+    echo ""
+
+    echo "Copying board specific SoC files to backend directory."
+    echo "__________________________________________________________________________"
+    echo ""
+    for file in "${BOARD_FILES[@]}"
+    do
+	if [ $file != NONE ]
+	then
+            echo "Copying $file, to backend directory..."
+            cp $BOARD_DIR/$file $BACKEND_DIR
+	fi
+    done
+    echo ""
+    echo "Configuration done."
+    echo "For synthesis go to $SYN_DIR and type \"make\"."
+fi
+
