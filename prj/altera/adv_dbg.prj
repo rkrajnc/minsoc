@@ -1,1 +1,0 @@
-set_global_assignment -name SEARCH_PATH ../rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog

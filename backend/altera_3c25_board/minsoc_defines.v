@@ -77,7 +77,7 @@
 //
 // Define division
 //
-`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded 
+`define CLOCK_DIVISOR 2		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded 
                             //down to an even value in FPGA case, check minsoc_clock_manager 
                             //for allowed divisors.
 				            //DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION 
@@ -86,8 +86,8 @@
 //
 // Reset polarity
 //
-//`define NEGATIVE_RESET      //rstn
-`define POSITIVE_RESET      //rst
+`define NEGATIVE_RESET      //rstn
+//`define POSITIVE_RESET      //rst
 
 //
 // Start-up circuit (only necessary later to load firmware automatically from SPI memory)
@@ -98,7 +98,7 @@
 // Connected modules
 //
 `define UART
-`define ETHERNET
+//`define ETHERNET
 
 //
 // Ethernet reset

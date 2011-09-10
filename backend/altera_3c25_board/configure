@@ -17,7 +17,7 @@ SYNSRC_DIR=$MINSOC_DIR/prj/altera
 SYNSUPPORT_DIR=$SYN_DIR/buildSupport
 MAKEFILE_DIR=$SYN_DIR/altera
 
-SYN_FILES=(adv_dbg.prj altera_jtag.prj ethmac.prj or1k.prj uart16550.prj minsoc_top.prj)
+SYN_FILES=(adbg_top.prj jtag_top.prj or1200_top.prj uart_top.prj minsoc_top.prj)
 MAKEFILE=Makefile
 
 FIND_PART='DEVICE_PART'
@@ -54,30 +54,29 @@ if [ $CONSTRAINT_FILE == 'NONE' ]
 then
     echo "Skipping synthesis preparation. Standard implementation can only be simulated."
 else
-    echo "Device part for files under minsoc/prj/altera will be patched and stored "
+    echo "Device part and family for qsf file under $MAKEFILE_DIR will patched and stored "
     echo "temporarily." 
     echo "Afterwards, they are copied to minsoc/syn/buildSupport."
     echo "__________________________________________________________________________"
     echo ""
-    echo "Generating quartus settings file from templates..."
-    sed "s/$FIND_PART/$DEVICE_PART/g" $SYNSRC_DIR/$PROJECT_FILE > TMPFILE
+    sed "s/$FIND_PART/$DEVICE_PART/g" $MAKEFILE_DIR/$PROJECT_FILE > TMPFILE
     sed "s/$FIND_FAMILY/$FAMILY_PART/g" TMPFILE > TMPFILE2
     #sed "s/$FIND_VERSION/$SW_VERSION/g" TMPFILE> TMPFILE
     echo "Adding settings from constraint file..."
     cat $CONSTRAINT_FILE >> TMPFILE2
 
+    echo "Generating quartus settings from prj files in $SYNSRC_DIR"
     for file in "${SYN_FILES[@]}"
     do
         echo "Adding settings from file $file..."
     	cat $SYNSRC_DIR/$file >> TMPFILE2 
     done
-    mv TMPFILE2 $SYN_DIR/$PROJECT_FILE
+    mv TMPFILE2 $SYNSUPPORT_DIR/$PROJECT_FILE
     rm TMPFILE
     echo ""
-    echo "Generated quartus settings file in $SYN_DIR/$PROJECT_FILE"
+    echo "Generated quartus settings file in $SYNSUPPORT_DIR/$PROJECT_FILE"
     echo ""
 
-    echo "Updating Makefile file..."
     echo "Copying Makefile to synthesis directory..."
     cp $MAKEFILE_DIR/$MAKEFILE $SYN_DIR/$MAKEFILE
     echo ""
@@ -95,6 +94,6 @@ else
     done
     echo ""
     echo "Configuration done."
-    echo "For synthesis go to $SYN_DIR and type \"make\"."
+    echo "For synthesis help go to $SYN_DIR and type \"make\"."
 fi
 
