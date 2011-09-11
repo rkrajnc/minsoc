@@ -17,7 +17,7 @@ SYNSRC_DIR=$MINSOC_DIR/prj/altera
 SYNSUPPORT_DIR=$SYN_DIR/buildSupport
 MAKEFILE_DIR=$SYN_DIR/altera
 
-SYN_FILES=(adbg_top.prj jtag_top.prj or1200_top.prj uart_top.prj minsoc_top.prj)
+SYN_FILES=(adbg_top.prj jtag_top.prj or1200_top.prj uart_top.prj minsoc_top.prj altera_virtual_jtag.prj)
 MAKEFILE=Makefile
 
 FIND_PART='DEVICE_PART'
