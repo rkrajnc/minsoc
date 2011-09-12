@@ -57,20 +57,28 @@ echo "__________________________________________________________________________
 #~NON STANDARD SCRIPT PART
 
 echo ""
-echo "Configuring SoC board's specific files for firmware compilation, "
-echo "testbench generation and synthesis."
-echo "Firmware and testbench looks for board specific files under minsoc/backend."
-echo "Synthesis work under minsoc/syn."
+echo "This script sets up the SoC for simulations and synthesis."
 echo ""
+echo "In order to do so, SoC board's specific files for firmware compilation, "
+echo "testbench generation and synthesis are configured."
+echo "Firmware and testbench looks for board specific files under $BACKEND_DIR."
+echo "Synthesis work under $SYN_DIR."
+echo ""
+echo ""
+
+echo "Generating project files for simulation and synthesis..."
+make -C $MINSOC_DIR/prj
+echo "Generation complete."
+echo "__________________________________________________________________________"
 echo ""
 
 if [ $CONSTRAINT_FILE == 'NONE' ]
 then
     echo "Skipping synthesis preparation. Standard implementation can only be simulated."
 else
-    echo "Device part for files under minsoc/prj/xilinx will be patched and stored "
+    echo "Device part for files under $SYNSRC_DIR will be patched and stored "
     echo "temporarily." 
-    echo "Afterwards, they are copied to minsoc/syn/buildSupport."
+    echo "Afterwards, they are copied to $SYNSUPPORT_DIR."
     echo "__________________________________________________________________________"
     echo ""
     for file in "${SYN_FILES[@]}"
@@ -83,8 +91,8 @@ else
         rm TMPFILE
     done
 
-    echo "Updating Makefile file..."
-    echo "Copying Makefile to synthesis directory..."
+    echo "Updating Makefile file under $MAKEFILE_DIR..."
+    echo "Copying Makefile to synthesis directory, $SYN_DIR..."
     echo ""
     sed "s/$FIND_PART/$DEVICE_PART/g" $MAKEFILE_DIR/$MAKEFILE > TMPFILE
     sed "s/$FIND_CONSTRAINT/$CONSTRAINT_FILE/g" TMPFILE > TMPFILE2 && mv TMPFILE2 $SYN_DIR/$MAKEFILE
@@ -94,7 +102,7 @@ echo ""
 echo ""
 
 
-echo "Copying board specific SoC files to backend directory."
+echo "Copying board specific SoC files from $BOARD_DIR to $BACKEND_DIR directory."
 echo "__________________________________________________________________________"
 echo ""
 for file in "${BOARD_FILES[@]}"
