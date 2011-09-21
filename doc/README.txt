@@ -1,7 +1,7 @@
 Welcome to MinSoC. 
 
 In order to put the system up and running, you should first visit MinSoC's Wiki
-that can be found at (http://minsoc.wikaba.com). There, you will find guidance
+that can be found at (http://www.minsoc.com). There, you will find guidance
 to retrieve and install the required tools, simulate and synthesize the design,
 and to run and debug the first firmware on your FPGA. 
 
