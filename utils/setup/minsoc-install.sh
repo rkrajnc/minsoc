@@ -154,7 +154,7 @@ else
         execcmd "tar xf or32-elf-linux-x86_64.tar.bz2";
     fi
 fi
-execcmd "tar -jxf gdb-6.8.tar.bz2"
+execcmd "tar -jxf gdb-6.8a.tar.bz2"
 execcmd "bzip2 -d or32-gdb-6.8-patch-2.4.bz2"
 if [ "$ENV" != "Cygwin" ]
 then
