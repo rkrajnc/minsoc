@@ -129,7 +129,7 @@ else
         execcmd "Downloading GNU Toolchain" "wget ftp://ocuser:ocuser@openrisc.opencores.org/toolchain/or32-elf-linux-x86_64.tar.bz2";
     fi
 fi
-execcmd "Downloading GDB" "wget ftp://anonymous:anonymous@ftp.gnu.org/gnu/gdb/gdb-6.8.tar.bz2"
+execcmd "Downloading GDB" "wget ftp://anonymous:anonymous@ftp.gnu.org/gnu/gdb/gdb-6.8a.tar.bz2"
 execcmd "wget ftp://ocuser:ocuser@openrisc.opencores.org/toolchain/or32-gdb-6.8-patch-2.4.bz2"
 execcmd "svn export -q http://opencores.org/ocsvn/adv_debug_sys/adv_debug_sys/trunk/Patches/GDB6.8/gdb-6.8-bz436037-reg-no-longer-active.patch"
 if [ "$ENV" != "Cygwin" ]
