@@ -6,6 +6,20 @@ MINSOC_DIR=`pwd`/..
 PROJECT=$1
 OUTPUT=$2
 
+ENV=`uname -o`
+
+function adaptpath
+{
+    if [ "$ENV" == "Cygwin" ]
+    then
+        local cygpath=`cygpath -w $1`
+        local result=`echo $cygpath | sed 's/\\\\/\\//g'`
+        echo "$result"
+    else
+        echo "$1"
+    fi
+}
+
 if [ ! -f $PROJECT ]
 then
     echo "Unexistent project file."
@@ -23,7 +37,8 @@ source $PROJECT
 
 for dir in "${PROJECT_DIR[@]}"
 do
-    echo "set_global_assignment -name SEARCH_PATH $MINSOC_DIR/$dir" >> $OUTPUT
+    adapted_dir=`adaptpath $MINSOC_DIR/$dir`
+    echo "set_global_assignment -name SEARCH_PATH $adapted_dir" >> $OUTPUT
 done
 
 for file in "${PROJECT_SRC[@]}"
@@ -34,12 +49,13 @@ do
     do
         if [ -f $MINSOC_DIR/$dir/$file ]
         then
-	    is_vhdl=`ls $MINSOC_DIR/$dir/$file | grep vhd`
+            adapted_file=`adaptpath $MINSOC_DIR/$dir/$file`
+            is_vhdl=`ls $MINSOC_DIR/$dir/$file | grep vhd`
 	    if [ -z $is_vhdl ]
 	    then
-		echo "set_global_assignment -name VERILOG_FILE $MINSOC_DIR/$dir/$file" >> $OUTPUT
+            echo "set_global_assignment -name VERILOG_FILE $adapted_file" >> $OUTPUT
 	    else
-		echo "set_global_assignment -name VHDL_FILE $MINSOC_DIR/$dir/$file" >> $OUTPUT
+            echo "set_global_assignment -name VHDL_FILE $adapted_file" >> $OUTPUT
 	    fi
             FOUND=1
             break
