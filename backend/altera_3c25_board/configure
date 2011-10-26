@@ -3,10 +3,8 @@
 #new boards have to udpate this
 BOARD=altera_3c25_board						#this has to have the name of the directory this file is in
 DEVICE_PART=EP3C25Q240C8
-FAMILY_PART="Cyclone III"
 CONSTRAINT_FILE='altera_3c25_board.ucf'
-PROJECT_FILE=minsoc_top.qsf
-#SW_VERSION=`quartus_map -v | grep Version`
+FAMILY_PART="Cyclone III"
 #~new boards update
 
 #system workings
@@ -16,6 +14,8 @@ SYN_DIR=$MINSOC_DIR/syn
 SYNSRC_DIR=$MINSOC_DIR/prj/altera
 SYNSUPPORT_DIR=$SYN_DIR/buildSupport
 MAKEFILE_DIR=$SYN_DIR/altera
+
+PROJECT_FILE=minsoc_top.qsf
 
 SYN_FILES=(adbg_top.prj jtag_top.prj or1200_top.prj uart_top.prj minsoc_top.prj altera_virtual_jtag.prj)
 MAKEFILE=Makefile
@@ -87,6 +87,7 @@ else
 
     echo "Copying Makefile from $MAKEFILE_DIR to synthesis directory, $SYN_DIR..."
     cp $MAKEFILE_DIR/$MAKEFILE $SYN_DIR/$MAKEFILE
+    cp $MAKEFILE_DIR/setup.bat $SYN_DIR/setup.bat
     echo ""
 
     echo "Copying board specific SoC files from $BOARD_DIR to $BACKEND_DIR directory."

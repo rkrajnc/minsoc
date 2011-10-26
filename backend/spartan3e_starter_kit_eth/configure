@@ -97,6 +97,7 @@ else
     sed "s/$FIND_PART/$DEVICE_PART/g" $MAKEFILE_DIR/$MAKEFILE > TMPFILE
     sed "s/$FIND_CONSTRAINT/$CONSTRAINT_FILE/g" TMPFILE > TMPFILE2 && mv TMPFILE2 $SYN_DIR/$MAKEFILE
     rm TMPFILE
+    cp $MAKEFILE_DIR/setup.bat $SYN_DIR/setup.bat
 fi
 echo ""
 echo ""
