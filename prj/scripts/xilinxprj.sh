@@ -7,6 +7,19 @@ PROJECT=$1
 SRC_OUTPUT=$2
 TOP_MODULE=$3
 
+ENV=`uname -o`
+
+function adaptpath
+{
+    if [ "$ENV" == "Cygwin" ]
+    then
+        local cygpath=`cygpath -w $1`
+        echo "$cygpath"
+    else
+        echo "$1"
+    fi
+}
+
 if [ ! -f $PROJECT ]
 then
     echo "Unexistent project file."
@@ -30,8 +43,9 @@ do
     do
         if [ -f $MINSOC_DIR/$dir/$file ]
         then
+            adapted_file=`adaptpath $MINSOC_DIR/$dir/$file`
             echo -n '`include "' >> $SRC_OUTPUT
-            echo -n "$MINSOC_DIR/$dir/$file" >> $SRC_OUTPUT
+            echo -n "$adapted_file" >> $SRC_OUTPUT
             echo '"' >> $SRC_OUTPUT
             FOUND=1
             break
@@ -49,8 +63,10 @@ if [ -n "$TOP_MODULE" ]
 then
     for file in src/blackboxes/*.v
     do
+        dir=`pwd`
+        adapted_file=`adaptpath $dir/$file`
         echo -n '`include "' >> $SRC_OUTPUT
-        echo -n "`pwd`/$file" >> $SRC_OUTPUT
+        echo -n "$adapted_file" >> $SRC_OUTPUT
         echo '"' >> $SRC_OUTPUT
     done
 fi

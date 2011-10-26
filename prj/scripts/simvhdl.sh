@@ -6,6 +6,20 @@ MINSOC_DIR=`pwd`/..
 PROJECT=$1
 OUTPUT=$2
 
+ENV=`uname -o`
+
+function adaptpath
+{
+    if [ "$ENV" == "Cygwin" ]
+    then
+        local cygpath=`cygpath -w $1`
+        local result=`echo $cygpath | sed 's/\\\\/\\//g'`
+        echo "$result"
+    else
+        echo "$1"
+    fi
+}
+
 if [ ! -f $PROJECT ]
 then
     echo "Unexistent project file."
@@ -29,7 +43,8 @@ do
     do
         if [ -f $MINSOC_DIR/$dir/$file ]
         then
-            echo "$MINSOC_DIR/$dir/$file" >> $OUTPUT
+            adapted_file=`adaptpath $MINSOC_DIR/$dir/$file`
+            echo "$adapted_file" >> $OUTPUT
             FOUND=1
             break
         fi

@@ -9,6 +9,19 @@ PROJECT_FILE=$3
 TOP_MODULE_NAME=$4
 TOP_MODULE=$5
 
+ENV=`uname -o`
+
+function adaptpath
+{
+    if [ "$ENV" == "Cygwin" ]
+    then
+        local cygpath=`cygpath -w $1`
+        echo "$cygpath"
+    else
+        echo "$1"
+    fi
+}
+
 if [ ! -f $PROJECT ]
 then
     echo "Unexistent project file."
@@ -31,13 +44,15 @@ DIR_PATH="-vlgincdir {"
 
 for dir in "${PROJECT_DIR[@]}"
 do
-    DIR_PATH="$DIR_PATH \"$MINSOC_DIR/$dir\" "
+    adapted_dir=`adaptpath $MINSOC_DIR/$dir`
+    DIR_PATH="$DIR_PATH \"$adapted_dir\" "
 done
 
 DIR_PATH="$DIR_PATH }"
 echo $DIR_PATH >> $DIR_OUTPUT
 
-echo "-ifn $MINSOC_DIR/prj/xilinx/${PROJECT_FILE}" >> $DIR_OUTPUT
+adapted_project_file=`adaptpath $MINSOC_DIR/prj/xilinx/${PROJECT_FILE}`
+echo "-ifn $adapted_project_file" >> $DIR_OUTPUT
 echo "-ifmt Verilog" >> $DIR_OUTPUT
 echo "-ofn ${TOP_MODULE_NAME}" >> $DIR_OUTPUT
 echo "-ofmt NGC" >> $DIR_OUTPUT
