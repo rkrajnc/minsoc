@@ -6,8 +6,7 @@
 # ===== CONFIGURATIONS =====
 # ==========================
 
-DIR_TO_INSTALL=`pwd`
-
+export DIR_TO_INSTALL=`pwd`
 # Debug ?
 export DEBUG=0;
 . beautify.sh
@@ -71,5 +70,4 @@ then
     errormsg "Directory doesn't exist. Please create it";	
 fi;
 
-export ${DIR_TO_INSTALL}
 bash configure.sh

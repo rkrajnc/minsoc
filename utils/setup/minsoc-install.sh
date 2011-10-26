@@ -5,8 +5,8 @@
 
 # ===== CONFIGURATIONS =====
 # ==========================
-MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-0.1
-DIR_TO_INSTALL=`pwd`
+MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-1.0
+export DIR_TO_INSTALL=`pwd`
 
 # Debug ?
 export DEBUG=0;
@@ -226,7 +226,6 @@ execcmd "make install"
 
 
 #Configuring MinSoC, Advanced Debug System and patching OpenRISC
-export ${DIR_TO_INSTALL}
 bash configure.sh
 
 
