@@ -50,13 +50,7 @@ do
         if [ -f $MINSOC_DIR/$dir/$file ]
         then
             adapted_file=`adaptpath $MINSOC_DIR/$dir/$file`
-            is_vhdl=`ls $MINSOC_DIR/$dir/$file | grep vhd`
-	    if [ -z $is_vhdl ]
-	    then
-            echo "set_global_assignment -name VERILOG_FILE $adapted_file" >> $OUTPUT
-	    else
             echo "set_global_assignment -name VHDL_FILE $adapted_file" >> $OUTPUT
-	    fi
             FOUND=1
             break
         fi
@@ -64,7 +58,7 @@ do
 
     if [ $FOUND != 1 ]
     then
-        echo "FILE NOT FOUND"
+        echo "FILE NOT FOUND: $file"
         exit 1
     fi
 done

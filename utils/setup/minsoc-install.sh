@@ -1,30 +1,11 @@
 #!/bin/bash
-# Author: Constantinos Xanthopoulos
+# Author: Constantinos Xanthopoulos & Raul Fajardo
 # This script install MinSOC tree
 # under a specific directory.
 
 # ===== CONFIGURATIONS =====
 # ==========================
-
-# Where should I put the dir. minsoc?
-# ex. /home/conx/Thesis/
-DIR_TO_INSTALL=`pwd`
-
-# This variable should be set to trunk
-# or to stable.
-VERSION=""
-
-# This variable should take one of
-# the following values depending
-# to your system: linux, cygwin, freebsd
-ENV=""
-
-# !!! DO NOT EDIT BELLOW THIS LINE !!!
-# ===================================
-
-# ===== SCRIPT ======
-# ===================
-
+MINSOC_SVN_URL="http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-0.1"
 
 # Debug ?
 export DEBUG=0;
@@ -88,6 +69,7 @@ fi
 
 
 # Wizard
+DIR_TO_INSTALL=`pwd`
 if [ -z "${ALTDIR}" ]
 then
     cnecho "Give full path (ex. /home/foo/) for installation directory or leave empty for "${DIR_TO_INSTALL}": ";
@@ -116,7 +98,7 @@ execcmd "Creating directory ./tools for package binaries" "mkdir -p tools"
 cecho "\nDownloading packages"
 cd ${DIR_TO_INSTALL}
 cecho "Download MinSoC"
-svn co -q http://opencores.org/ocsvn/minsoc/minsoc/trunk/ minsoc	#user need to input password, execcmd omits command output and should be this way
+svn co -q ${MINSOC_SVN_URL} minsoc	#user need to input password, execcmd omits command output and should be this way
 execcmd "cd ${DIR_TO_INSTALL}/download"
 if [ "$ENV" == "Cygwin" ]
 then
@@ -243,37 +225,9 @@ execcmd "Compiling Icarus Verilog" "make"
 execcmd "make install"
 
 
-#Configuring MinSoC
-cecho "\nConfiguring MinSoC"
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/backend/std"
-execcmd "Configuring MinSoC as standard board (simulatable but not synthesizable)" "./configure"
-execcmd "cd ${DIR_TO_INSTALL}"
-
-
-#Configuring Advanced Debug System to work with MinSoC
-cecho "\nConfiguring Advanced Debug System to work with MinSoC"
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog"
-sed "s%\`define DBG_JSP_SUPPORTED%//\`define DBG_JSP_SUPPORTED%" adbg_defines.v > TMPFILE && mv TMPFILE adbg_defines.v
-
-#Compiling and moving adv_jtag_bridge debug modules for simulation
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge/sim_lib/icarus"
-execcmd "make"
-execcmd "cp jp-io-vpi.vpi ${DIR_TO_INSTALL}/minsoc/bench/verilog/vpi"
-
-
-#Precompiling firmwares
-cecho "\nPrecompiling delivered firmwares";
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/sw/utils"
-execcmd "Make utils" "make"
-
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/sw/support"
-execcmd "Make support tools" "make"
-
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/sw/drivers"
-execcmd "Make drivers" "make"
-
-execcmd "cd ${DIR_TO_INSTALL}/minsoc/sw/uart"
-execcmd "Make UART" "make"
+#Configuring MinSoC, Advanced Debug System and patching OpenRISC
+export ${DIR_TO_INSTALL}
+bash configure.sh
 
 
 #Setting-up new variables

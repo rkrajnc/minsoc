@@ -57,8 +57,4 @@ or1200_freeze.v
 or1200_spram_128x32.v
 or1200_dc_fsm.v
 or1200_wb_biu.v
-or1200_spram_64x22.v
-or1200_fpu.v
-or1200_spram.v
-or1200_spram_32_bw.v
-or1200_dpram.v)
+or1200_spram_64x22.v)

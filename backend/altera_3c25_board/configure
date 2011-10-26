@@ -17,7 +17,7 @@ MAKEFILE_DIR=$SYN_DIR/altera
 
 PROJECT_FILE=minsoc_top.qsf
 
-SYN_FILES=(adbg_top.prj jtag_top.prj or1200_top.prj uart_top.prj minsoc_top.prj altera_virtual_jtag.prj)
+SYN_FILES=(adbg_top.vprj jtag_top.vprj or1200_top.vprj uart_top.vprj minsoc_top.vprj altera_virtual_jtag.vhdprj)
 MAKEFILE=Makefile
 
 FIND_PART='DEVICE_PART'
