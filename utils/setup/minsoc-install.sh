@@ -5,7 +5,8 @@
 
 # ===== CONFIGURATIONS =====
 # ==========================
-MINSOC_SVN_URL="http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-0.1"
+MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-0.1
+DIR_TO_INSTALL=`pwd`
 
 # Debug ?
 export DEBUG=0;
@@ -69,7 +70,6 @@ fi
 
 
 # Wizard
-DIR_TO_INSTALL=`pwd`
 if [ -z "${ALTDIR}" ]
 then
     cnecho "Give full path (ex. /home/foo/) for installation directory or leave empty for "${DIR_TO_INSTALL}": ";
