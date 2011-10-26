@@ -42,6 +42,24 @@ function testtool
     fi
 }
 
+
+#Setting environment
+ENV=`uname -o`
+if [ "$ENV" != "GNU/Linux" ] && [ "$ENV" != "Cygwin" ]
+then
+    errormsg "Environment $ENV not supported by this script."
+fi
+cecho "Building tools for ${ENV} system"
+
+is_arch64=`uname -m | grep 64`
+if [ -z $is_arch64 ]
+then
+    KERNEL_ARCH="32"
+else
+    KERNEL_ARCH="64"
+fi
+
+
 # User check!
 if [ `whoami` = "root" ];
 then
@@ -85,23 +103,6 @@ if [ ! -d ${DIR_TO_INSTALL} ]
 then
     errormsg "Directory doesn't exist. Please create it";	
 fi;
-
-
-#Setting environment
-ENV=`uname -o`
-if [ "$ENV" != "GNU/Linux" ] && [ "$ENV" != "Cygwin" ]
-then
-    errormsg "Environment $ENV not supported by this script."
-fi
-cecho "Building tools for ${ENV} system"
-
-is_arch64=`uname -m | grep 64`
-if [ -z $is_arch64 ]
-then
-    KERNEL_ARCH="32"
-else
-    KERNEL_ARCH="64"
-fi
 
 
 #Creating directory structure
