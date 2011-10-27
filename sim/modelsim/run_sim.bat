@@ -6,3 +6,4 @@ vsim -lib minsoc minsoc_bench -pli ../../bench/verilog/vpi/jp-io-vpi.dll +file_n
 echo %target_firmware% could not be found. 
 set /p exit=Press ENTER to close this window... 
 )
+
