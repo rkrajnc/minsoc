@@ -23,4 +23,5 @@ eth_register.v
 eth_fifo.v
 eth_receivecontrol.v
 eth_transmitcontrol.v
-eth_txcounters.v)
+eth_txcounters.v
+xilinx_dist_ram_16x32.v)
