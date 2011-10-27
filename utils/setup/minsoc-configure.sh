@@ -6,7 +6,8 @@
 # ===== CONFIGURATIONS =====
 # ==========================
 
-export DIR_TO_INSTALL=`pwd`
+SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
+export DIR_TO_INSTALL=`pwd`/../../../
 # Debug ?
 export DEBUG=0;
 . beautify.sh
@@ -70,4 +71,4 @@ then
     errormsg "Directory doesn't exist. Please create it";	
 fi;
 
-bash configure.sh
+bash ${SCRIPT_DIR}/configure.sh

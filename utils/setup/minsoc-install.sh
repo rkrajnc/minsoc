@@ -6,6 +6,7 @@
 # ===== CONFIGURATIONS =====
 # ==========================
 MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-1.0
+SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 export DIR_TO_INSTALL=`pwd`
 
 # Debug ?
@@ -226,7 +227,7 @@ execcmd "make install"
 
 
 #Configuring MinSoC, Advanced Debug System and patching OpenRISC
-bash configure.sh
+bash ${SCRIPT_DIR}/configure.sh
 
 
 #Setting-up new variables

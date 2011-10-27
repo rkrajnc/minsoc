@@ -16,7 +16,7 @@ XILINX_PRJ_FILES = $(addprefix $(XILINX_DIR)/, $(addsuffix .prj, $(basename $(PR
 XILINX_XST_FILES = $(addprefix $(XILINX_DIR)/, $(addsuffix .xst, $(basename $(PROJECTS))))
 
 ALTERA_VERILOG_PRJ_FILES = $(addprefix $(ALTERA_DIR)/, $(addsuffix .vprj, $(basename $(VERILOG_PROJECTS))))
-ALTERA_VHD_PRJ_FILES = $(addprefix $(ALTERA_DIR)/, $(addsuffix .vhdprj, $(basename $(VHDL_PROJECTS))))
+ALTERA_VHDL_PRJ_FILES = $(addprefix $(ALTERA_DIR)/, $(addsuffix .vhdprj, $(basename $(VHDL_PROJECTS))))
 
 all: $(SIMULATION_DIR)/minsoc_verilog.src $(SIMULATION_DIR)/minsoc_vhdl.src $(XILINX_PRJ_FILES) $(XILINX_XST_FILES) $(ALTERA_VERILOG_PRJ_FILES) $(ALTERA_VHDL_PRJ_FILES)
 
