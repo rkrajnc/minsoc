@@ -175,7 +175,7 @@ execcmd "mkdir -p build"
 execcmd "cd build"
 execcmd "../configure --target=or32-elf --disable-werror --prefix=$DIR_TO_INSTALL/tools"
 execcmd "Compiling GDB" "make"
-make install 1>>${DIR_TO_INSTALL}/progress.log 2>>${DIR_TO_INSTALL}/error.log   #avoid Fedora failing due to missing Makeinfo
+make install 1>>${SCRIPT_DIR}/progress.log 2>>${SCRIPT_DIR}/error.log   #avoid Fedora failing due to missing Makeinfo
 PATH=$PATH:${DIR_TO_INSTALL}/tools/bin
 
 

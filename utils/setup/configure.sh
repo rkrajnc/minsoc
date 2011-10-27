@@ -1,4 +1,4 @@
-. beautify.sh
+. ${SCRIPT_DIR}/beautify.sh
 
 #Configuring MinSoC
 cecho "\nConfiguring MinSoC"
