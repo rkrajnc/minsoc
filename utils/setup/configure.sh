@@ -20,7 +20,8 @@ execcmd "cp jp-io-vpi.vpi ${DIR_TO_INSTALL}/minsoc/bench/verilog/vpi"
 #Patching OpenRISC Release 1 with Advanced Debug System patch for Watchpoints
 execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/or1200/rtl/verilog"
 cecho "Patching OpenRISC for watchpoint support" 
-patch -p0 < ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Patches/OR1200v1/or1200v1_hwbkpt.patch
+#patch -p0 < ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Patches/OR1200v1/or1200v1_hwbkpt.patch
+patch -p0 < ${SCRIPT_DIR}/or1200v1_hwbkpt.patch
 
 
 #Precompiling firmwares
