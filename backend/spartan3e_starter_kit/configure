@@ -42,8 +42,7 @@ fi
 #NON STANDARD SCRIPT PART
 echo "THIS SCRIPT HAS A NON-STANDARD BEGINNING."
 echo "__________________________________________________________________________"
-echo "Spartan3E Starter Kit requires another configuration for or1200_r3."
-echo "or1200_r1 should work fine, roll back this for minsoc release-1.0."
+echo "${BOARD} requires another configuration for or1200_rel1."
 
 echo ""
 echo "Copying or1200_defines.v, to or1200 implementation directory..."   
