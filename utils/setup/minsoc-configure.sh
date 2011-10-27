@@ -6,11 +6,11 @@
 # ===== CONFIGURATIONS =====
 # ==========================
 
-SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
-export DIR_TO_INSTALL=`pwd`/../../../
+export SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
+export DIR_TO_INSTALL=`pwd`
 # Debug ?
 export DEBUG=0;
-. beautify.sh
+. ${SCRIPT_DIR}/beautify.sh
 
 function testtool
 {

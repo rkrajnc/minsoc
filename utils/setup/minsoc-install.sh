@@ -6,12 +6,12 @@
 # ===== CONFIGURATIONS =====
 # ==========================
 MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-1.0
-SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
+export SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 export DIR_TO_INSTALL=`pwd`
 
 # Debug ?
 export DEBUG=0;
-. beautify.sh
+. ${SCRIPT_DIR}/beautify.sh
 
 function testtool
 {
