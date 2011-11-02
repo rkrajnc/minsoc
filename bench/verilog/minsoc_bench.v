@@ -174,7 +174,7 @@ initial begin
 
 `ifdef ETHERNET
 `ifdef TEST_ETHERNET
-            $display("Testing Ethernet firmware, this takes long (~30 min. @ 2.53 GHz dual-core)...");
+            $display("Testing Ethernet firmware, this takes long (~15 min. @ 2.53 GHz dual-core)...");
             $display("Ethernet firmware encloses UART firmware, testing UART firmware first...");
             test_uart();
             test_eth();
