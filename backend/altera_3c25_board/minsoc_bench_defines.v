@@ -4,7 +4,7 @@
 `define NO_CLOCK_DIVISION   //if commented out, generic clock division is implemented (odd divisors are rounded down)
 //~set RTL for simulation, override FPGA specific definitions (JTAG TAP, MEMORY and CLOCK DIVIDER)
 
-`define FREQ_NUM_FOR_NS 1000000000
+`define FREQ_NUM_FOR_NS 100000000
 
 `define FREQ 25000000
 `define CLK_PERIOD (`FREQ_NUM_FOR_NS/`FREQ)
@@ -24,3 +24,6 @@
 										//only use with the memory model. 
                                         //If you use the original memory (`define MEMORY_MODEL 
                                         //commented out), comment this too.
+
+`define TEST_UART
+//`define TEST_ETHERNET
