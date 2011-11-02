@@ -65,7 +65,7 @@ localparam ETH_PAYLOAD_MAX_LENGTH = 1518;//only able to send up to 1536 bytes wi
 // Testbench mechanics
 //
 reg [7:0] program_mem[(1<<(`MEMORY_ADR_WIDTH+2))-1:0];
-integer initialize, final, ptr;
+integer initialize, firmware_size, ptr;
 reg [8*64:0] file_name;
 reg load_file;
 
@@ -110,13 +110,13 @@ initial begin
 		end
 		$readmemh(file_name, program_mem);
 		// First word comprehends size of program
-		final = { program_mem[0] , program_mem[1] , program_mem[2] , program_mem[3] };
+		firmware_size = { program_mem[0] , program_mem[1] , program_mem[2] , program_mem[3] };
 	end
 
 `ifdef INITIALIZE_MEMORY_MODEL 
 	// Initialize memory with firmware
 	initialize = 0;
-	while ( initialize < final ) begin
+	while ( initialize < firmware_size ) begin
 		minsoc_top_0.onchip_ram_top.block_ram_3.mem[initialize/4] = program_mem[initialize];
 		minsoc_top_0.onchip_ram_top.block_ram_2.mem[initialize/4] = program_mem[initialize+1];
 		minsoc_top_0.onchip_ram_top.block_ram_1.mem[initialize/4] = program_mem[initialize+2];
@@ -125,7 +125,7 @@ initial begin
 	end
 	$display("Memory model initialized with firmware:");
 	$display("%s", file_name);
-	$display("%d Bytes loaded from %d ...", initialize , final);
+	$display("%d Bytes loaded from %d ...", initialize , firmware_size);
 `endif
 
     // Reset controller
@@ -143,7 +143,7 @@ initial begin
 	send_spi(program_mem[ptr]);
 	send_spi(program_mem[ptr]);
 	//~read dummy
-	while ( ptr < final ) begin
+	while ( ptr < firmware_size ) begin
 		send_spi(program_mem[ptr]);
 		ptr = ptr + 1;
 	end
