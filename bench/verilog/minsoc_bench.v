@@ -167,55 +167,38 @@ initial begin
     // Testbench START
 	//
     design_ready = 1'b1;
+    $display("Running simulation: if you want to stop it, type ctrl+c and type in finish afterwards.");
     fork
         begin
+`ifdef UART
+
+`ifdef ETHERNET
+`ifdef TEST_ETHERNET
+            $display("Testing Ethernet firmware, this takes long (~30 min. @ 2.53 GHz dual-core)...");
+            $display("Ethernet firmware encloses UART firmware, testing UART firmware first...");
+            test_uart();
+            test_eth();
+            $display("Stopping simulation.");
+            $finish;
+`endif
+`endif
+
 `ifdef TEST_UART
-            $display("Testing UART interface...");
-            @ (posedge new_line);
-            $display("UART data received.");
-            hello = line[12*8-1:0];
-            //sending character A to UART, B expected
-            $display("Testing UART interrupt..."); 
-            uart_echo = 1'b0;
-            uart_send(8'h41);       //Character A
-            @ (posedge new_char);
-            if ( line[7:0] == "B" )
-                $display("UART interrupt working.");
-            else
-                $display("UART interrupt failed.");
-            uart_echo = 1'b1;
-
-            if ( hello == "Hello World." )
-                $display("UART interface test completed, firmware behaving correclty.");
-            else
-                $display("UART interface test completed, UART firmware failed.");
-`ifdef TEST_ETHERNET    
-            $display("Testing Ethernet interface...");
-	        eth_tx_data[ETH_HDR+0] = 8'hBA;
-	        eth_tx_data[ETH_HDR+1] = 8'h87;	
-	        eth_tx_data[ETH_HDR+2] = 8'hAA;
-	        eth_tx_data[ETH_HDR+3] = 8'hBB;	
-	        eth_tx_data[ETH_HDR+4] = 8'hCC;
-	        eth_tx_data[ETH_HDR+5] = 8'hDD;	
-
-            $display("Sending an Ethernet package to the system and waiting for the data to be output from UART...");
-	        send_mac(6);
-            $display("This takes a long time, if you want to stop it, type ctrl+c and type in finish afterwards.");
-            repeat(3+40) @ (posedge new_line);
-            $display("Ethernet test completed.");
+            $display("Testing UART firmware, this takes a while (~1 min. @ 2.53 GHz dual-core)...");
+            test_uart();
             $display("Stopping simulation.");
             $finish;
-`endif        
-            $display("Stopping simulation.");
-            $finish;
+`endif
+
 `endif	
         end
         begin 
+`ifdef ETHERNET
 `ifdef TEST_ETHERNET            
             get_mac();
-            
             if ( { eth_rx_data[ETH_HDR] , eth_rx_data[ETH_HDR+1] , eth_rx_data[ETH_HDR+2] , eth_rx_data[ETH_HDR+3] } == 32'hFF2B4050 )
                 $display("Ethernet firmware started correctly.");
+`endif
 `endif
         end
     join
@@ -287,6 +270,50 @@ minsoc_top minsoc_top_0(
    assign dbg_tck_i = 0;
    assign dbg_tms_i = 1;
 `endif
+
+
+//
+// Firmware testers
+//
+task test_uart();
+    begin
+            @ (posedge new_line);
+            $display("UART data received.");
+            hello = line[12*8-1:0];
+            //sending character A to UART, B expected
+            $display("Testing UART interrupt..."); 
+            uart_echo = 1'b0;
+            uart_send(8'h41);       //Character A
+            @ (posedge new_char);
+            if ( line[7:0] == "B" )
+                $display("UART interrupt working.");
+            else
+                $display("UART interrupt failed.");
+            uart_echo = 1'b1;
+
+            if ( hello == "Hello World." )
+                $display("UART firmware test completed, behaving correclty.");
+            else
+                $display("UART firmware test completed, failed.");
+    end
+endtask
+
+task test_eth();
+    begin
+	        eth_tx_data[ETH_HDR+0] = 8'hBA;
+	        eth_tx_data[ETH_HDR+1] = 8'h87;	
+	        eth_tx_data[ETH_HDR+2] = 8'hAA;
+	        eth_tx_data[ETH_HDR+3] = 8'hBB;	
+	        eth_tx_data[ETH_HDR+4] = 8'hCC;
+	        eth_tx_data[ETH_HDR+5] = 8'hDD;	
+
+            $display("Sending an Ethernet package to the system and waiting for the data to be output through UART...");
+	        send_mac(6);
+            $display("This takes a long time, if you want to stop it, type ctrl+c and type in finish afterwards.");
+            repeat(3+40) @ (posedge new_line);
+            $display("Ethernet test completed.");
+    end
+endtask
 
 
 //
