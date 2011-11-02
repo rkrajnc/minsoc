@@ -4,17 +4,14 @@
 
 `include "timescale.v"
 
-module minsoc_bench();
+module minsoc_bench(
+    clock,
+    reset,
+    eth_tx_clk,
+    eth_rx_clk
+);
 
-`ifdef POSITIVE_RESET
-    localparam RESET_LEVEL = 1'b1;
-`elsif NEGATIVE_RESET
-    localparam RESET_LEVEL = 1'b0;
-`else
-    localparam RESET_LEVEL = 1'b1;
-`endif
-
-reg clock, reset;
+input clock, reset, eth_tx_clk, eth_rx_clk;
 
 //Debug interface
 wire dbg_tms_i;
@@ -38,11 +35,9 @@ reg uart_srx;
 reg eth_col;
 reg eth_crs;
 wire eth_trst;
-reg eth_tx_clk;
 wire eth_tx_en;
 wire eth_tx_er;
 wire [3:0] eth_txd;
-reg eth_rx_clk;
 reg eth_rx_dv;
 reg eth_rx_er;
 reg [3:0] eth_rxd;
@@ -78,8 +73,6 @@ reg [8*64:0] file_name;
 reg load_file;
 
 initial begin
-    reset = ~RESET_LEVEL;
-    clock = 1'b0;
     design_ready = 1'b0;
     uart_echo = 1'b1;
 
@@ -94,9 +87,6 @@ initial begin
 	eth_crs = 1'b0;
 	eth_fds_mdint = 1'b1;
 	eth_rx_er = 1'b0;
-	
-	eth_tx_clk = 1'b0;
-	eth_rx_clk = 1'b0;
 	eth_rxd = 4'h0;
 	eth_rx_dv = 1'b0;
     
@@ -137,12 +127,6 @@ initial begin
 	$display("%s", file_name);
 	$display("%d Bytes loaded from %d ...", initialize , firmware_size);
 `endif
-
-    // Reset controller
-    repeat (2) @ (negedge clock);
-    reset = RESET_LEVEL;
-    repeat (16) @ (negedge clock);
-    reset = ~RESET_LEVEL;
 
 `ifdef START_UP
 	// Pass firmware over spi to or1k_startup
@@ -292,7 +276,7 @@ task test_uart();
             uart_echo = 1'b1;
 
             if ( hello == "Hello World." )
-                $display("UART firmware test completed, behaving correclty.");
+                $display("UART firmware test completed, behaving correctly.");
             else
                 $display("UART firmware test completed, failed.");
     end
@@ -314,13 +298,6 @@ task test_eth();
     end
 endtask
 
-
-//
-//	Regular clocking and output
-//
-always begin
-    #((`CLK_PERIOD)/2) clock <= ~clock;
-end
 
 `ifdef VCD_OUTPUT
 initial begin
@@ -595,15 +572,6 @@ task gencrc32;
     end
 endtask
 //~CRC32
-
-//Generate tx and rx clocks
-always begin
-	#((`ETH_PHY_PERIOD)/2) eth_tx_clk <= ~eth_tx_clk;
-end
-always begin
-	#((`ETH_PHY_PERIOD)/2) eth_rx_clk <= ~eth_rx_clk;	
-end
-//~Generate tx and rx clocks
 
 `endif // !ETHERNET
 //~MAC_DATA
@@ -917,8 +885,6 @@ task init_fpga_memory;
 `endif
     end
 endtask
-
-
 
 endmodule
 
