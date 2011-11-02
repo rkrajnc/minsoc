@@ -309,7 +309,6 @@ task test_eth();
 
             $display("Sending an Ethernet package to the system and waiting for the data to be output through UART...");
 	        send_mac(6);
-            $display("This takes a long time, if you want to stop it, type ctrl+c and type in finish afterwards.");
             repeat(3+40) @ (posedge new_line);
             $display("Ethernet test completed.");
     end
