@@ -1,4 +1,5 @@
 `include "minsoc_bench_defines.v"
+`include "minsoc_defines.v"
 
 `include "timescale.v"
 
@@ -32,7 +33,6 @@ initial begin
     reset = RESET_LEVEL;
     repeat (16) @ (negedge clock);
     reset = ~RESET_LEVEL;
-
 end
 
 //

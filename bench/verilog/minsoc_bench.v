@@ -128,6 +128,14 @@ initial begin
 	$display("%d Bytes loaded from %d ...", initialize , firmware_size);
 `endif
 
+`ifdef POSITIVE_RESET
+    repeat(2) @ (negedge reset);
+`elsif NEGATIVE_RESET
+    repeat(2) @ (posedge reset);
+`else
+    repeat(2) @ (negedge reset);
+`endif
+
 `ifdef START_UP
 	// Pass firmware over spi to or1k_startup
 	ptr = 0;
