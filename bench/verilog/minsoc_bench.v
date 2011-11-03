@@ -290,6 +290,7 @@ task test_uart();
     end
 endtask
 
+`ifdef ETHERNET
 task test_eth();
     begin
 	        eth_tx_data[ETH_HDR+0] = 8'hBA;
@@ -305,6 +306,7 @@ task test_eth();
             $display("Ethernet test completed.");
     end
 endtask
+`endif
 
 
 `ifdef VCD_OUTPUT
