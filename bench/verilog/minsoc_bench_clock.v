@@ -4,7 +4,7 @@
 `include "timescale.v"
 
 
-module minsoc_verilog_bench();
+module minsoc_bench_clock();
 
 `ifdef POSITIVE_RESET
     localparam RESET_LEVEL = 1'b1;
@@ -16,7 +16,7 @@ module minsoc_verilog_bench();
 
 reg clock, reset, eth_tx_clk, eth_rx_clk;
 
-minsoc_bench minsoc_bench_0(
+minsoc_bench_core minsoc_bench_core_0(
     .clock(clock),
     .reset(reset),
     .eth_tx_clk(eth_tx_clk),

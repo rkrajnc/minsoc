@@ -4,7 +4,7 @@
 
 `include "timescale.v"
 
-module minsoc_bench(
+module minsoc_bench_core(
     clock,
     reset,
     eth_tx_clk,
@@ -267,6 +267,7 @@ minsoc_top minsoc_top_0(
 //
 // Firmware testers
 //
+`ifdef UART
 task test_uart();
     begin
             @ (posedge new_line);
@@ -289,6 +290,7 @@ task test_uart();
                 $display("UART firmware test completed, failed.");
     end
 endtask
+`endif
 
 `ifdef ETHERNET
 task test_eth();
