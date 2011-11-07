@@ -4,14 +4,17 @@
 
 `include "timescale.v"
 
-module minsoc_bench_core(
-    clock,
-    reset,
-    eth_tx_clk,
-    eth_rx_clk
-);
+module minsoc_bench();
 
-input clock, reset, eth_tx_clk, eth_rx_clk;
+`ifdef POSITIVE_RESET
+    localparam RESET_LEVEL = 1'b1;
+`elsif NEGATIVE_RESET
+    localparam RESET_LEVEL = 1'b0;
+`else
+    localparam RESET_LEVEL = 1'b1;
+`endif
+
+reg clock, reset;
 
 //Debug interface
 wire dbg_tms_i;
@@ -35,9 +38,11 @@ reg uart_srx;
 reg eth_col;
 reg eth_crs;
 wire eth_trst;
+reg eth_tx_clk;
 wire eth_tx_en;
 wire eth_tx_er;
 wire [3:0] eth_txd;
+reg eth_rx_clk;
 reg eth_rx_dv;
 reg eth_rx_er;
 reg [3:0] eth_rxd;
@@ -75,6 +80,11 @@ integer      firmware_size_in_header;
 reg load_file;
 
 initial begin
+    reset = ~RESET_LEVEL;
+    clock = 1'b0;
+	eth_tx_clk = 1'b0;
+	eth_rx_clk = 1'b0;
+
     design_ready = 1'b0;
     uart_echo = 1'b1;
 
@@ -131,7 +141,7 @@ initial begin
 			$display("ERROR: The firmware size in the file header does not match the firmware size given as command-line argument. Did you forget bin2hex's -size_word flag when generating the firmware file?");
 			$finish;
         end
-       
+
 	end
 
 `ifdef INITIALIZE_MEMORY_MODEL 
@@ -149,13 +159,11 @@ initial begin
 	$display("%d Bytes loaded from %d ...", initialize , firmware_size);
 `endif
 
-`ifdef POSITIVE_RESET
-    repeat(2) @ (negedge reset);
-`elsif NEGATIVE_RESET
-    repeat(2) @ (posedge reset);
-`else
-    repeat(2) @ (negedge reset);
-`endif
+    // Reset controller
+    repeat (2) @ (negedge clock);
+    reset = RESET_LEVEL;
+    repeat (16) @ (negedge clock);
+    reset = ~RESET_LEVEL;
 
 `ifdef START_UP
 	// Pass firmware over spi to or1k_startup
@@ -332,6 +340,13 @@ endtask
 `endif
 
 
+//
+//	Regular clocking and output
+//
+always begin
+    #((`CLK_PERIOD)/2) clock <= ~clock;
+end
+
 `ifdef VCD_OUTPUT
 initial begin
 	$dumpfile("../results/minsoc_wave.vcd");
@@ -361,20 +376,20 @@ endtask
 
 //UART
 `ifdef UART
-localparam UART_TX_WAIT = (`FREQ / `UART_BAUDRATE);
+localparam UART_TX_WAIT = (`FREQ_NUM_FOR_NS / `UART_BAUDRATE);
 
 task uart_send;
     input [7:0] data;
     integer i;
     begin
         uart_srx = 1'b0;
-        repeat (UART_TX_WAIT) @ (posedge clock);
+        #UART_TX_WAIT;
         for ( i = 0; i < 8 ; i = i + 1 ) begin
 		    uart_srx = data[i];
-            repeat (UART_TX_WAIT) @ (posedge clock);
+            #UART_TX_WAIT;
 	    end        
         uart_srx = 1'b0;
-        repeat (UART_TX_WAIT) @ (posedge clock);
+        #UART_TX_WAIT;
 	    uart_srx = 1'b1;	    
     end
 endtask
@@ -400,11 +415,11 @@ task uart_decoder;
         while (uart_stx == 1'b1)
         @(uart_stx);
 
-        repeat (UART_TX_WAIT+(UART_TX_WAIT/2)) @ (posedge clock);
+        #(UART_TX_WAIT + (UART_TX_WAIT/2));
 
         for ( i = 0; i < 8 ; i = i + 1 ) begin
             tx_byte[i] = uart_stx;
-            repeat (UART_TX_WAIT) @ (posedge clock);
+            #UART_TX_WAIT;
         end
 
         //Check for stop bit
@@ -608,6 +623,15 @@ endtask
 
 `endif // !ETHERNET
 //~MAC_DATA
+
+//Generate tx and rx clocks
+always begin
+	#((`ETH_PHY_PERIOD)/2) eth_tx_clk <= ~eth_tx_clk;
+end
+always begin
+	#((`ETH_PHY_PERIOD)/2) eth_rx_clk <= ~eth_rx_clk;	
+end
+//~Generate tx and rx clocks
 
 
 
