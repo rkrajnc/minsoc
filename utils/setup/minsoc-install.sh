@@ -77,6 +77,7 @@ testtool sed
 testtool patch
 testtool gcc
 testtool make
+testtool makeinfo
 testtool libncurses
 testtool flex
 testtool bison
