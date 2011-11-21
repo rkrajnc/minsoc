@@ -85,7 +85,12 @@ fi
 
 if [ ! -d ${DIR_TO_INSTALL} ]
 then
-    errormsg "Directory doesn't exist. Please create it";	
+     cecho "Directory ${DIR_TO_INSTALL} doesn't exist."
+     execcmd "Creating directory ${DIR_TO_INSTALL}" "mkdir -p ${DIR_TO_INSTALL}"
+     if [ $? -ne 0 ]
+     then
+          errormsg "Connot create ${DIR_TO_INSTALL}";
+     fi
 fi;
 
 
