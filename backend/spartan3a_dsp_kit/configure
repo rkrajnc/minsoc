@@ -101,4 +101,15 @@ else
     echo ""
 fi
 
+#Precompiling firmwares
+echo "Precompiling delivered libraries and firmwares..."
+make -C ../../../sw/utils
+make -C ../../../sw/support
+make -C ../../../sw/drivers
+make -C ../../../sw/uart
+make -C ../../../sw/eth
+echo "done."
+echo ""
+echo ""
+
 echo "Configuration done."
