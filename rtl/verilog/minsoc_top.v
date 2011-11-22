@@ -669,7 +669,32 @@ onchip_ram_top (
 //
 // Instantiation of the UART16550
 //
-`ifdef UART
+`ifdef UART_DPI
+uart_dpi
+#( .tcp_port(5678),
+    .port_name("UART DPI number 2"),
+    .welcome_message( "--- Welcome to my second UART DPI port ---\n\r" )
+)
+uart_dpi_0_
+(
+    // WISHBONE common
+    .wb_clk_i       ( wb_clk ),
+    .wb_rst_i       ( wb_rst ),
+
+    // WISHBONE slave
+    .wb_adr_i       ( wb_us_adr_i[4:0] ),
+    .wb_dat_i       ( wb_us_dat_i ),
+    .wb_dat_o       ( wb_us_dat_o ),
+    .wb_we_i        ( wb_us_we_i  ),
+    .wb_stb_i       ( wb_us_stb_i ),
+    .wb_cyc_i       ( wb_us_cyc_i ),
+    .wb_ack_o       ( wb_us_ack_o ),
+    .wb_sel_i       ( wb_us_sel_i ),
+
+    // Interrupt request
+    .int_o          ( pic_ints[`APP_INT_UART] )
+);
+`elsif UART
 uart_top uart_top (
 
 	// WISHBONE common
@@ -703,10 +728,10 @@ uart_top uart_top (
 	.dcd_pad_i	( 1'b0 )
 );
 `else
-assign wb_us_dat_o = 32'h0000_0000;
-assign wb_us_ack_o = 1'b0;
+    assign wb_us_dat_o = 32'h0000_0000;
+    assign wb_us_ack_o = 1'b0;
 
-assign pic_ints[`APP_INT_UART] = 1'b0;
+    assign pic_ints[`APP_INT_UART] = 1'b0;
 `endif
 
 //
