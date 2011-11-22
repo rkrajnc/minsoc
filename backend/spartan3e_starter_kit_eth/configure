@@ -42,9 +42,7 @@ fi
 #NON STANDARD SCRIPT PART
 echo "THIS SCRIPT HAS A NON-STANDARD BEGINNING."
 echo "__________________________________________________________________________"
-echo "Ethernet on Spartan3E Starter Kit requires another configuration for or1200."
-echo "For minsoc release-1.0 or1200_r1 will be used." 
-echo "This will need or1200_defines.v of or1200_r1 with same configuration."
+echo "${BOARD} requires another configuration for or1200."
 
 echo ""
 echo "Copying or1200_defines.v, to or1200 implementation directory..."   
@@ -66,15 +64,33 @@ echo "Synthesis work under $SYN_DIR."
 echo ""
 echo ""
 
+echo "Copying board specific SoC files from $BOARD_DIR to $BACKEND_DIR directory."
+echo "__________________________________________________________________________"
+echo ""
+for file in "${BOARD_FILES[@]}"
+do
+    if [ $file != NONE ]
+    then
+        echo "Copying $file, to backend directory..."
+        cp $BOARD_DIR/$file $BACKEND_DIR
+    fi
+done
+echo ""
+echo ""
+
 echo "Generating project files for simulation and synthesis..."
+echo "__________________________________________________________________________"
+echo ""
 make -C $MINSOC_DIR/prj
 echo "Generation complete."
-echo "__________________________________________________________________________"
+echo ""
 echo ""
 
 if [ $CONSTRAINT_FILE == 'NONE' ]
 then
     echo "Skipping synthesis preparation. Standard implementation can only be simulated."
+    echo ""
+    echo ""
 else
     echo "Device part for files under $SYNSRC_DIR will be patched and stored "
     echo "temporarily." 
@@ -98,21 +114,8 @@ else
     sed "s/$FIND_CONSTRAINT/$CONSTRAINT_FILE/g" TMPFILE > TMPFILE2 && mv TMPFILE2 $SYN_DIR/$MAKEFILE
     rm TMPFILE
     cp $MAKEFILE_DIR/setup.bat $SYN_DIR/setup.bat
+    echo ""
+    echo ""
 fi
-echo ""
-echo ""
 
-
-echo "Copying board specific SoC files from $BOARD_DIR to $BACKEND_DIR directory."
-echo "__________________________________________________________________________"
-echo ""
-for file in "${BOARD_FILES[@]}"
-do
-    if [ $file != NONE ]
-    then
-        echo "Copying $file, to backend directory..."
-        cp $BOARD_DIR/$file $BACKEND_DIR
-    fi
-done
-echo ""
-echo ""
+echo "Configuration done."

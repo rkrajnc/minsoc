@@ -43,6 +43,9 @@
 // Generates basic ASCII hex output to stdout from binary file input
 // Compile and run the program with no options for usage.
 //
+// Modified by R. Diez in 2011 so that, when using option -size_word,
+// padding zeroes are eventually appended, so that the length of
+// the resulting file matches the length written in the header.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,16 +67,18 @@ int main(int argc, char **argv)
 	int filename_index=1;
 	int bytes_per_line=1;
 	int bytes_per_line_index=2;
-	unsigned int image_size;
+    unsigned int padding_size = 0;
 
 	if(argc < 3) {
 	  fprintf(stderr,"\n\tInsufficient options.\n");
 	  fprintf(stderr,"\tPlease specify, in this order: a binary file to\n");	  
-	  fprintf(stderr,"\tconvert and the number of bytes of data to putput\n");
+	  fprintf(stderr,"\tconvert and the number of bytes of data to output\n");
 	  fprintf(stderr,"\tper line.\n");
-	  fprintf(stderr,"\tOptionally specify the option -size_word to output,\n");
+	  fprintf(stderr,"\tOptionally specify the option -size_word to output\n");
 	  fprintf(stderr,"\tthe size of the image in the first 4 bytes. This is\n");
-	  fprintf(stderr,"\tused by some of the new OR1k bootloaders.\n\n");
+	  fprintf(stderr,"\tused by some of the new OR1k bootloaders. Note that\n");
+	  fprintf(stderr,"\tpadding zeroes will be appended so that the image size\n");
+      fprintf(stderr,"\tis a multiple of 4.\n\n");
 	  exit(1);
 	}
 	
@@ -105,6 +110,8 @@ int main(int argc, char **argv)
 
 	if (write_size_word)
 	  {
+        unsigned int image_size;
+        
 	    // or1200 startup method of determining size of boot image we're copying by reading out
 	    // the very first word in flash is used. Determine the length of this file
 	    fseek(fd, 0, SEEK_END);
@@ -112,8 +119,8 @@ int main(int argc, char **argv)
 	    fseek(fd,0,SEEK_SET);
 	    
 	    // Now we should have the size of the file in bytes. Let's ensure it's a word multiple
-	    image_size+=3;
-	    image_size &= 0xfffffffc;
+        padding_size = ( 4 - (image_size % 4) ) % 4;
+	    image_size += padding_size;
 
 	    // Sanity check on image size
 	    if (image_size < 8){ 
@@ -147,6 +154,16 @@ int main(int argc, char **argv)
 			i = 0;
 		}
         }
+
+    unsigned j;
+    for ( j = 0; j < padding_size; ++j ) {
+        // printf("Adding one padding byte.\n");
+		printf("%.2x", 0);
+		if (++i == bytes_per_line) {
+			printf("\n");
+			i = 0;
+		}
+    }
 
 	return 0;
 }	

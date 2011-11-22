@@ -38,7 +38,7 @@ source $PROJECT
 for dir in "${PROJECT_DIR[@]}"
 do
     adapted_dir=`adaptpath $MINSOC_DIR/$dir`
-    echo "+incdir+$adapted_dir" >> $OUTPUT
+    echo "set_global_assignment -name SEARCH_PATH $adapted_dir" >> $OUTPUT
 done
 
 for file in "${PROJECT_SRC[@]}"
@@ -50,7 +50,7 @@ do
         if [ -f $MINSOC_DIR/$dir/$file ]
         then
             adapted_file=`adaptpath $MINSOC_DIR/$dir/$file`
-            echo "$adapted_file" >> $OUTPUT
+            echo "set_global_assignment -name VERILOG_FILE $adapted_file" >> $OUTPUT
             FOUND=1
             break
         fi

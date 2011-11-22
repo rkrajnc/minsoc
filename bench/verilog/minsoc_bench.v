@@ -53,6 +53,14 @@ wire eth_mdio;
 //
 //	TASKS registers to communicate with interfaces
 //
+reg design_ready;
+reg uart_echo;
+`ifdef UART
+reg [40*8-1:0] line;
+reg [12*8-1:0] hello;
+reg new_line;
+reg new_char;
+`endif
 `ifdef ETHERNET
 reg [7:0] eth_rx_data [0:1535];		 //receive buffer ETH (max packet 1536)
 reg [7:0] eth_tx_data [0:1535];     //send buffer ETH (max packet 1536)
@@ -65,13 +73,20 @@ localparam ETH_PAYLOAD_MAX_LENGTH = 1518;//only able to send up to 1536 bytes wi
 // Testbench mechanics
 //
 reg [7:0] program_mem[(1<<(`MEMORY_ADR_WIDTH+2))-1:0];
-integer initialize, final, ptr;
+integer initialize, ptr;
 reg [8*64:0] file_name;
+integer      firmware_size;  // Note that the .hex file size is greater than this, as each byte in the file needs 2 hex characters.
+integer      firmware_size_in_header;
 reg load_file;
 
 initial begin
     reset = ~RESET_LEVEL;
     clock = 1'b0;
+	eth_tx_clk = 1'b0;
+	eth_rx_clk = 1'b0;
+
+    design_ready = 1'b0;
+    uart_echo = 1'b1;
 
 `ifndef NO_CLOCK_DIVISION
     minsoc_top_0.clk_adjust.clk_int = 1'b0;
@@ -84,9 +99,6 @@ initial begin
 	eth_crs = 1'b0;
 	eth_fds_mdint = 1'b1;
 	eth_rx_er = 1'b0;
-	
-	eth_tx_clk = 1'b0;
-	eth_rx_clk = 1'b0;
 	eth_rxd = 4'h0;
 	eth_rx_dv = 1'b0;
     
@@ -105,18 +117,37 @@ initial begin
 	//get firmware hex file from command line input
 	if ( load_file ) begin
 		if ( ! $value$plusargs("file_name=%s", file_name) || file_name == 0 ) begin
-			$display("ERROR: please specify an input file to start.");
+			$display("ERROR: Please specify the name of the firmware file to load on start-up.");
 			$finish;
 		end
-		$readmemh(file_name, program_mem);
-		// First word comprehends size of program
-		final = { program_mem[0] , program_mem[1] , program_mem[2] , program_mem[3] };
+
+        // We are passing the firmware size separately as a command-line argument in order
+        // to avoid this kind of Icarus Verilog warnings:
+        //   WARNING: minsoc_bench_core.v:111: $readmemh: Standard inconsistency, following 1364-2005.
+        //   WARNING: minsoc_bench_core.v:111: $readmemh(../../sw/uart/uart.hex): Not enough words in the file for the requested range [0:32767].
+        // Apparently, some of the $readmemh() warnigns are even required by the standard. The trouble is,
+        // Verilog's $fread() is not widely implemented in the simulators, so from Verilog alone
+        // it's not easy to read the firmware file header without getting such warnings.
+		if ( ! $value$plusargs("firmware_size=%d", firmware_size) ) begin
+			$display("ERROR: Please specify the size of the firmware (in bytes) contained in the hex firmware file.");
+			$finish;
+		end
+
+		$readmemh(file_name, program_mem, 0, firmware_size - 1);
+
+		firmware_size_in_header = { program_mem[0] , program_mem[1] , program_mem[2] , program_mem[3] };
+
+        if ( firmware_size != firmware_size_in_header ) begin
+			$display("ERROR: The firmware size in the file header does not match the firmware size given as command-line argument. Did you forget bin2hex's -size_word flag when generating the firmware file?");
+			$finish;
+        end
+
 	end
 
 `ifdef INITIALIZE_MEMORY_MODEL 
 	// Initialize memory with firmware
 	initialize = 0;
-	while ( initialize < final ) begin
+	while ( initialize < firmware_size ) begin
 		minsoc_top_0.onchip_ram_top.block_ram_3.mem[initialize/4] = program_mem[initialize];
 		minsoc_top_0.onchip_ram_top.block_ram_2.mem[initialize/4] = program_mem[initialize+1];
 		minsoc_top_0.onchip_ram_top.block_ram_1.mem[initialize/4] = program_mem[initialize+2];
@@ -125,7 +156,7 @@ initial begin
 	end
 	$display("Memory model initialized with firmware:");
 	$display("%s", file_name);
-	$display("%d Bytes loaded from %d ...", initialize , final);
+	$display("%d Bytes loaded from %d ...", initialize , firmware_size);
 `endif
 
     // Reset controller
@@ -143,7 +174,7 @@ initial begin
 	send_spi(program_mem[ptr]);
 	send_spi(program_mem[ptr]);
 	//~read dummy
-	while ( ptr < final ) begin
+	while ( ptr < firmware_size ) begin
 		send_spi(program_mem[ptr]);
 		ptr = ptr + 1;
 	end
@@ -156,31 +187,40 @@ initial begin
 	//
     // Testbench START
 	//
-	
+    design_ready = 1'b1;
+    $display("Running simulation: if you want to stop it, type ctrl+c and type in finish afterwards.");
     fork
-        begin 
-`ifdef ETHERNET            
-            get_mac();
-            
-            if ( { eth_rx_data[ETH_HDR] , eth_rx_data[ETH_HDR+1] , eth_rx_data[ETH_HDR+2] , eth_rx_data[ETH_HDR+3] } == 32'hFF2B4050 )
-                $display("eth-nocache firmware started.");
-`endif
-        end
         begin
-	        #2000000;
 `ifdef UART
-            uart_send(8'h41);       //Character A
-`endif	
-`ifdef ETHERNET    
-	        eth_tx_data[ETH_HDR+0] = 8'hBA;
-	        eth_tx_data[ETH_HDR+1] = 8'h87;	
-	        eth_tx_data[ETH_HDR+2] = 8'hAA;
-	        eth_tx_data[ETH_HDR+3] = 8'hBB;	
-	        eth_tx_data[ETH_HDR+4] = 8'hCC;
-	        eth_tx_data[ETH_HDR+5] = 8'hDD;	
 
-	        send_mac(6);
-`endif        
+`ifdef ETHERNET
+`ifdef TEST_ETHERNET
+            $display("Testing Ethernet firmware, this takes long (~15 min. @ 2.53 GHz dual-core)...");
+            $display("Ethernet firmware encloses UART firmware, testing UART firmware first...");
+            test_uart();
+            test_eth();
+            $display("Stopping simulation.");
+            $finish;
+`endif
+`endif
+
+`ifdef TEST_UART
+            $display("Testing UART firmware, this takes a while (~1 min. @ 2.53 GHz dual-core)...");
+            test_uart();
+            $display("Stopping simulation.");
+            $finish;
+`endif
+
+`endif	
+        end
+        begin 
+`ifdef ETHERNET
+`ifdef TEST_ETHERNET            
+            get_mac();
+            if ( { eth_rx_data[ETH_HDR] , eth_rx_data[ETH_HDR+1] , eth_rx_data[ETH_HDR+2] , eth_rx_data[ETH_HDR+3] } == 32'hFF2B4050 )
+                $display("Ethernet firmware started correctly.");
+`endif
+`endif
         end
     join
 
@@ -254,6 +294,53 @@ minsoc_top minsoc_top_0(
 
 
 //
+// Firmware testers
+//
+`ifdef UART
+task test_uart();
+    begin
+            @ (posedge new_line);
+            $display("UART data received.");
+            hello = line[12*8-1:0];
+            //sending character A to UART, B expected
+            $display("Testing UART interrupt..."); 
+            uart_echo = 1'b0;
+            uart_send(8'h41);       //Character A
+            @ (posedge new_char);
+            if ( line[7:0] == "B" )
+                $display("UART interrupt working.");
+            else
+                $display("UART interrupt failed.");
+            uart_echo = 1'b1;
+
+            if ( hello == "Hello World." )
+                $display("UART firmware test completed, behaving correctly.");
+            else
+                $display("UART firmware test completed, failed.");
+    end
+endtask
+`endif
+
+`ifdef ETHERNET
+task test_eth();
+    begin
+	        eth_tx_data[ETH_HDR+0] = 8'hBA;
+	        eth_tx_data[ETH_HDR+1] = 8'h87;	
+	        eth_tx_data[ETH_HDR+2] = 8'hAA;
+	        eth_tx_data[ETH_HDR+3] = 8'hBB;	
+	        eth_tx_data[ETH_HDR+4] = 8'hCC;
+	        eth_tx_data[ETH_HDR+5] = 8'hDD;	
+
+            $display("Sending an Ethernet package to the system and waiting for the data to be output through UART...");
+	        send_mac(6);
+            repeat(3+40) @ (posedge new_line);
+            $display("Ethernet test completed.");
+    end
+endtask
+`endif
+
+
+//
 //	Regular clocking and output
 //
 always begin
@@ -296,49 +383,66 @@ task uart_send;
     integer i;
     begin
         uart_srx = 1'b0;
-	    #UART_TX_WAIT;
+        #UART_TX_WAIT;
         for ( i = 0; i < 8 ; i = i + 1 ) begin
 		    uart_srx = data[i];
-		    #UART_TX_WAIT;
+            #UART_TX_WAIT;
 	    end        
         uart_srx = 1'b0;
-	    #UART_TX_WAIT;
+        #UART_TX_WAIT;
 	    uart_srx = 1'b1;	    
     end
 endtask
 
 //UART Monitor (prints uart output on the terminal)
 // Something to trigger the task
-always @(posedge clock)
-	uart_decoder;
+initial
+begin
+    new_line = 1'b0;
+    new_char = 1'b0;
+end
+
+always @ (posedge clock)
+    if ( design_ready )
+        uart_decoder;
 
 task uart_decoder;
 	integer i;
 	reg [7:0] tx_byte;
 	begin
+        new_char = 1'b0;
+        // Wait for start bit
+        while (uart_stx == 1'b1)
+        @(uart_stx);
 
-	// Wait for start bit
-	while (uart_stx == 1'b1)
-		@(uart_stx);
+        #(UART_TX_WAIT + (UART_TX_WAIT/2));
 
-	#(UART_TX_WAIT+(UART_TX_WAIT/2));
+        for ( i = 0; i < 8 ; i = i + 1 ) begin
+            tx_byte[i] = uart_stx;
+            #UART_TX_WAIT;
+        end
 
-    for ( i = 0; i < 8 ; i = i + 1 ) begin
-		tx_byte[i] = uart_stx;
-		#UART_TX_WAIT;
-	end
-
-	//Check for stop bit
-	if (uart_stx == 1'b0) begin
-		  //$display("* WARNING: user stop bit not received when expected at time %d__", $time);
-	  // Wait for return to idle
-		while (uart_stx == 1'b0)
-			@(uart_stx);
-	  //$display("* USER UART returned to idle at time %d",$time);
-	end
-	// display the char
-	$write("%c", tx_byte);
-	end
+        //Check for stop bit
+        if (uart_stx == 1'b0) begin
+            //$display("* WARNING: user stop bit not received when expected at time %d__", $time);
+            // Wait for return to idle
+            while (uart_stx == 1'b0)
+            @(uart_stx);
+            //$display("* USER UART returned to idle at time %d",$time);
+        end
+        // display the char
+        new_char = 1'b1;
+        if ( uart_echo )
+            $write("%c", tx_byte);
+        if ( new_line )
+            line = "";
+        if ( tx_byte == "\n" )
+            new_line = 1'b1;
+        else begin
+            line = { line[39*8-1:0], tx_byte};
+            new_line = 1'b0;
+        end
+    end
 endtask
 //~UART Monitor
 `endif // !UART
@@ -436,7 +540,7 @@ task send_rx_packet;
   reg     [7:0] eth_tx_data_data_out; // data for reading from RX memory
 begin
       @(posedge eth_rx_clk);
-      #1 eth_rx_dv = 1;
+       eth_rx_dv = 1;
 
       // set initial rx memory address
       eth_tx_data_addr_in = start_addr;
@@ -444,31 +548,28 @@ begin
       // send preamble
       for (rx_cnt = 0; (rx_cnt < (preamble_len << 1)) && (rx_cnt < 16); rx_cnt = rx_cnt + 1)
       begin
-        #1 eth_rxd = preamble_data[3:0];
-        #1 preamble_data = preamble_data >> 4;
+         eth_rxd = preamble_data[3:0];
+         preamble_data = preamble_data >> 4;
         @(posedge eth_rx_clk);
       end
     
       // send SFD
       for (rx_cnt = 0; rx_cnt < 2; rx_cnt = rx_cnt + 1)
       begin
-        #1 eth_rxd = sfd_data[3:0];
-        #1 sfd_data = sfd_data >> 4;
+         eth_rxd = sfd_data[3:0];
+         sfd_data = sfd_data >> 4;
         @(posedge eth_rx_clk);
       end
 
       // send packet's addresses, type/length, data and FCS
       for (rx_cnt = 0; rx_cnt < len; rx_cnt = rx_cnt + 1)
       begin
-        #1;
         eth_tx_data_data_out = eth_tx_data[eth_tx_data_addr_in[21:0]];
         eth_rxd = eth_tx_data_data_out[3:0];
         @(posedge eth_rx_clk);
-        #1;
         eth_rxd = eth_tx_data_data_out[7:4];
         eth_tx_data_addr_in = eth_tx_data_addr_in + 1;
         @(posedge eth_rx_clk);
-        #1;
       end
       if (plus_drible_nibble)
       begin
@@ -477,7 +578,7 @@ begin
         @(posedge eth_rx_clk);
       end
 
-      #1 eth_rx_dv = 0;
+       eth_rx_dv = 0;
       @(posedge eth_rx_clk);
 
 end
@@ -520,6 +621,9 @@ task gencrc32;
 endtask
 //~CRC32
 
+`endif // !ETHERNET
+//~MAC_DATA
+
 //Generate tx and rx clocks
 always begin
 	#((`ETH_PHY_PERIOD)/2) eth_tx_clk <= ~eth_tx_clk;
@@ -528,9 +632,6 @@ always begin
 	#((`ETH_PHY_PERIOD)/2) eth_rx_clk <= ~eth_rx_clk;	
 end
 //~Generate tx and rx clocks
-
-`endif // !ETHERNET
-//~MAC_DATA
 
 
 
@@ -841,8 +942,6 @@ task init_fpga_memory;
 `endif
     end
 endtask
-
-
 
 endmodule
 

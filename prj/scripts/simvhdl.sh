@@ -52,7 +52,7 @@ do
 
     if [ $FOUND != 1 ]
     then
-        echo "FILE NOT FOUND"
+        echo "FILE NOT FOUND: $file"
         exit 1
     fi
 done
