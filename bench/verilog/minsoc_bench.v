@@ -350,7 +350,7 @@ end
 
 `ifdef WAVEFORM_OUTPUT
 initial begin
-	$dumpfile("../results/minsoc_wave.lxt");
+	$dumpfile("../results/minsoc_wave.lxt2");
 	$dumpvars();
 end
 `endif
