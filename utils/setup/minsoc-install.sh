@@ -64,6 +64,7 @@ testtool makeinfo
 testtool libncurses
 testtool flex
 testtool bison
+testtool libz
 if [ "$ENV" == "Cygwin" ]
 then
     testtool ioperm

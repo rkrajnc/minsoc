@@ -6,17 +6,17 @@
 
 `define FREQ_NUM_FOR_NS 100000000
 
-`define FREQ 25000000
+`define FREQ 10000000
 `define CLK_PERIOD (`FREQ_NUM_FOR_NS/`FREQ)
 
 `define ETH_PHY_FREQ  25000000
 `define ETH_PHY_PERIOD  (`FREQ_NUM_FOR_NS/`ETH_PHY_FREQ)    //40ns
 
-`define UART_BAUDRATE 115200 
+`define UART_BAUDRATE 9600 
 
 `define VPI_DEBUG
 
-//`define VCD_OUTPUT
+//`define WAVEFORM_OUTPUT
 
 //`define START_UP						//pass firmware over spi to or1k_startup
 
