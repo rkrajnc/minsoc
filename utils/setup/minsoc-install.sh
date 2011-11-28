@@ -5,7 +5,7 @@
 
 # ===== CONFIGURATIONS =====
 # ==========================
-MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-1.0
+MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/verilator
 export SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 export DIR_TO_INSTALL=`pwd`
 
