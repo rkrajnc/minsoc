@@ -5,7 +5,7 @@
 
 # ===== CONFIGURATIONS =====
 # ==========================
-MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/branches/rc-1.0
+MINSOC_SVN_URL=http://opencores.org/ocsvn/minsoc/minsoc/tags/release-1.0
 export SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 export DIR_TO_INSTALL=`pwd`
 
