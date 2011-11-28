@@ -14,7 +14,7 @@ int main()
 	
 	/* We can't use printf because in this simple example
 	   we don't link C library. */
-	uart_print_str("Hello World.\n\r");
+	uart_print_str("Hello World.\n");
 	
 	report(0xdeaddead);
 	or32_exit(0);

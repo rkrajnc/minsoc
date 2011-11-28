@@ -57,10 +57,6 @@ void uart_putc(char c)
 
 	WAIT_FOR_THRE;
 	REG8(UART_BASE + UART_TX) = c;
-	if(c == '\n') {
-		WAIT_FOR_THRE;
-		REG8(UART_BASE + UART_TX) = '\r';
-	}
 	WAIT_FOR_XMITR;
 }
 

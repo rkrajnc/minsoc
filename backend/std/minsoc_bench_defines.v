@@ -16,7 +16,7 @@
 
 `define VPI_DEBUG
 
-//`define VCD_OUTPUT
+//`define WAVEFORM_OUTPUT
 
 //`define START_UP						//pass firmware over spi to or1k_startup
 

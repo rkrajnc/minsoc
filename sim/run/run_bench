@@ -10,4 +10,4 @@ set -o posix    # Make command substitution subshells inherit the errexit option
 # regardless of the number of hex bytes per line.
 FIRMWARE_SIZE_IN_BYTES="$(wc -w <"$1")"
 
-vvp -M ../../bench/verilog/vpi/ -mjp-io-vpi minsoc_bench +file_name="$1" +firmware_size="$FIRMWARE_SIZE_IN_BYTES"
+vvp -M ../../bench/verilog/vpi/ -mjp-io-vpi minsoc_bench +file_name="$1" +firmware_size="$FIRMWARE_SIZE_IN_BYTES" -lxt2

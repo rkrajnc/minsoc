@@ -60,6 +60,7 @@ reg [40*8-1:0] line;
 reg [12*8-1:0] hello;
 reg new_line;
 reg new_char;
+reg flush_line;
 `endif
 `ifdef ETHERNET
 reg [7:0] eth_rx_data [0:1535];		 //receive buffer ETH (max packet 1536)
@@ -310,7 +311,7 @@ task test_uart();
             if ( line[7:0] == "B" )
                 $display("UART interrupt working.");
             else
-                $display("UART interrupt failed.");
+                $display("UART interrupt failed. B was expected, %c was received.", line[7:0]);
             uart_echo = 1'b1;
 
             if ( hello == "Hello World." )
@@ -347,9 +348,9 @@ always begin
     #((`CLK_PERIOD)/2) clock <= ~clock;
 end
 
-`ifdef VCD_OUTPUT
+`ifdef WAVEFORM_OUTPUT
 initial begin
-	$dumpfile("../results/minsoc_wave.vcd");
+	$dumpfile("../results/minsoc_wave.lxt2");
 	$dumpvars();
 end
 `endif
@@ -400,6 +401,7 @@ initial
 begin
     new_line = 1'b0;
     new_char = 1'b0;
+    flush_line = 1'b0;
 end
 
 always @ (posedge clock)
@@ -411,6 +413,7 @@ task uart_decoder;
 	reg [7:0] tx_byte;
 	begin
         new_char = 1'b0;
+        new_line = 1'b0;
         // Wait for start bit
         while (uart_stx == 1'b1)
         @(uart_stx);
@@ -431,16 +434,19 @@ task uart_decoder;
             //$display("* USER UART returned to idle at time %d",$time);
         end
         // display the char
-        new_char = 1'b1;
         if ( uart_echo )
             $write("%c", tx_byte);
-        if ( new_line )
+        if ( flush_line ) begin
             line = "";
-        if ( tx_byte == "\n" )
+            flush_line = 1'b0;
+        end
+        if ( tx_byte == "\n" ) begin
             new_line = 1'b1;
+            flush_line = 1'b1;
+        end
         else begin
             line = { line[39*8-1:0], tx_byte};
-            new_line = 1'b0;
+            new_char = 1'b1;
         end
     end
 endtask
