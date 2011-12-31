@@ -11,12 +11,12 @@
 ////       Igor Mohor (igorm@opencores.org)                       ////
 ////       Gyorgy Jeney (nog@sdf.lonestar.net)                    ////
 ////       Nathan Yawn (nathan.yawn@opencores.org)                ////
-////	   Raul Fajardo (rfajardo@gmail.com)					  ////
+////	   Raul Fajardo (rfajardo@gmail.com)			  ////
 ////                                                              ////
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 ////                                                              ////
-//// Copyright (C) 2000-2008 Authors                              ////
+//// Copyright (C) 2000-2011 Authors                              ////
 ////                                                              ////
 //// This source file may be used and distributed without         ////
 //// restriction provided that this copyright statement is not    ////
@@ -77,7 +77,7 @@
 `include "timescale.v"
 
 `define JP_PORT "4567"
-`define TIMEOUT_COUNT 6'd20  // 1/2 of a TCK clock will be this many SYS_CLK ticks.  Must be less than 6 bits. 
+`define TIMEOUT_COUNT 6'd5  // 1/2 of a TCK clock will be this many SYS_CLK ticks.  Must be less than 6 bits. 
   
   module dbg_comm_vpi (
 		       SYS_CLK,
