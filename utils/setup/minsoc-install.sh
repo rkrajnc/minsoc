@@ -203,25 +203,8 @@ execcmd "make install"
 
 #Installing Advanced JTAG Bridge
 execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge"
-if [ `grep "INCLUDE_JSP_SERVER=true" Makefile` != "" ]
-then
-    #Switching off the adv_jtag_bridge JSP_SERVER option
-    sed 's/INCLUDE_JSP_SERVER=true/INCLUDE_JSP_SERVER=false/' Makefile > TMPFILE && mv TMPFILE Makefile
-fi
-
-if [ "${ENV}" == "GNU/Linux" ] 
-then
-    #Setting the right build environment
-    sed 's/BUILD_ENVIRONMENT=cygwin/BUILD_ENVIRONMENT=linux/' Makefile > TMPFILE && mv TMPFILE Makefile
-fi
-
-#preparing the Makefile to find and link libraries
-sed "s%prefix = /usr/local%prefix = ${DIR_TO_INSTALL}/tools%" Makefile > TMPFILE && mv TMPFILE Makefile
-sed "s%\$(CC) \$(CFLAGS)%\$(CC) \$(CFLAGS) \$(INCLUDEDIRS)%" Makefile > TMPFILE && mv TMPFILE Makefile
-sed "s%INCLUDEDIRS =%INCLUDEDIRS = -I${DIR_TO_INSTALL}/tools/include%" Makefile > TMPFILE && mv TMPFILE Makefile
-sed "s%LIBS =%LIBS = -L${DIR_TO_INSTALL}/tools/lib -Wl,-R${DIR_TO_INSTALL}/tools/lib%" Makefile > TMPFILE && mv TMPFILE Makefile
-
-#properly installing Advanced JTAG Bridge
+execcmd "./autogen.sh"
+execcmd "./configure --enable-jsp-server=no --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}=tools/include LDFLAGS=-L${DIR_TO_INSTALL}/tools/lib LDFLAGS=-Wl,-R${DIR_TO_INSTALL}/tools/lib"
 execcmd "Compiling Advanced JTAG Bridge" "make"
 execcmd "make install"
 
