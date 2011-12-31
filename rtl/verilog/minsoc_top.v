@@ -420,6 +420,7 @@ adbg_top dbg_top  (
       .debug_select_i( debug_select ),
 	// WISHBONE common
       .wb_clk_i   ( wb_clk ),
+      .wb_rst_i   ( wb_rst ),
 
       // WISHBONE master interface
       .wb_adr_o  ( wb_dm_adr_o ),
@@ -439,7 +440,7 @@ adbg_top dbg_top  (
       .cpu0_addr_o ( dbg_adr ),
       .cpu0_data_i ( dbg_dat_risc ),
       .cpu0_data_o ( dbg_dat_dbg ),
-      .cpu0_bp_i   ( dbg_bp ),
+      .cpu0_bp_i   ( (dbg_bp | (| dbg_wp[10:0])) ),
       .cpu0_stall_o( dbg_stall ),
       .cpu0_stb_o  ( dbg_stb ),
       .cpu0_we_o   ( dbg_we ),
