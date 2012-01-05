@@ -2,8 +2,8 @@ include ../support/Makefile.inc
 include $(BACKEND_DIR)/gcc-opt.mk
 
 #USER INPUT
-SRCS = uart.c
-OR32_TARGET = uart.hex
+SRCS = jsp.c
+OR32_TARGET = jsp.hex
 TARGET = 
 TARGETLIB = 
 MODEL = static  	#dynamic|static

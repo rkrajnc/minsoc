@@ -1,9 +1,9 @@
 //
-// Define FPGA manufacturer
+// Define FPGA manufacturer: DE2_115 board
 //
 //`define GENERIC_FPGA
-//`define ALTERA_FPGA
-`define XILINX_FPGA
+`define ALTERA_FPGA
+//`define XILINX_FPGA
 
 // 
 // Define Xilinx FPGA family
@@ -26,9 +26,9 @@
 //`define ARRIA_II_GX
 //`define CYCLONE_I
 //`define CYCLONE_II
-`define CYCLONE_III
+//`define CYCLONE_III
 //`define CYCLONE_III_LS
-//`define CYCLONE_IV_E
+`define CYCLONE_IV_E
 //`define CYCLONE_IV_GS
 //`define MAX_II
 //`define MAX_V
@@ -45,7 +45,7 @@
 //
 // Memory
 //
-`define MEMORY_ADR_WIDTH   15	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, 
+`define MEMORY_ADR_WIDTH   13	//MEMORY_ADR_WIDTH IS NOT ALLOWED TO BE LESS THAN 12, 
                                 //memory is composed by blocks of address width 11
 								//Address width of memory -> select memory depth, 
                                 //2 powers MEMORY_ADR_WIDTH defines the memory depth 
@@ -77,7 +77,7 @@
 //
 // Define division
 //
-`define CLOCK_DIVISOR 5		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded 
+`define CLOCK_DIVISOR 2		//in case of GENERIC_CLOCK_DIVISION the real value will be rounded 
                             //down to an even value in FPGA case, check minsoc_clock_manager 
                             //for allowed divisors.
 				            //DO NOT USE CLOCK_DIVISOR = 1 COMMENT THE CLOCK DIVISION SELECTION 
@@ -86,8 +86,8 @@
 //
 // Reset polarity
 //
-//`define NEGATIVE_RESET      //rstn
-`define POSITIVE_RESET      //rst
+`define NEGATIVE_RESET      //rstn
+//`define POSITIVE_RESET      //rst
 
 //
 // Start-up circuit (only necessary later to load firmware automatically from SPI memory)
@@ -99,7 +99,7 @@
 //
 `define UART
 `define JSP
-`define ETHERNET
+//`define ETHERNET
 
 //
 // Ethernet reset
@@ -114,8 +114,8 @@
 `ifdef GENERIC_FPGA
     `undef FPGA_TAP
     `undef FPGA_CLOCK_DIVISION
-    `undef XILINX_FPGA
-    `undef SPARTAN3A
+    `undef ALTERA_FPGA
+    `undef CYCLONE_IV_E
 
 	`define GENERIC_TAP
 	`define GENERIC_MEMORY

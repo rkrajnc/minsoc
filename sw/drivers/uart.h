@@ -117,7 +117,7 @@
 #define UART_EFR_ENI	0x10	/* Enhanced Interrupt */
 
 
-void uart_init(void);
+void uart_init(unsigned long);
 void uart_putc(char);
 char uart_getc(void);
 void uart_print_str(char *);

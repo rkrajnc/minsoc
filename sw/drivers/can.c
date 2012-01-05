@@ -1,5 +1,5 @@
-#include <board.h>
 #include <support.h>
+#include "interconnect.h"
 #include "can.h"
 
 int can_rx_done, can_tx_done;

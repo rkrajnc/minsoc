@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #new boards have to udpate this
-BOARD=altera_3c25_board						#this has to have the name of the directory this file is in
-DEVICE_PART=EP3C25Q240C8
-CONSTRAINT_FILE='altera_3c25_board.ucf'
-FAMILY_PART="Cyclone III"
+BOARD=de2_115_board						#this has to have the name of the directory this file is in
+DEVICE_PART=EP4CE115F29C7
+CONSTRAINT_FILE='de2_115_board.ucf'
+FAMILY_PART="Cyclone IV E"
 #~new boards update
 
 #system workings

@@ -1,5 +1,5 @@
-#include <board.h>
 #include <support.h>
+#include "interconnect.h"
 #include "eth.h"
 
 int eth_tx_done;

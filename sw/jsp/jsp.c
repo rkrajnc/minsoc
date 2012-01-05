@@ -7,10 +7,10 @@
 
 int main()
 {
-	uart_init(UART_BASE);
+	uart_init(JSP_BASE);
 
 	int_init();
-	int_add(UART_IRQ, &uart_interrupt, NULL);
+	int_add(JSP_IRQ, &uart_interrupt, NULL);
 	
 	/* We can't use printf because in this simple example
 	   we don't link C library. */

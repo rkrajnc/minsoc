@@ -11,8 +11,8 @@ NET "reset" LOC = "K17" | PULLDOWN ;
 #
 # UART serial port (RS232 DCE) - connector DB9 female.
 #
-NET "uart_srx" LOC = "R7";
-NET "uart_stx" LOC = "M14" | DRIVE = 8 | SLEW = SLOW ;
+#NET "uart_srx" LOC = "R7";
+#NET "uart_stx" LOC = "M14" | DRIVE = 8 | SLEW = SLOW ;
 
 ###########################
 ##

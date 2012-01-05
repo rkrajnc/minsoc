@@ -10,7 +10,7 @@ MODEL = static  	#dynamic|static
 VERSION = 0.1
 MODE = debug		#release|debug
 
-INCLUDEDIRS = $(BACKEND_DIR) $(SUPPORT_DIR) $(DRIVERS_DIR)
+INCLUDEDIRS = $(SUPPORT_DIR) $(DRIVERS_DIR)
 #libsystemc or systemc (system ignores lib at the beginning)
 LIBNAMES = 
 LIBDIRS = 

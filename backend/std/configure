@@ -107,6 +107,7 @@ make -C ../../sw/utils
 make -C ../../sw/support
 make -C ../../sw/drivers
 make -C ../../sw/uart
+make -C ../../sw/jsp
 make -C ../../sw/eth
 echo "done."
 echo ""

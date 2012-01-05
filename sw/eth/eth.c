@@ -1,4 +1,4 @@
-#include <board.h>
+#include <interconnect.h>
 #include <support.h>
 #include <or1200.h>
 #include <int.h>
@@ -29,7 +29,7 @@ void eth_receive()
 
 int main()
 {
-	uart_init();
+	uart_init(UART_BASE);
 
 	int_init();
 	eth_init();
