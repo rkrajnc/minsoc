@@ -20,12 +20,15 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset
 # NOTES: pins G12, G9, Y2, and M23 above are overloaded by standard
 #		 DE2_115 design terms below
 
+# free PIN_P28 to be used after config - overloaded with HSMC
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
 
 #============================================================
 # CLOCK
 #============================================================
-set_location_assignment PIN_Y2 -to CLOCK_50
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+#set_location_assignment PIN_Y2 -to CLOCK_50		// overloaded with 'clk'
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+
 set_location_assignment PIN_AG14 -to CLOCK2_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK2_50
 set_location_assignment PIN_AG15 -to CLOCK3_50
@@ -100,8 +103,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDG[8]
 #============================================================
 # KEY
 #============================================================
-set_location_assignment PIN_M23 -to KEY[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[0]
+#set_location_assignment PIN_M23 -to KEY[0]
+#set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[0]			// overloaded with 'reset'
+
 set_location_assignment PIN_M21 -to KEY[1]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[1]
 set_location_assignment PIN_N21 -to KEY[2]
@@ -316,10 +320,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_ON
 #============================================================
 # RS232
 #============================================================
-set_location_assignment PIN_G9 -to UART_TXD
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TXD
-set_location_assignment PIN_G12 -to UART_RXD
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RXD
+# Overloaded with MonSoc uart's uart_srx and uart_stx
+#set_location_assignment PIN_G9 -to UART_TXD
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TXD
+#set_location_assignment PIN_G12 -to UART_RXD
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RXD
+
 set_location_assignment PIN_G14 -to UART_CTS
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_CTS
 set_location_assignment PIN_J13 -to UART_RTS

@@ -10,3 +10,4 @@ ioperm
 libusb-win32
 flex
 bison
+zlib-devel
