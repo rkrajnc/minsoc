@@ -204,7 +204,7 @@ execcmd "make install"
 #Installing Advanced JTAG Bridge
 execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge"
 execcmd "./autogen.sh"
-execcmd "./configure --enable-jsp-server=yes --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}=tools/include LDFLAGS=-L${DIR_TO_INSTALL}/tools/lib LDFLAGS=-Wl,-R${DIR_TO_INSTALL}/tools/lib"
+execcmd "./configure --enable-jsp-server=yes --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include LDFLAGS=-L${DIR_TO_INSTALL}/tools/lib LDFLAGS=-Wl,-R${DIR_TO_INSTALL}/tools/lib"
 execcmd "Compiling Advanced JTAG Bridge" "make"
 execcmd "make install"
 
