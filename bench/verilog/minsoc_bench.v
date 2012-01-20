@@ -298,7 +298,7 @@ minsoc_top minsoc_top_0(
 // Firmware testers
 //
 `ifdef UART
-task test_uart();
+task test_uart;
     begin
             @ (posedge new_line);
             $display("UART data received.");
@@ -323,7 +323,7 @@ endtask
 `endif
 
 `ifdef ETHERNET
-task test_eth();
+task test_eth;
     begin
 	        eth_tx_data[ETH_HDR+0] = 8'hBA;
 	        eth_tx_data[ETH_HDR+1] = 8'h87;	
