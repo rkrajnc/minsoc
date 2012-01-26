@@ -89,7 +89,7 @@
 // cyc + stb + address bus width +
 // byte select bus width + we + data bus width
 //
-`define TC_IIN_W	1+1+1+`TC_AW+`TC_BSW+1+`TC_DW
+`define TC_IIN_W	1+1+`TC_AW+`TC_BSW+1+`TC_DW
 
 //
 // Traffic Cop Top
@@ -1323,9 +1323,9 @@ always @(req_r or req_i)
 //
 always @(posedge wb_clk_i or posedge wb_rst_i)
 	if (wb_rst_i)
-		req_r <= #1 3'd0;
+		req_r <= 3'd0;
 	else
-		req_r <= #1 req_won;
+		req_r <= req_won;
 
 endmodule	
 
