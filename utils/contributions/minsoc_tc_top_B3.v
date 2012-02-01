@@ -87,9 +87,9 @@
 // Width of WB initiator inputs (coming from WB masters)
 //
 // cyc + stb + address bus width +
-// byte select bus width + we + data bus width
+// byte select bus width + we + data bus width + cti + bte
 //
-`define TC_IIN_W	1+1+1+`TC_AW+`TC_BSW+1+`TC_DW
+`define TC_IIN_W	1+1+`TC_AW+`TC_BSW+1+`TC_DW+3+2
 
 //
 // Traffic Cop Top
@@ -1033,7 +1033,7 @@ tc_si_to_mt #(t1_addr_w, t1_addr, t28i_addr_w, t2_addr, t3_addr,
 	.t7_wb_ack_i(t8_wb_ack_i),
 	.t7_wb_err_i(t8_wb_err_i),
 	.t7_wb_cti_o(t8_wb_cti_o),
-	.t7_wb_bte_o(t8_wb_bte_o),
+	.t7_wb_bte_o(t8_wb_bte_o)
 
 
 );
