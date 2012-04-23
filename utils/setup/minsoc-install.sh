@@ -196,7 +196,7 @@ then
 fi
 
 execcmd "cd ${DIR_TO_INSTALL}/download/libftdi-0.19"
-execcmd "./configure --prefix=${DIR_TO_INSTALL}/tools"
+execcmd "PATH=$PATH:${DIR_TO_INSTALL}/tools/bin ./configure --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include"
 execcmd "Compiling libftdi" "make"
 execcmd "make install"
 
@@ -204,7 +204,7 @@ execcmd "make install"
 #Installing Advanced JTAG Bridge
 execcmd "cd ${DIR_TO_INSTALL}/minsoc/rtl/verilog/adv_debug_sys/Software/adv_jtag_bridge"
 execcmd "./autogen.sh"
-execcmd "./configure --enable-jsp-server=yes --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include LIBS=-L${DIR_TO_INSTALL}/tools/lib LDFLAGS=-Wl,-R${DIR_TO_INSTALL}/tools/lib"
+execcmd "./configure --enable-jsp-server=yes --prefix=${DIR_TO_INSTALL}/tools CFLAGS=-I${DIR_TO_INSTALL}/tools/include LIBS=-L${DIR_TO_INSTALL}/tools/lib LDFLAGS=-Wl,-R${DIR_TO_INSTALL}/tools/lib"
 execcmd "Compiling Advanced JTAG Bridge" "make"
 execcmd "make install"
 
