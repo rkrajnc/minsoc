@@ -170,7 +170,7 @@ else
         execcmd "Installing GNU Toolchain" "tar xf or32-elf-linux-x86_64.tar.bz2 -C $DIR_TO_INSTALL/tools";
     fi
 fi
-PATH=$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin
+PATH="$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin"
 
 
 #Installing GDB
@@ -183,7 +183,7 @@ execcmd "cd build"
 execcmd "../configure --target=or32-elf --disable-werror --prefix=$DIR_TO_INSTALL/tools"
 execcmd "Compiling GDB" "make"
 make install 1>>${SCRIPT_DIR}/progress.log 2>>${SCRIPT_DIR}/error.log   #avoid Fedora failing due to missing Makeinfo
-PATH=$PATH:${DIR_TO_INSTALL}/tools/bin
+PATH="$PATH:${DIR_TO_INSTALL}/tools/bin"
 
 
 #Installing Advanced JTAG Bridge support libraries
@@ -196,7 +196,7 @@ then
 fi
 
 execcmd "cd ${DIR_TO_INSTALL}/download/libftdi-0.19"
-execcmd "PATH=$PATH:${DIR_TO_INSTALL}/tools/bin ./configure --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include"
+execcmd "PATH=\"$PATH:${DIR_TO_INSTALL}/tools/bin\" ./configure --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include"
 execcmd "Compiling libftdi" "make"
 execcmd "make install"
 
@@ -222,8 +222,8 @@ bash ${SCRIPT_DIR}/configure.sh
 
 #Setting-up new variables
 cecho "\nSystem configurations"
-execcmd "Adding MinSoC tools to PATH" "echo \"PATH=\\\$PATH:$DIR_TO_INSTALL/tools/bin\" >> /home/$(whoami)/.bashrc;";
-execcmd "Adding OpenRISC toolchain to PATH" "echo \"PATH=\\\$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin/\" >> /home/$(whoami)/.bashrc;";
+execcmd "Adding MinSoC tools to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/bin\\\"\" >> /home/$(whoami)/.bashrc;";
+execcmd "Adding OpenRISC toolchain to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin/\\\"\" >> /home/$(whoami)/.bashrc;";
 
 cecho "\nInstallation Complete!"
 cecho "Before using the system, load the new environment variables doing this: source /home/$(whoami)/.bashrc"
