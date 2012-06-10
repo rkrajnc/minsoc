@@ -50,27 +50,55 @@ then
 fi;
 
 
-# Testing necessary tools
-cecho "Testing if necessary tools are installed, program "whereis" is required."
-testtool wget
-testtool svn
-testtool bzip2
-testtool tar
-testtool sed
-testtool patch
-testtool gcc
-testtool make
-testtool makeinfo
-testtool libncurses
-testtool flex
-testtool bison
-testtool libz
-if [ "$ENV" == "Cygwin" ]
+# Selecting automated or advanced intallation modes
+# Wizard
+if [ -z "${AUTO}" ]
 then
-    testtool ioperm
-    testtool libusb
+	while [ "${AUTO}" != "R" ] &&  [ "${AUTO}" != "A" ]
+	do
+	    cecho "Select installation mode.";
+		cnecho "	Enter R for Resumed or A for Advanced mode or H for Help: "
+	    read AUTO;
+		if [ ${AUTO} == "H" ]
+		then
+			cecho "Advanced mode:"
+			cecho "		the script only downloads and installs the required tools. Dependency libraries and tools are checked during individual tool compilation. Furthermore, the install directory is not added to the system PATH. You have to do it yourself. Libusb, libftdi and Icarus Verilog are supposed to be installed by the user.\n"
+			cecho "Resumed mode:"
+			cecho "		the script checks if the dependency libraries and tools are installed before doing anything. It also adds the installation directory to the system PATH variable for bash shells on HOME/.bashrc. Libusb, libftdi and Icarus Verilog are automatically installed for you.\n"
+		fi
+	done
+    if [ "${AUTO}" == "R" ]
+    then
+        cecho "Resumed mode selected";
+	else
+		cecho "Advanced mode selected";
+    fi
 fi
 
+
+# Testing necessary tools
+if [ "${AUTO}" == "R" ]
+then
+	cecho "Testing if necessary tools are installed, program "whereis" is required."
+	testtool wget
+	testtool svn
+	testtool bzip2
+	testtool tar
+	testtool sed
+	testtool patch
+	testtool gcc
+	testtool make
+	testtool makeinfo
+	testtool libncurses
+	testtool flex
+	testtool bison
+	testtool libz
+	if [ "$ENV" == "Cygwin" ]
+	then
+		testtool ioperm
+		testtool libusb
+	fi
+fi
 
 # Wizard
 if [ -z "${ALTDIR}" ]
@@ -123,12 +151,15 @@ fi
 execcmd "Downloading GDB" "wget ftp://anonymous:anonymous@ftp.gnu.org/gnu/gdb/gdb-6.8a.tar.bz2"
 execcmd "wget ftp://ocuser:ocuser@openrisc.opencores.org/toolchain/or32-gdb-6.8-patch-2.4.bz2"
 execcmd "svn export -q http://opencores.org/ocsvn/adv_debug_sys/adv_debug_sys/trunk/Patches/GDB6.8/gdb-6.8-bz436037-reg-no-longer-active.patch"
-if [ "$ENV" != "Cygwin" ]
+if [ "${AUTO}" == "R" ]
 then
-    execcmd "Downloading libusb-0.1 for Advanced Debug System" "wget http://sourceforge.net/projects/libusb/files/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz"
+	if [ "$ENV" != "Cygwin" ]
+	then
+		execcmd "Downloading libusb-0.1 for Advanced Debug System" "wget http://sourceforge.net/projects/libusb/files/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz"
+	fi
+	execcmd "Downloading libftdi for Advanced Debug System" "wget http://www.intra2net.com/en/developer/libftdi/download/libftdi-0.19.tar.gz"
+	execcmd "Downloading Icarus Verilog" "wget ftp://icarus.com/pub/eda/verilog/v0.9/verilog-0.9.4.tar.gz"
 fi
-execcmd "Downloading libftdi for Advanced Debug System" "wget http://www.intra2net.com/en/developer/libftdi/download/libftdi-0.19.tar.gz"
-execcmd "Downloading Icarus Verilog" "wget ftp://icarus.com/pub/eda/verilog/v0.9/verilog-0.9.4.tar.gz"
 
 
 #Uncompressing everything
@@ -147,12 +178,15 @@ else
 fi
 execcmd "tar -jxf gdb-6.8a.tar.bz2"
 execcmd "bzip2 -d or32-gdb-6.8-patch-2.4.bz2"
-if [ "$ENV" != "Cygwin" ]
+if [ "${AUTO}" == "R" ]
 then
-    execcmd "tar zxf libusb-0.1.12.tar.gz"
+	if [ "$ENV" != "Cygwin" ]
+	then
+		execcmd "tar zxf libusb-0.1.12.tar.gz"
+	fi
+	execcmd "tar zxf libftdi-0.19.tar.gz"
+	execcmd "tar zxf verilog-0.9.4.tar.gz"
 fi
-execcmd "tar zxf libftdi-0.19.tar.gz"
-execcmd "tar zxf verilog-0.9.4.tar.gz"
 
 
 #Compiling and Installing all packages
@@ -187,18 +221,21 @@ PATH="$PATH:${DIR_TO_INSTALL}/tools/bin"
 
 
 #Installing Advanced JTAG Bridge support libraries
-if [ "$ENV" != "Cygwin" ]
+if [ "${AUTO}" == "R" ]
 then
-    execcmd "cd ${DIR_TO_INSTALL}/download/libusb-0.1.12"
-    execcmd "./configure --prefix=${DIR_TO_INSTALL}/tools"
-    execcmd "Installing libusb-0.1" "make"
-    execcmd "make install"
-fi
+	if [ "$ENV" != "Cygwin" ]
+	then
+		execcmd "cd ${DIR_TO_INSTALL}/download/libusb-0.1.12"
+		execcmd "./configure --prefix=${DIR_TO_INSTALL}/tools"
+		execcmd "Installing libusb-0.1" "make"
+		execcmd "make install"
+	fi
 
-execcmd "cd ${DIR_TO_INSTALL}/download/libftdi-0.19"
-execcmd "PATH=\"$PATH:${DIR_TO_INSTALL}/tools/bin\" ./configure --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include"
-execcmd "Compiling libftdi" "make"
-execcmd "make install"
+	execcmd "cd ${DIR_TO_INSTALL}/download/libftdi-0.19"
+	execcmd "PATH=\"$PATH:${DIR_TO_INSTALL}/tools/bin\" ./configure --prefix=${DIR_TO_INSTALL}/tools CPPFLAGS=-I${DIR_TO_INSTALL}/tools/include"
+	execcmd "Compiling libftdi" "make"
+	execcmd "make install"
+fi
 
 
 #Installing Advanced JTAG Bridge
@@ -210,10 +247,13 @@ execcmd "make install"
 
 
 #Installing Icarus Verilog
-execcmd "cd ${DIR_TO_INSTALL}/download/verilog-0.9.4"
-execcmd "./configure --prefix=${DIR_TO_INSTALL}/tools"
-execcmd "Compiling Icarus Verilog" "make"
-execcmd "make install"
+if [ "${AUTO}" == "R" ]
+then
+	execcmd "cd ${DIR_TO_INSTALL}/download/verilog-0.9.4"
+	execcmd "./configure --prefix=${DIR_TO_INSTALL}/tools"
+	execcmd "Compiling Icarus Verilog" "make"
+	execcmd "make install"
+fi
 
 
 #Configuring MinSoC, Advanced Debug System and patching OpenRISC
@@ -221,10 +261,20 @@ bash ${SCRIPT_DIR}/configure.sh
 
 
 #Setting-up new variables
-cecho "\nSystem configurations"
-execcmd "Adding MinSoC tools to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/bin\\\"\" >> /home/$(whoami)/.bashrc;";
-execcmd "Adding OpenRISC toolchain to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin/\\\"\" >> /home/$(whoami)/.bashrc;";
+if [ "${AUTO}" == "R" ]
+then
+	cecho "\nSystem configurations"
+	execcmd "Adding MinSoC tools to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/bin\\\"\" >> /home/$(whoami)/.bashrc;";
+	execcmd "Adding OpenRISC toolchain to PATH" "echo \"PATH=\\\"\\\$PATH:$DIR_TO_INSTALL/tools/or32-elf/bin/\\\"\" >> /home/$(whoami)/.bashrc;";
 
-cecho "\nInstallation Complete!"
-cecho "Before using the system, load the new environment variables doing this: source /home/$(whoami)/.bashrc"
-cecho "You may remove the ${DIR_TO_INSTALL}/download directory if you wish."
+	cecho "\nInstallation Complete!"
+	cecho "Before using the system, load the new environment variables doing this: source /home/$(whoami)/.bashrc"
+	cecho "You may remove the ${DIR_TO_INSTALL}/download directory if you wish."
+else
+	cecho "\nInstallation Complete!\n"
+	cecho "Remember to add the two following directories in the following order to the PATH system variable."
+	cecho "1) $DIR_TO_INSTALL/tools/bin "
+	cecho "2) $DIR_TO_INSTALL/tools/or32-elf/bin "
+	cecho "You may remove the ${DIR_TO_INSTALL}/download directory if you wish."
+fi
+
